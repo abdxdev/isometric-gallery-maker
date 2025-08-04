@@ -35,7 +35,7 @@ export function ImageImporter({ onImageAdd, onImageRemove, recentImages = [] }) 
   return (
     <div className="space-y-4">
       {/* URL Import */}
-      <div className="space-y-3">
+      <div className="space-y-2">
         <div className="flex items-center gap-2">
           <Label className="text-sm font-medium">Add from URL</Label>
         </div>
@@ -54,7 +54,7 @@ export function ImageImporter({ onImageAdd, onImageRemove, recentImages = [] }) 
       </div>
 
       {/* File Upload */}
-      <div className="space-y-3">
+      <div className="space-y-2">
         <div className="flex items-center gap-2">
           <Label className="text-sm font-medium">Upload Files</Label>
         </div>

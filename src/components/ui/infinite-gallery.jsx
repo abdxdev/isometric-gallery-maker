@@ -17,13 +17,14 @@ const hexToRgba = (hex, opacity) => {
   return hex; // fallback to original color if parsing fails
 };
 
-export const InfiniteCanvas = forwardRef(function InfiniteCanvas({ images, className, columns = 4, controls, style }, ref) {
+export const InfiniteCanvas = forwardRef(function InfiniteCanvas({ images, className, controls, style }, ref) {
   const canvasRef = useRef();
-  const contentRef = useRef();  const [dimensions, setDimensions] = useState({ width: "100%", height: "100%" });
+  const contentRef = useRef();
+  const [dimensions, setDimensions] = useState({ width: "100%", height: "100%" });
   const [height, setHeight] = useState(0);
   const [highlightedImageId, setHighlightedImageId] = useState(null);
   const [isHighlightVisible, setIsHighlightVisible] = useState(false);
-  
+
   const resetView = useCallback(() => {
     if (canvasRef.current) {
       canvasRef.current.fitContentToView({
@@ -41,12 +42,12 @@ export const InfiniteCanvas = forwardRef(function InfiniteCanvas({ images, class
   const highlightImage = useCallback((imageId) => {
     setHighlightedImageId(imageId);
     setIsHighlightVisible(true);
-    
+
     // Start fade out after 2.7 seconds
     setTimeout(() => {
       setIsHighlightVisible(false);
     }, 2700);
-    
+
     // Remove highlight completely after 3 seconds (including fade transition)
     setTimeout(() => {
       setHighlightedImageId(null);
@@ -113,7 +114,7 @@ export const InfiniteCanvas = forwardRef(function InfiniteCanvas({ images, class
               ref={contentRef}
               className="gap-10 space-y-4"
               style={{
-                columns: controls?.columns || columns,
+                columns: controls?.columns,
                 columnGap: `${controls?.gap || 10}px`,
                 transform: `translate(-50%, -50%) rotateX(-90deg) translateZ(${height / 2}px)`,
                 transformOrigin: "center center",
@@ -133,13 +134,7 @@ export const InfiniteCanvas = forwardRef(function InfiniteCanvas({ images, class
                         border: `${controls?.borderThickness || 1}px solid ${hexToRgba(controls?.borderColor || "#000000", controls?.borderOpacity || 1)}`,
                       }}
                     />
-                    {highlightedImageId === image.id && (
-                      <div 
-                        className={`absolute inset-0 border-10 border-blue-500 shadow-lg shadow-blue-500/30 transition-all duration-300 ease-in-out ${
-                          isHighlightVisible ? 'opacity-100' : 'opacity-0'
-                        }`} 
-                      />
-                    )}
+                    {highlightedImageId === image.id && <div className={`absolute inset-0 border-10 border-blue-500 shadow-lg shadow-blue-500/30 transition-all duration-300 ease-in-out ${isHighlightVisible ? "opacity-100" : "opacity-0"}`} />}
                   </div>
                 </div>
               ))}

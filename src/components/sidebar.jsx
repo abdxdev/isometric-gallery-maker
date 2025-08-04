@@ -8,7 +8,7 @@ import { Label } from "@/components/ui/label";
 import { ReactColorPicker } from "@/components/ui/react-color-picker";
 import { Maximize2, Minimize2, RotateCcw, Focus, Camera, X, RefreshCw } from "lucide-react";
 
-export function GallerySidebar({ controls, defaultControls, updateControl, resetControls, imageOrder, addImageFromUrl, removeImage, setImageOrder, onImageRotate, resetView, onCapture, onHighlightImage, isFullscreen, toggleFullscreen, isFullscreenSupported }) {
+export function GallerySidebar({ controls, defaultControls, updateControl, resetControls, imageOrder, addImageFromUrl, removeImage, setImageOrder, resetView, onCapture, onHighlightImage, isFullscreen, toggleFullscreen, isFullscreenSupported }) {
   const clearAll = () => {
     setImageOrder([]);
     removeImage();
@@ -18,7 +18,6 @@ export function GallerySidebar({ controls, defaultControls, updateControl, reset
       {/* Import Images Section */}
       <div className="space-y-4">
         <h2 className="text-lg font-semibold">Import Images</h2>
-
         {/* Image Import Section */}
         <div className="space-y-3">
           <ImageImporter onImageAdd={addImageFromUrl} onImageRemove={removeImage} recentImages={imageOrder} />
@@ -85,7 +84,8 @@ export function GallerySidebar({ controls, defaultControls, updateControl, reset
       <div className="space-y-4">
         <h2 className="text-lg font-semibold">Image Order</h2>
         {/* Description */}
-        <p className="text-sm text-muted-foreground">Drag and drop images to reorder them. Click the X button to remove an image or the ⚡ button to highlight it in the canvas.</p> {/* Image Sortable Component */}
+        <p className="text-sm text-muted-foreground">Drag and drop images to reorder them</p>
+        {/* Image Sortable Component */}
         <div className="space-y-2">
           <ImageSortable imageList={imageOrder} onImageOrderChange={setImageOrder} onImageRemove={removeImage} onHighlightImage={onHighlightImage} columns={3} />
           <Button onClick={clearAll} variant="outline" className="w-full" disabled={imageOrder.length === 0}>
@@ -94,9 +94,11 @@ export function GallerySidebar({ controls, defaultControls, updateControl, reset
           </Button>
         </div>
       </div>
-      <hr className="border-t border-border" /> {/* Actions Section */}
+      <hr className="border-t border-border" />
+      {/* Actions Section */}
       <div className="space-y-4">
-        <h2 className="text-lg font-semibold">Actions</h2> {/* Reset View Button */}
+        <h2 className="text-lg font-semibold">Actions</h2>
+        {/* Reset View Button */}
         <div className="space-y-2">
           <Button onClick={resetView} variant="outline" className="w-full">
             <Focus className="w-4 h-4" />
@@ -105,17 +107,8 @@ export function GallerySidebar({ controls, defaultControls, updateControl, reset
           {/* Fullscreen Toggle Button */}
           {isFullscreenSupported && (
             <Button onClick={toggleFullscreen} variant="outline" className="w-full">
-              {isFullscreen ? (
-                <>
-                  <Minimize2 className="w-4 h-4" />
-                  Exit Fullscreen
-                </>
-              ) : (
-                <>
-                  <Maximize2 className="w-4 h-4" />
-                  Fullscreen
-                </>
-              )}
+              <Minimize2 className="w-4 h-4" />
+              {isFullscreen ? <>Exit Fullscreen</> : <>Fullscreen</>}
             </Button>
           )}
           <Button onClick={onCapture} className="w-full">

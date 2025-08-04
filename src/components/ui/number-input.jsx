@@ -84,16 +84,18 @@ export const NumberInput = forwardRef(
           setValue(max);
           ref.current.value = String(max);
         }
-      }    
-    };
+      }      };
 
-    const CustomInputComponent = forwardRef((inputProps, inputRef) => (
-      <Input 
-        {...inputProps}
-        ref={inputRef}
-        className="[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none rounded-r-none relative"
-      />
-    ));
+    const CustomInputComponent = useCallback(
+      forwardRef((inputProps, inputRef) => (
+        <Input 
+          {...inputProps}
+          ref={inputRef}
+          className="[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none rounded-r-none relative"
+        />
+      )),
+      []
+    );
 
     return (
       <div className="flex items-center">
