@@ -10,31 +10,6 @@ import { ReactColorPicker } from "@/components/ui/react-color-picker";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Minimize2, Maximize2, Focus, Camera, X, RefreshCw, ImageIcon } from "lucide-react";
 
-// Sample images data
-const sampleImages = [
-  { id: "sample-1", src: "https://tailwindcss.com/plus-assets/img/heroes/ui-blocks-col-1-row-1.png" },
-  { id: "sample-2", src: "https://tailwindcss.com/plus-assets/img/heroes/ui-blocks-col-1-row-2.png" },
-  { id: "sample-3", src: "https://tailwindcss.com/plus-assets/img/heroes/ui-blocks-col-1-row-3.png" },
-  { id: "sample-4", src: "https://tailwindcss.com/plus-assets/img/heroes/ui-blocks-col-1-row-4.png" },
-  { id: "sample-5", src: "https://tailwindcss.com/plus-assets/img/heroes/ui-blocks-col-2-row-1.png" },
-  { id: "sample-6", src: "https://tailwindcss.com/plus-assets/img/heroes/ui-blocks-col-2-row-2.png" },
-  { id: "sample-7", src: "https://tailwindcss.com/plus-assets/img/heroes/ui-blocks-col-2-row-3.png" },
-  { id: "sample-8", src: "https://tailwindcss.com/plus-assets/img/heroes/ui-blocks-col-2-row-4.png" },
-  { id: "sample-9", src: "https://tailwindcss.com/plus-assets/img/heroes/ui-blocks-col-2-row-5.png" },
-  { id: "sample-10", src: "https://tailwindcss.com/plus-assets/img/heroes/ui-blocks-col-2-row-6.png" },
-  { id: "sample-11", src: "https://tailwindcss.com/plus-assets/img/heroes/ui-blocks-col-3-row-1.png" },
-  { id: "sample-12", src: "https://tailwindcss.com/plus-assets/img/heroes/ui-blocks-col-3-row-2.png" },
-  { id: "sample-13", src: "https://tailwindcss.com/plus-assets/img/heroes/ui-blocks-col-3-row-3.png" },
-  { id: "sample-14", src: "https://tailwindcss.com/plus-assets/img/heroes/ui-blocks-col-3-row-4.png" },
-  { id: "sample-15", src: "https://tailwindcss.com/plus-assets/img/heroes/ui-blocks-col-3-row-5.png" },
-  { id: "sample-16", src: "https://tailwindcss.com/plus-assets/img/heroes/ui-blocks-col-3-row-6.png" },
-  { id: "sample-17", src: "https://tailwindcss.com/plus-assets/img/heroes/ui-blocks-col-3-row-7.png" },
-  { id: "sample-18", src: "https://tailwindcss.com/plus-assets/img/heroes/ui-blocks-col-4-row-1.png" },
-  { id: "sample-19", src: "https://tailwindcss.com/plus-assets/img/heroes/ui-blocks-col-4-row-2.png" },
-  { id: "sample-20", src: "https://tailwindcss.com/plus-assets/img/heroes/ui-blocks-col-4-row-3.png" },
-];
-
-// Reusable Reset Button Component
 function ResetButton({ onClick, title, className = "flex-shrink-0" }) {
   return (
     <Button onClick={onClick} variant="outline" size="icon" className={className} title={title}>
@@ -43,7 +18,7 @@ function ResetButton({ onClick, title, className = "flex-shrink-0" }) {
   );
 }
 
-export function GallerySidebar({ controls, updateControl, resetControl, imageOrder, addImageFromUrl, removeImage, setImageOrder, resetView, recalculatePadding, onCapture, onHighlightImage, isFullscreen, toggleFullscreen, isFullscreenSupported }) {
+export function Sidebar({ controls, updateControl, resetControl, imageOrder, sampleImages, addImageFromUrl, removeImage, setImageOrder, resetView, recalculatePadding, onCapture, onHighlightImage, isFullscreen, toggleFullscreen, isFullscreenSupported }) {
   const clearAll = () => {
     setImageOrder([]);
     removeImage();

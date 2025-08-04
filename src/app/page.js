@@ -1,11 +1,36 @@
 "use client";
 
 import { InfiniteCanvas } from "@/components/ui/infinite-gallery";
-import { GallerySidebar } from "@/components/sidebar";
+import { Sidebar } from "@/components/sidebar";
 import { FullscreenToggle } from "@/components/fullscreen-toggle";
 import { Header } from "@/components/header";
+import { WelcomeDialog } from "@/components/welcome-dialog";
 import { useState, useRef, useEffect } from "react";
 import { useFullscreen } from "@/hooks/useFullscreen";
+
+// Sample images data - same as in sidebar for consistency
+const sampleImages = [
+  { id: "sample-1", src: "https://tailwindcss.com/plus-assets/img/heroes/ui-blocks-col-1-row-1.png" },
+  { id: "sample-2", src: "https://tailwindcss.com/plus-assets/img/heroes/ui-blocks-col-1-row-2.png" },
+  { id: "sample-3", src: "https://tailwindcss.com/plus-assets/img/heroes/ui-blocks-col-1-row-3.png" },
+  { id: "sample-4", src: "https://tailwindcss.com/plus-assets/img/heroes/ui-blocks-col-1-row-4.png" },
+  { id: "sample-5", src: "https://tailwindcss.com/plus-assets/img/heroes/ui-blocks-col-2-row-1.png" },
+  { id: "sample-6", src: "https://tailwindcss.com/plus-assets/img/heroes/ui-blocks-col-2-row-2.png" },
+  { id: "sample-7", src: "https://tailwindcss.com/plus-assets/img/heroes/ui-blocks-col-2-row-3.png" },
+  { id: "sample-8", src: "https://tailwindcss.com/plus-assets/img/heroes/ui-blocks-col-2-row-4.png" },
+  { id: "sample-9", src: "https://tailwindcss.com/plus-assets/img/heroes/ui-blocks-col-2-row-5.png" },
+  { id: "sample-10", src: "https://tailwindcss.com/plus-assets/img/heroes/ui-blocks-col-2-row-6.png" },
+  { id: "sample-11", src: "https://tailwindcss.com/plus-assets/img/heroes/ui-blocks-col-3-row-1.png" },
+  { id: "sample-12", src: "https://tailwindcss.com/plus-assets/img/heroes/ui-blocks-col-3-row-2.png" },
+  { id: "sample-13", src: "https://tailwindcss.com/plus-assets/img/heroes/ui-blocks-col-3-row-3.png" },
+  { id: "sample-14", src: "https://tailwindcss.com/plus-assets/img/heroes/ui-blocks-col-3-row-4.png" },
+  { id: "sample-15", src: "https://tailwindcss.com/plus-assets/img/heroes/ui-blocks-col-3-row-5.png" },
+  { id: "sample-16", src: "https://tailwindcss.com/plus-assets/img/heroes/ui-blocks-col-3-row-6.png" },
+  { id: "sample-17", src: "https://tailwindcss.com/plus-assets/img/heroes/ui-blocks-col-3-row-7.png" },
+  { id: "sample-18", src: "https://tailwindcss.com/plus-assets/img/heroes/ui-blocks-col-4-row-1.png" },
+  { id: "sample-19", src: "https://tailwindcss.com/plus-assets/img/heroes/ui-blocks-col-4-row-2.png" },
+  { id: "sample-20", src: "https://tailwindcss.com/plus-assets/img/heroes/ui-blocks-col-4-row-3.png" },
+];
 
 export default function Home() {
   const defaultControls = {
@@ -32,7 +57,6 @@ export default function Home() {
   const canvasRef = useRef();
   const galleryContainerRef = useRef();
 
-  // Fullscreen functionality for the gallery
   const { isFullscreen, toggleFullscreen, isSupported } = useFullscreen(galleryContainerRef);
 
   const updateControl = (key, value) => {
@@ -73,6 +97,10 @@ export default function Home() {
     setImageOrder(prev => prev.filter(img => img.id !== id));
   };
 
+  const loadSampleImages = () => {
+    setImageOrder(sampleImages);
+  };
+
   const highlightImage = (imageId) => {
     if (canvasRef.current) {
       canvasRef.current.highlightImage(imageId);
@@ -84,7 +112,6 @@ export default function Home() {
     console.log("Capture clicked");
   };
 
-  // Use the current imageOrder for the gallery with unique IDs for repeated items
   const repeatedImages = Array(controls.repeat)
     .fill(null)
     .flatMap((_, repeatIndex) => 
@@ -96,6 +123,9 @@ export default function Home() {
 
   return (
     <div className="min-h-screen">
+      {/* Welcome Dialog */}
+      <WelcomeDialog onLoadSamples={loadSampleImages} />
+
       {/* Header - hide in fullscreen */}
       {!isFullscreen && <Header />}
 
@@ -128,12 +158,13 @@ export default function Home() {
         {/* Right Sidebar for Image Management - hide in fullscreen */}
         {!isFullscreen && (
           <div className="order-2 lg:order-2">
-            <GallerySidebar
+            <Sidebar
               controls={controls}
               defaultControls={defaultControls}
               updateControl={updateControl}
               resetControl={resetControl}
               imageOrder={imageOrder}
+              sampleImages={sampleImages}
               addImageFromUrl={addImageFromUrl}
               removeImage={removeImage}
               setImageOrder={setImageOrder}
