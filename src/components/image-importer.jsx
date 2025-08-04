@@ -59,8 +59,8 @@ export function ImageImporter({ onImageAdd, onImageRemove, recentImages = [] }) 
           <Label className="text-sm font-medium">Upload Files</Label>
         </div>
         <input ref={fileInputRef} type="file" accept="image/*" multiple onChange={handleFileUpload} className="hidden" />
-        <Button onClick={triggerFileUpload} variant="outline" className="w-full" size="sm">
-          <Upload size={16} className="mr-2" />
+        <Button onClick={triggerFileUpload} variant="outline" className="w-full">
+          <Upload size={16} className="w-4 h-4" />
           Choose Images
         </Button>
       </div>
