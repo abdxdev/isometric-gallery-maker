@@ -7,6 +7,7 @@ import { Header } from "@/components/header";
 import { WelcomeDialog } from "@/components/welcome-dialog";
 import { useState, useRef, useEffect } from "react";
 import { useFullscreen } from "@/hooks/useFullscreen";
+import { preloadImages } from "@/hooks/useImagePreloader";
 
 const sampleImages = [
   { id: 1, src: "https://tailwindcss.com/plus-assets/img/heroes/ui-blocks-col-1-row-1.png" },
@@ -46,6 +47,7 @@ export default function Home() {
   const [controls, setControls] = useState(defaultControls);
   const [imageOrder, setImageOrder] = useState([]);
   const [nextImageId, setNextImageId] = useState(21); // Start after sample images (1-20)
+  const [isLoadingImages, setIsLoadingImages] = useState(false);
 
   useEffect(() => {
     const timer = setTimeout(resetView, 300);
@@ -97,8 +99,36 @@ export default function Home() {
     setImageOrder(prev => prev.filter(img => img.id !== id));
   };
 
-  const loadSampleImages = () => {
-    setImageOrder(sampleImages);
+  const loadSampleImages = async () => {
+    setIsLoadingImages(true);
+    
+    try {
+      // Preload all sample images before setting them
+      const imageSources = sampleImages.map(img => img.src);
+      console.log('Starting to preload', imageSources.length, 'images...');
+      
+      const results = await preloadImages(imageSources);
+      
+      // Count successful loads
+      const successCount = results.filter(result => result.status === 'fulfilled').length;
+      const failureCount = results.length - successCount;
+      
+      console.log(`Preloading complete: ${successCount} succeeded, ${failureCount} failed`);
+      
+      if (failureCount > 0) {
+        console.warn("Some images failed to preload, but proceeding anyway");
+      }
+      
+      // Set images after preloading attempt (successful or not)
+      setImageOrder(sampleImages);
+      
+    } catch (error) {
+      console.error("Error during image preloading:", error);
+      // Still set the images even if preloading fails
+      setImageOrder(sampleImages);
+    } finally {
+      setIsLoadingImages(false);
+    }
   };
 
   const highlightImage = (imageId) => {
@@ -161,11 +191,10 @@ export default function Home() {
           <div className="order-2 lg:order-2">
             <Sidebar
               controls={controls}
-              defaultControls={defaultControls}
               updateControl={updateControl}
               resetControl={resetControl}
               imageOrder={imageOrder}
-              sampleImages={sampleImages}
+              sampleImages={loadSampleImages}
               addImageFromUrl={addImageFromUrl}
               removeImage={removeImage}
               setImageOrder={setImageOrder}
@@ -176,6 +205,7 @@ export default function Home() {
               isFullscreen={isFullscreen}
               toggleFullscreen={toggleFullscreen}
               isFullscreenSupported={isSupported}
+              isLoadingImages={isLoadingImages}
             />
           </div>
         )}

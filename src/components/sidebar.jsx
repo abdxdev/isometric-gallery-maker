@@ -8,7 +8,7 @@ import { Label } from "@/components/ui/label";
 import { Slider } from "@/components/ui/slider";
 import { ReactColorPicker } from "@/components/ui/react-color-picker";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
-import { Minimize2, Maximize2, Focus, Camera, X, RefreshCw, ImageIcon } from "lucide-react";
+import { Minimize2, Maximize2, Focus, Camera, X, RefreshCw, ImageIcon, Loader2 } from "lucide-react";
 
 function ResetButton({ onClick, title, className = "flex-shrink-0" }) {
   return (
@@ -18,14 +18,18 @@ function ResetButton({ onClick, title, className = "flex-shrink-0" }) {
   );
 }
 
-export function Sidebar({ controls, updateControl, resetControl, imageOrder, sampleImages, addImageFromUrl, removeImage, setImageOrder, resetView, recalculatePadding, onCapture, onHighlightImage, isFullscreen, toggleFullscreen, isFullscreenSupported }) {
+export function Sidebar({ controls, updateControl, resetControl, imageOrder, sampleImages, addImageFromUrl, removeImage, setImageOrder, resetView, recalculatePadding, onCapture, onHighlightImage, isFullscreen, toggleFullscreen, isFullscreenSupported, isLoadingImages }) {
   const clearAll = () => {
     setImageOrder([]);
     removeImage();
   };
 
   const loadSampleImages = () => {
-    setImageOrder(sampleImages);
+    if (typeof sampleImages === 'function') {
+      sampleImages(); // Call the function if it's a function
+    } else {
+      setImageOrder(sampleImages); // Use the array if it's an array
+    }
   };
   return (
     <div className="w-full lg:w-86 flex flex-col p-4 lg:border-l border-border">
@@ -46,7 +50,7 @@ export function Sidebar({ controls, updateControl, resetControl, imageOrder, sam
               <div className="space-y-2">
                 <Label htmlFor="columns">Columns</Label>
                 <div className="flex gap-2">
-                  <NumberInput id="columns" value={controls.columns} onValueChange={(value) => updateControl("columns", value)} min={1} max={8} stepper={1} className="flex-1" />
+                  <NumberInput id="columns" value={controls.columns} onValueChange={(value) => updateControl("columns", value)} min={1} max={5} stepper={1} className="flex-1" />
                   <ResetButton onClick={() => resetControl("columns")} title="Reset Columns" />
                 </div>
               </div>
@@ -131,14 +135,27 @@ export function Sidebar({ controls, updateControl, resetControl, imageOrder, sam
         <AccordionItem value="order">
           <AccordionTrigger className="text-md">Image Order</AccordionTrigger>
           <AccordionContent>
-            <div className="space-y-4">
-              {imageOrder.length === 0 ? (
+            <div className="space-y-4">              {imageOrder.length === 0 ? (
                 <>
                   {/* Empty state */}
                   <p className="text-sm text-muted-foreground text-center">No images added yet</p>
-                  <Button onClick={loadSampleImages} variant="outline" className="w-full">
-                    <ImageIcon className="w-4 h-4" />
-                    Load Sample Images
+                  <Button 
+                    onClick={loadSampleImages} 
+                    variant="outline" 
+                    className="w-full"
+                    disabled={isLoadingImages}
+                  >
+                    {isLoadingImages ? (
+                      <>
+                        <Loader2 className="w-4 h-4 animate-spin" />
+                        Loading Images...
+                      </>
+                    ) : (
+                      <>
+                        <ImageIcon className="w-4 h-4" />
+                        Load Sample Images
+                      </>
+                    )}
                   </Button>
                 </>
               ) : (

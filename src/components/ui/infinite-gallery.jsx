@@ -4,6 +4,7 @@ import { useRef, useState, useEffect, useCallback, forwardRef, useImperativeHand
 import { ReactInfiniteCanvas, ReactInfiniteCanvasHandle } from "react-infinite-canvas";
 import { cn } from "@/lib/utils";
 import { calculateIsometricBoundingBox } from "@/lib/isometric-bounding-box";
+import { useImageLoad } from "@/hooks/useElementResize";
 
 // Helper function to convert hex color to RGBA with opacity
 const hexToRgba = (hex, opacity) => {
@@ -24,6 +25,7 @@ export const InfiniteCanvas = forwardRef(function InfiniteCanvas({ images, class
   const [height, setHeight] = useState(0);
   const [highlightedImageId, setHighlightedImageId] = useState(null);
   const [isHighlightVisible, setIsHighlightVisible] = useState(false);
+  const [imagesLoaded, setImagesLoaded] = useState(false);
 
   const resetView = useCallback(() => {
     if (canvasRef.current) {
@@ -31,38 +33,8 @@ export const InfiniteCanvas = forwardRef(function InfiniteCanvas({ images, class
       canvasRef.current.scrollNodeToCenter({});
     }
   }, []);
-  const highlightImage = useCallback((imageId) => {
-    setHighlightedImageId(imageId);
-    setIsHighlightVisible(true);
 
-    // Start fade out after 2.7 seconds
-    setTimeout(() => {
-      setIsHighlightVisible(false);
-    }, 2700);
-
-    // Remove highlight completely after 3 seconds (including fade transition)
-    setTimeout(() => {
-      setHighlightedImageId(null);
-    }, 3000);
-  }, []);// Expose functions to parent component
-  useImperativeHandle(
-    ref,
-    () => ({
-      resetView,
-      highlightImage,
-      calculatePadding,
-    }),
-    [resetView, highlightImage]
-  );
-  useEffect(() => {
-    if (contentRef.current && images.length > 0) {
-      // Small delay to let images start loading
-      const timer = setTimeout(calculatePadding, 300);
-      return () => clearTimeout(timer);
-    }
-  }, [images, controls]);
-
-  const calculatePadding = () => {
+  const calculatePadding = useCallback(() => {
     if (!contentRef.current) return;
     const original = {
       width: contentRef.current.offsetWidth,
@@ -77,7 +49,53 @@ export const InfiniteCanvas = forwardRef(function InfiniteCanvas({ images, class
     });
     console.log("Original dimensions:", original);
     console.log("Calculated dimensions:", result);
-  };
+  }, [controls.rotateXOuter, controls.rotateYOuter]);
+
+  // Use the image load hook to wait for all images to load
+  const imageLoadRef = useImageLoad(() => {
+    setImagesLoaded(true);
+    // Calculate padding after images are loaded
+    setTimeout(calculatePadding, 100);
+  }, images);
+
+  const highlightImage = useCallback((imageId) => {
+    setHighlightedImageId(imageId);
+    setIsHighlightVisible(true);
+
+    // Start fade out after 2.7 seconds
+    setTimeout(() => {
+      setIsHighlightVisible(false);
+    }, 2700);
+
+    // Remove highlight completely after 3 seconds (including fade transition)
+    setTimeout(() => {
+      setHighlightedImageId(null);
+    }, 3000);
+  }, []);
+
+  // Expose functions to parent component
+  useImperativeHandle(
+    ref,
+    () => ({
+      resetView,
+      highlightImage,
+      calculatePadding,
+    }),
+    [resetView, highlightImage, calculatePadding]
+  );
+
+  // Reset images loaded state when images change
+  useEffect(() => {
+    setImagesLoaded(false);
+  }, [images]);
+
+  // Recalculate padding when controls change and images are loaded
+  useEffect(() => {
+    if (imagesLoaded && contentRef.current && images.length > 0) {
+      const timer = setTimeout(calculatePadding, 50);
+      return () => clearTimeout(timer);
+    }
+  }, [imagesLoaded, controls, calculatePadding]);
   return (
     <div
       className={cn("overflow-visible", className)}
@@ -102,8 +120,14 @@ export const InfiniteCanvas = forwardRef(function InfiniteCanvas({ images, class
               position: "relative",
             }}
           >
+            {" "}
             <div
-              ref={contentRef}
+              ref={(node) => {
+                contentRef.current = node;
+                if (imageLoadRef.current !== node) {
+                  imageLoadRef.current = node;
+                }
+              }}
               className="gap-10 space-y-4"
               style={{
                 columns: controls?.columns,
@@ -113,16 +137,29 @@ export const InfiniteCanvas = forwardRef(function InfiniteCanvas({ images, class
                 position: "relative",
                 left: "50%",
                 top: "50%",
+                opacity: imagesLoaded ? 1 : 0.5,
+                transition: "opacity 0.3s ease-in-out",
               }}
-            >              {images.map((image, index) => (
+            >
+              {images.map((image, index) => (
                 <div key={image.id || index} className="break-inside-avoid" style={{ marginBottom: `${controls?.gap || 10}px` }}>
                   <div className="relative">
+                    {" "}
                     <img
                       className="w-full object-cover object-center"
                       src={image.src}
                       alt={`gallery-photo-${index}`}
+                      loading="eager"
+                      decoding="async"
                       style={{
                         border: `${controls?.borderThickness || 1}px solid ${hexToRgba(controls?.borderColor || "#000000", controls?.borderOpacity || 1)}`,
+                      }}
+                      onLoad={() => {
+                        // Individual image load handler for better UX
+                        if (!imagesLoaded) {
+                          // Force a recalculation when each image loads
+                          setTimeout(calculatePadding, 10);
+                        }
                       }}
                     />
                     {highlightedImageId && (image.originalId === highlightedImageId || image.id === highlightedImageId) && <div className={`absolute inset-0 border-10 border-primary shadow-lg shadow-blue-500/30 transition-all duration-300 ease-in-out ${isHighlightVisible ? "opacity-100" : "opacity-0"}`} />}

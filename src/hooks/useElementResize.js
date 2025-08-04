@@ -40,12 +40,19 @@ export function useImageLoad(callback, images = []) {
 
     let loadedCount = 0;
     const totalImages = imageElements.length;
+    let timeoutId;
 
     const handleLoad = () => {
       loadedCount++;
       if (loadedCount === totalImages) {
+        clearTimeout(timeoutId);
         setTimeout(callback, 50);
       }
+    };
+
+    const handleError = () => {
+      // Still count errored images as "loaded" to avoid hanging
+      handleLoad();
     };
 
     imageElements.forEach(img => {
@@ -53,12 +60,21 @@ export function useImageLoad(callback, images = []) {
         handleLoad();
       } else {
         img.addEventListener('load', handleLoad);
+        img.addEventListener('error', handleError);
       }
     });
 
+    // Fallback timeout - call callback even if some images fail to load
+    timeoutId = setTimeout(() => {
+      console.warn('Image load timeout reached, proceeding anyway');
+      callback();
+    }, 10000); // 10 second timeout
+
     return () => {
+      clearTimeout(timeoutId);
       imageElements.forEach(img => {
         img.removeEventListener('load', handleLoad);
+        img.removeEventListener('error', handleError);
       });
     };
   }, [callback, images.length]);

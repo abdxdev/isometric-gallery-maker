@@ -91,7 +91,7 @@ export const NumberInput = forwardRef(
         <Input 
           {...inputProps}
           ref={inputRef}
-          className="[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none rounded-r-none relative"
+          className="[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none rounded-r-none relative h-9"
         />
       )),
       []
@@ -126,7 +126,7 @@ export const NumberInput = forwardRef(
             onClick={handleIncrement}
             disabled={value === max}
           >
-            <ChevronUp size={15} />
+            <ChevronUp size={16} />
           </Button>
           <Button
             aria-label="Decrease value"
@@ -135,7 +135,7 @@ export const NumberInput = forwardRef(
             onClick={handleDecrement}
             disabled={value === min}
           >
-            <ChevronDown size={15} />
+            <ChevronDown size={16} />
           </Button>
         </div>
       </div>
