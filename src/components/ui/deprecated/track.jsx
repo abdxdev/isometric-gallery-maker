@@ -2,11 +2,11 @@ import React from "react";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
 
-export const Tract = ({
+export const Track = ({
   columns,
   images,
   columnCount,
-  columnWidth = 970,
+  columnWidth,
   className,
   containerClassName,
   gridClassName,
@@ -23,7 +23,7 @@ export const Tract = ({
           src: img.src,
           alt: img.alt || "",
           width: img.width || columnWidth,
-          height: img.height || 500,
+          height: img.height || 1000,
           className: img.className,
         })),
       };
@@ -34,7 +34,7 @@ export const Tract = ({
   return (
     <div className={cn("max-xl:line-t relative max-xl:h-84 outline bg-gray-50 outline-gray-950/5", className)}>
       <div className={cn("absolute inset-0", containerClassName)}>
-        <div className="overflow-hidden [--right:45%] flex size-full items-center justify-center">
+        <div className="[--right:45%] flex size-full items-center justify-center overflow-scroll">
           <div className="size-430 shrink-0 scale-50 sm:scale-75 lg:scale-100">
             <div
               className={cn(
@@ -52,8 +52,7 @@ export const Tract = ({
                   style={{
                     transform: column.translateY ? `translateY(${column.translateY}px)` : undefined
                   }}
-                >
-                  {column.images.map((image, imgIndex) => (
+                >                  {column.images.map((image, imgIndex) => (
                     <Image
                       key={imgIndex}
                       src={image.src}
@@ -64,6 +63,9 @@ export const Tract = ({
                         `aspect-auto ring ring-gray-950/5`,
                         image.className
                       )}
+                      priority={colIndex === 0 && imgIndex === 0}
+                      quality={100}
+                      // sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                     />
                   ))}
                 </div>
