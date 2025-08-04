@@ -2,16 +2,17 @@
 
 import * as Sortable from "@/components/ui/sortable";
 import { Button } from "@/components/ui/button";
-import { X } from "lucide-react";
+import { X, ImagePlayIcon } from "lucide-react";
 import { useState, useEffect } from "react";
 
-export function ImageSortable({ imageList, onImageOrderChange, onImageRemove, columns = 3 }) {
+export function ImageSortable({ imageList, onImageOrderChange, onImageRemove, onHighlightImage, columns = 3 }) {
   const [images, setImages] = useState(imageList);
 
   // Update images when imageList prop changes
   useEffect(() => {
     setImages(imageList);
   }, [imageList]);
+
   const handleValueChange = (newOrder) => {
     setImages(newOrder);
     if (onImageOrderChange) {
@@ -28,13 +29,13 @@ export function ImageSortable({ imageList, onImageOrderChange, onImageRemove, co
   };
   return (
     <Sortable.Root value={images} onValueChange={handleValueChange} orientation="mixed" getItemValue={(item) => item.id}>
-      <Sortable.Content className="grid auto-rows-fr gap-2.5" style={{ gridTemplateColumns: `repeat(${columns}, minmax(0, 1fr))` }}>
+      <Sortable.Content className="grid auto-rows-fr gap-1" style={{ gridTemplateColumns: `repeat(${columns}, minmax(0, 1fr))` }}>
         {images.map((image) => (
           <Sortable.Item key={image.id} value={image.id} asChild asHandle>
             <div className="relative aspect-square cursor-grab active:cursor-grabbing rounded-lg overflow-hidden border-2 border-border hover:border-primary transition-colors group">
-              <img src={image.src} alt={`Image ${image.id}`} className="w-full h-full object-cover" draggable={false} />
-              {onImageRemove && (
+              <img src={image.src} alt={`Image ${image.id}`} className="w-full h-full object-cover" draggable={false} />              {onImageRemove && (
                 <Button
+                  title="Remove Image"
                   onClick={(e) => {
                     e.preventDefault();
                     e.stopPropagation();
@@ -55,6 +56,31 @@ export function ImageSortable({ imageList, onImageOrderChange, onImageRemove, co
                   type="button"
                 >
                   <X className="h-3 w-3" />
+                </Button>
+              )}
+              {onHighlightImage && (
+                <Button
+                  title="Highlight Image"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    onHighlightImage(image.id);
+                  }}
+                  onMouseDown={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                  }}
+                  onPointerDown={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                  }}
+                  variant="secondary"
+                  size="icon"
+                  className="absolute top-7 right-1 w-6 h-6 opacity-0 group-hover:opacity-50 hover:opacity-100 transition-opacity duration-200 z-10 rounded-sm"
+                  style={{ pointerEvents: "auto" }}
+                  type="button"
+                >
+                  <ImagePlayIcon className="h-3 w-3" />
                 </Button>
               )}
             </div>

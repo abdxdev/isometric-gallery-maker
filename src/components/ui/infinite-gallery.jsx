@@ -19,10 +19,11 @@ const hexToRgba = (hex, opacity) => {
 
 export const InfiniteCanvas = forwardRef(function InfiniteCanvas({ images, className, columns = 4, controls, style }, ref) {
   const canvasRef = useRef();
-  const contentRef = useRef();
-  const [dimensions, setDimensions] = useState({ width: "100%", height: "100%" });
+  const contentRef = useRef();  const [dimensions, setDimensions] = useState({ width: "100%", height: "100%" });
   const [height, setHeight] = useState(0);
-
+  const [highlightedImageId, setHighlightedImageId] = useState(null);
+  const [isHighlightVisible, setIsHighlightVisible] = useState(false);
+  
   const resetView = useCallback(() => {
     if (canvasRef.current) {
       canvasRef.current.fitContentToView({
@@ -37,13 +38,28 @@ export const InfiniteCanvas = forwardRef(function InfiniteCanvas({ images, class
     }
   }, []);
 
+  const highlightImage = useCallback((imageId) => {
+    setHighlightedImageId(imageId);
+    setIsHighlightVisible(true);
+    
+    // Start fade out after 2.7 seconds
+    setTimeout(() => {
+      setIsHighlightVisible(false);
+    }, 2700);
+    
+    // Remove highlight completely after 3 seconds (including fade transition)
+    setTimeout(() => {
+      setHighlightedImageId(null);
+    }, 3000);
+  }, []);
   // Expose resetView function to parent component
   useImperativeHandle(
     ref,
     () => ({
       resetView,
+      highlightImage,
     }),
-    [resetView]
+    [resetView, highlightImage]
   );
   useEffect(() => {
     if (contentRef.current && images.length > 0) {
@@ -108,14 +124,23 @@ export const InfiniteCanvas = forwardRef(function InfiniteCanvas({ images, class
             >
               {images.map((image, index) => (
                 <div key={index} className="break-inside-avoid" style={{ marginBottom: `${controls?.gap || 10}px` }}>
-                  <img
-                    className="w-full object-cover object-center"
-                    src={image.src}
-                    alt={`gallery-photo-${index}`}
-                    style={{
-                      border: `${controls?.borderThickness || 1}px solid ${hexToRgba(controls?.borderColor || "#000000", controls?.borderOpacity || 1)}`,
-                    }}
-                  />
+                  <div className="relative">
+                    <img
+                      className="w-full object-cover object-center"
+                      src={image.src}
+                      alt={`gallery-photo-${index}`}
+                      style={{
+                        border: `${controls?.borderThickness || 1}px solid ${hexToRgba(controls?.borderColor || "#000000", controls?.borderOpacity || 1)}`,
+                      }}
+                    />
+                    {highlightedImageId === image.id && (
+                      <div 
+                        className={`absolute inset-0 border-10 border-blue-500 shadow-lg shadow-blue-500/30 transition-all duration-300 ease-in-out ${
+                          isHighlightVisible ? 'opacity-100' : 'opacity-0'
+                        }`} 
+                      />
+                    )}
+                  </div>
                 </div>
               ))}
             </div>

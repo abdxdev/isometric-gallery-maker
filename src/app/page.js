@@ -1,7 +1,7 @@
 "use client";
 
 import { InfiniteCanvas } from "@/components/ui/infinite-gallery";
-import { GallerySidebar } from "@/components/gallery-sidebar";
+import { GallerySidebar } from "@/components/sidebar";
 import { ModeToggle } from "@/components/mode-toggle";
 import { FullscreenToggle } from "@/components/fullscreen-toggle";
 import { useState, useRef } from "react";
@@ -10,29 +10,49 @@ import { useFullscreen } from "@/hooks/useFullscreen";
 export default function Home() {
   const defaultControls = {
     repeat: 1,
-    columns: 3,
-    gap: 45,
+    columns: 4,
+    gap: 30,
     backgroundColor: "rgba(249, 250, 251, 1)",
     borderColor: "rgba(3, 7, 18, 0.1)",
-    borderThickness: 5,
+    borderThickness: 4,
   };
 
   const [controls, setControls] = useState(defaultControls);
 
   const [imageOrder, setImageOrder] = useState([
-    { id: "1", src: "/images/image10.png" },
-    { id: "2", src: "/images/image5.png" },
-    { id: "3", src: "/images/image2.png" },
-    { id: "4", src: "/images/image6.png" },
-    { id: "5", src: "/images/image3.png" },
-    { id: "6", src: "/images/image7.png" },
-    { id: "7", src: "/images/image9.png" },
-    { id: "8", src: "/images/image8.png" },
-    { id: "9", src: "/images/image13.png" },
-    { id: "10", src: "/images/image11.png" },
-    { id: "11", src: "/images/image4.png" },
-    { id: "12", src: "/images/image1.png" },
-    { id: "13", src: "/images/image12.png" },
+    // { id: "1", src: "/images/image10.png" },
+    // { id: "2", src: "/images/image5.png" },
+    // { id: "3", src: "/images/image2.png" },
+    // { id: "4", src: "/images/image6.png" },
+    // { id: "5", src: "/images/image3.png" },
+    // { id: "6", src: "/images/image7.png" },
+    // { id: "7", src: "/images/image9.png" },
+    // { id: "8", src: "/images/image8.png" },
+    // { id: "9", src: "/images/image13.png" },
+    // { id: "10", src: "/images/image11.png" },
+    // { id: "11", src: "/images/image4.png" },
+    // { id: "12", src: "/images/image1.png" },
+    // { id: "13", src: "/images/image12.png" },
+    { id: 1, src: "https://tailwindcss.com/plus-assets/img/heroes/ui-blocks-col-1-row-1.png" },
+    { id: 2, src: "https://tailwindcss.com/plus-assets/img/heroes/ui-blocks-col-1-row-2.png" },
+    { id: 3, src: "https://tailwindcss.com/plus-assets/img/heroes/ui-blocks-col-1-row-3.png" },
+    { id: 4, src: "https://tailwindcss.com/plus-assets/img/heroes/ui-blocks-col-1-row-4.png" },
+    { id: 5, src: "https://tailwindcss.com/plus-assets/img/heroes/ui-blocks-col-2-row-1.png" },
+    { id: 6, src: "https://tailwindcss.com/plus-assets/img/heroes/ui-blocks-col-2-row-2.png" },
+    { id: 7, src: "https://tailwindcss.com/plus-assets/img/heroes/ui-blocks-col-2-row-3.png" },
+    { id: 8, src: "https://tailwindcss.com/plus-assets/img/heroes/ui-blocks-col-2-row-4.png" },
+    { id: 9, src: "https://tailwindcss.com/plus-assets/img/heroes/ui-blocks-col-2-row-5.png" },
+    { id: 10, src: "https://tailwindcss.com/plus-assets/img/heroes/ui-blocks-col-2-row-6.png" },
+    { id: 11, src: "https://tailwindcss.com/plus-assets/img/heroes/ui-blocks-col-3-row-1.png" },
+    { id: 12, src: "https://tailwindcss.com/plus-assets/img/heroes/ui-blocks-col-3-row-2.png" },
+    { id: 13, src: "https://tailwindcss.com/plus-assets/img/heroes/ui-blocks-col-3-row-3.png" },
+    { id: 14, src: "https://tailwindcss.com/plus-assets/img/heroes/ui-blocks-col-3-row-4.png" },
+    { id: 15, src: "https://tailwindcss.com/plus-assets/img/heroes/ui-blocks-col-3-row-5.png" },
+    { id: 16, src: "https://tailwindcss.com/plus-assets/img/heroes/ui-blocks-col-3-row-6.png" },
+    { id: 17, src: "https://tailwindcss.com/plus-assets/img/heroes/ui-blocks-col-3-row-7.png" },
+    { id: 18, src: "https://tailwindcss.com/plus-assets/img/heroes/ui-blocks-col-4-row-1.png" },
+    { id: 19, src: "https://tailwindcss.com/plus-assets/img/heroes/ui-blocks-col-4-row-2.png" },
+    { id: 20, src: "https://tailwindcss.com/plus-assets/img/heroes/ui-blocks-col-4-row-3.png" },
   ]);
 
   const canvasRef = useRef();
@@ -70,6 +90,12 @@ export default function Home() {
     setImageOrder(prev => prev.filter(img => img.id !== id));
   };
 
+  const highlightImage = (imageId) => {
+    if (canvasRef.current) {
+      canvasRef.current.highlightImage(imageId);
+    }
+  };
+
   const handleCapture = () => {
     // TODO: Implement capture functionality
     console.log("Capture clicked");
@@ -85,7 +111,7 @@ export default function Home() {
         <header className="sticky top-0 z-50 w-full border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
           <div className="flex h-14 items-center justify-between px-6 max-w-none">
             <div className="flex items-center space-x-2">
-              <h1 className="text-lg font-semibold">Infinite Gallery</h1>
+              <h1 className="text-lg font-semibold">Mockup Maker</h1>
             </div>
             <ModeToggle />
           </div>
@@ -112,9 +138,9 @@ export default function Home() {
             />
 
             {/* Floating fullscreen exit button when in fullscreen */}
-            <FullscreenToggle 
-              isFullscreen={isFullscreen} 
-              onToggleFullscreen={toggleFullscreen} 
+            <FullscreenToggle
+              isFullscreen={isFullscreen}
+              onToggleFullscreen={toggleFullscreen}
             />
           </div>
         </div>
@@ -123,6 +149,7 @@ export default function Home() {
         {!isFullscreen && (
           <GallerySidebar
             controls={controls}
+            defaultControls={defaultControls}
             updateControl={updateControl}
             resetControls={resetControls}
             imageOrder={imageOrder}
@@ -131,6 +158,7 @@ export default function Home() {
             setImageOrder={setImageOrder}
             resetView={resetView}
             onCapture={handleCapture}
+            onHighlightImage={highlightImage}
             isFullscreen={isFullscreen}
             toggleFullscreen={toggleFullscreen}
             isFullscreenSupported={isSupported}

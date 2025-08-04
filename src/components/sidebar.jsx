@@ -6,11 +6,15 @@ import { Button } from "@/components/ui/button";
 import { NumberInput } from "@/components/ui/number-input";
 import { Label } from "@/components/ui/label";
 import { ReactColorPicker } from "@/components/ui/react-color-picker";
-import { Maximize2, Minimize2, RotateCcw, Focus, Camera } from "lucide-react";
+import { Maximize2, Minimize2, RotateCcw, Focus, Camera, X, RefreshCw } from "lucide-react";
 
-export function GallerySidebar({ controls, updateControl, resetControls, imageOrder, addImageFromUrl, removeImage, setImageOrder, resetView, onCapture, isFullscreen, toggleFullscreen, isFullscreenSupported }) {
+export function GallerySidebar({ controls, defaultControls, updateControl, resetControls, imageOrder, addImageFromUrl, removeImage, setImageOrder, onImageRotate, resetView, onCapture, onHighlightImage, isFullscreen, toggleFullscreen, isFullscreenSupported }) {
+  const clearAll = () => {
+    setImageOrder([]);
+    removeImage();
+  };
   return (
-    <div className="w-80 flex flex-col space-y-6 p-4 border-l border-border">
+    <div className="w-86 flex flex-col space-y-6 p-4 border-l border-border">
       {/* Import Images Section */}
       <div className="space-y-4">
         <h2 className="text-lg font-semibold">Import Images</h2>
@@ -42,12 +46,26 @@ export function GallerySidebar({ controls, updateControl, resetControls, imageOr
         {/* Background Color Control */}
         <div className="space-y-2">
           <Label htmlFor="backgroundColor">Background Color</Label>
-          <ReactColorPicker value={controls.backgroundColor} onChange={(value) => updateControl("backgroundColor", value)} />
+          <div className="flex gap-2">
+            <div className="flex-1">
+              <ReactColorPicker value={controls.backgroundColor} onChange={(value) => updateControl("backgroundColor", value)} />
+            </div>
+            <Button onClick={() => updateControl("backgroundColor", defaultControls.backgroundColor)} variant="outline" size="icon" className="h-10 w-10 flex-shrink-0" title="Reset Background Color">
+              <RefreshCw className="w-4 h-4" />
+            </Button>
+          </div>
         </div>
         {/* Border Color Control */}
         <div className="space-y-2">
           <Label htmlFor="borderColor">Border Color</Label>
-          <ReactColorPicker value={controls.borderColor} onChange={(value) => updateControl("borderColor", value)} />
+          <div className="flex gap-2">
+            <div className="flex-1">
+              <ReactColorPicker value={controls.borderColor} onChange={(value) => updateControl("borderColor", value)} />
+            </div>
+            <Button onClick={() => updateControl("borderColor", defaultControls.borderColor)} variant="outline" size="icon" className="h-10 w-10 flex-shrink-0" title="Reset Border Color">
+              <RefreshCw className="w-4 h-4" />
+            </Button>
+          </div>
         </div>
         {/* Border Thickness Control */}
         <div className="space-y-2">
@@ -66,13 +84,14 @@ export function GallerySidebar({ controls, updateControl, resetControls, imageOr
       {/* Image Order Section */}
       <div className="space-y-4">
         <h2 className="text-lg font-semibold">Image Order</h2>
-
         {/* Description */}
-        <p className="text-sm text-muted-foreground">Drag and drop images to reorder them. Click the X button to remove an image.</p>
-
-        {/* Image Sortable Component */}
+        <p className="text-sm text-muted-foreground">Drag and drop images to reorder them. Click the X button to remove an image or the ⚡ button to highlight it in the canvas.</p> {/* Image Sortable Component */}
         <div className="space-y-2">
-          <ImageSortable imageList={imageOrder} onImageOrderChange={setImageOrder} onImageRemove={removeImage} columns={3} />
+          <ImageSortable imageList={imageOrder} onImageOrderChange={setImageOrder} onImageRemove={removeImage} onHighlightImage={onHighlightImage} columns={3} />
+          <Button onClick={clearAll} variant="outline" className="w-full" disabled={imageOrder.length === 0}>
+            <X className="w-4 h-4" />
+            Clear All
+          </Button>
         </div>
       </div>
       <hr className="border-t border-border" /> {/* Actions Section */}
