@@ -8,7 +8,6 @@ import { WelcomeDialog } from "@/components/welcome-dialog";
 import { useState, useRef, useEffect } from "react";
 import { useFullscreen } from "@/hooks/useFullscreen";
 
-// Sample images data - same as in sidebar for consistency
 const sampleImages = [
   { id: "sample-1", src: "https://tailwindcss.com/plus-assets/img/heroes/ui-blocks-col-1-row-1.png" },
   { id: "sample-2", src: "https://tailwindcss.com/plus-assets/img/heroes/ui-blocks-col-1-row-2.png" },

@@ -189,7 +189,6 @@ export function Sidebar({ controls, updateControl, resetControl, imageOrder, sam
                 Capture
               </Button>
               <p className="text-xs text-muted-foreground text-center">Feature in development. Use manual screenshot</p>
-
             </div>
           </AccordionContent>
         </AccordionItem>

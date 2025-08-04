@@ -2,7 +2,7 @@
   "name": "isometric-gallery-maker",
   "version": "0.1.0",
   "private": true,
-  "description": "A modern web application for creating stunning isometric and orthogonal gallery mockups from your images. Transform your screenshots and photos into professional 3D presentations with customizable layouts, rotations, and styling options.",
+  "description": "Create stunning 3D isometric gallery mockups from your images with customizable layouts and rotations.",
   "keywords": [
     "isometric",
     "orthogonal",
