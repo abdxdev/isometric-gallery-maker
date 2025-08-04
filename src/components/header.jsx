@@ -9,8 +9,9 @@ export function Header() {
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="flex h-14 items-center justify-between px-6 max-w-none">
-        <div className="flex items-center">
+        <div className="flex items-center gap-2">
           <h1 className="text-lg font-semibold">Isometric Gallery Maker</h1>
+          <p className="text-sm border px-1.5 bg-accent">BETA</p>
         </div>
         <div className="flex items-center space-x-2">
           <GitHubStarCounter repo="abdxdev/isometric-gallery-maker" />

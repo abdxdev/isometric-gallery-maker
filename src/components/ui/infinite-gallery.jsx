@@ -114,9 +114,8 @@ export const InfiniteCanvas = forwardRef(function InfiniteCanvas({ images, class
                 left: "50%",
                 top: "50%",
               }}
-            >
-              {images.map((image, index) => (
-                <div key={index} className="break-inside-avoid" style={{ marginBottom: `${controls?.gap || 10}px` }}>
+            >              {images.map((image, index) => (
+                <div key={image.id || index} className="break-inside-avoid" style={{ marginBottom: `${controls?.gap || 10}px` }}>
                   <div className="relative">
                     <img
                       className="w-full object-cover object-center"
@@ -126,7 +125,7 @@ export const InfiniteCanvas = forwardRef(function InfiniteCanvas({ images, class
                         border: `${controls?.borderThickness || 1}px solid ${hexToRgba(controls?.borderColor || "#000000", controls?.borderOpacity || 1)}`,
                       }}
                     />
-                    {highlightedImageId && image.id.startsWith(highlightedImageId) && <div className={`absolute inset-0 border-10 border-primary shadow-lg shadow-blue-500/30 transition-all duration-300 ease-in-out ${isHighlightVisible ? "opacity-100" : "opacity-0"}`} />}
+                    {highlightedImageId && (image.originalId === highlightedImageId || image.id === highlightedImageId) && <div className={`absolute inset-0 border-10 border-primary shadow-lg shadow-blue-500/30 transition-all duration-300 ease-in-out ${isHighlightVisible ? "opacity-100" : "opacity-0"}`} />}
                   </div>
                 </div>
               ))}
