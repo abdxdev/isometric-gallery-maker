@@ -4,9 +4,9 @@ import { useState, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Upload, Link, Plus, X } from "lucide-react";
+import { Upload, Plus } from "lucide-react";
 
-export function ImageImporter({ onImageAdd, onImageRemove, recentImages = [] }) {
+export function ImageImporter({ onImageAdd }) {
   const [urlInput, setUrlInput] = useState("");
   const fileInputRef = useRef();
 
@@ -48,7 +48,7 @@ export function ImageImporter({ onImageAdd, onImageRemove, recentImages = [] }) 
             className="flex-1"
           />
           <Button type="submit" variant="outline">
-            <Plus size={16} />
+            <Plus className="w-4 h-4" />
           </Button>
         </div>
       </div>

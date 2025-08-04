@@ -1,8 +1,8 @@
-export function calculateIsometricBoundingBox(width, height) {
+export function calculateIsometricBoundingBox(width, height, rotateXOuter, rotateYOuter) {
   const rad = (deg) => (deg * Math.PI) / 180;
 
-  const rotateXOuter = rad(35.264);
-  const rotateYOuter = rad(-45);
+  rotateXOuter = rad(rotateXOuter);
+  rotateYOuter = rad(rotateYOuter);
   const rotateXInner = rad(-90);
   const translateZInner = height / 2;
 

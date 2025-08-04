@@ -42,7 +42,7 @@ export function ReactColorPicker({ value, onChange, label }) {
   return (
     <div className="relative">
       <div
-        className="w-full h-10 border border-input rounded-md cursor-pointer flex items-center px-3 bg-background hover:bg-accent"
+        className="w-full h-9 border border-input rounded-md cursor-pointer flex items-center px-3 bg-background hover:bg-accent"
         onClick={handleClick}
       >
         <div

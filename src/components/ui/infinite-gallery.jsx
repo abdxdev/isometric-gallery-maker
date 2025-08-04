@@ -27,18 +27,10 @@ export const InfiniteCanvas = forwardRef(function InfiniteCanvas({ images, class
 
   const resetView = useCallback(() => {
     if (canvasRef.current) {
-      canvasRef.current.fitContentToView({
-        // offset: {
-        //   x: 0,
-        //   y: -400,
-        // },
-        // duration: 0,
-      });
+      canvasRef.current.fitContentToView({});
       canvasRef.current.scrollNodeToCenter({});
-      // canvasRef.current.scrollNodeHandler({ nodeElement, offset, scale: 1, shouldUpdateMaxScale, maxScale, transitionDuration, position });
     }
   }, []);
-
   const highlightImage = useCallback((imageId) => {
     setHighlightedImageId(imageId);
     setIsHighlightVisible(true);
@@ -52,13 +44,13 @@ export const InfiniteCanvas = forwardRef(function InfiniteCanvas({ images, class
     setTimeout(() => {
       setHighlightedImageId(null);
     }, 3000);
-  }, []);
-  // Expose resetView function to parent component
+  }, []);// Expose functions to parent component
   useImperativeHandle(
     ref,
     () => ({
       resetView,
       highlightImage,
+      calculatePadding,
     }),
     [resetView, highlightImage]
   );
@@ -78,7 +70,7 @@ export const InfiniteCanvas = forwardRef(function InfiniteCanvas({ images, class
     };
     setHeight(original.height);
     // Calculate isometric bounding box
-    const result = calculateIsometricBoundingBox(original.width, original.height);
+    const result = calculateIsometricBoundingBox(original.width, original.height, controls.rotateXOuter, controls.rotateYOuter);
     setDimensions({
       width: result.width,
       height: result.height,
@@ -105,7 +97,7 @@ export const InfiniteCanvas = forwardRef(function InfiniteCanvas({ images, class
         >
           <div
             style={{
-              transform: "rotateX(35.264deg) rotateY(-45deg)",
+              transform: `rotateX(${controls.rotateXOuter}deg) rotateY(${controls.rotateYOuter}deg)`,
               transformStyle: "preserve-3d",
               position: "relative",
             }}
@@ -134,7 +126,7 @@ export const InfiniteCanvas = forwardRef(function InfiniteCanvas({ images, class
                         border: `${controls?.borderThickness || 1}px solid ${hexToRgba(controls?.borderColor || "#000000", controls?.borderOpacity || 1)}`,
                       }}
                     />
-                    {highlightedImageId === image.id && <div className={`absolute inset-0 border-10 border-blue-500 shadow-lg shadow-blue-500/30 transition-all duration-300 ease-in-out ${isHighlightVisible ? "opacity-100" : "opacity-0"}`} />}
+                    {highlightedImageId && image.id.startsWith(highlightedImageId) && <div className={`absolute inset-0 border-10 border-primary shadow-lg shadow-blue-500/30 transition-all duration-300 ease-in-out ${isHighlightVisible ? "opacity-100" : "opacity-0"}`} />}
                   </div>
                 </div>
               ))}

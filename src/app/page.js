@@ -15,45 +15,13 @@ export default function Home() {
     backgroundColor: "rgba(249, 250, 251, 1)",
     borderColor: "rgba(3, 7, 18, 0.1)",
     borderThickness: 4,
+    rotateXOuter: 35.264,
+    rotateYOuter: -45,
   };
 
   const [controls, setControls] = useState(defaultControls);
 
-  const [imageOrder, setImageOrder] = useState([
-    // { id: "1", src: "/images/image10.png" },
-    // { id: "2", src: "/images/image5.png" },
-    // { id: "3", src: "/images/image2.png" },
-    // { id: "4", src: "/images/image6.png" },
-    // { id: "5", src: "/images/image3.png" },
-    // { id: "6", src: "/images/image7.png" },
-    // { id: "7", src: "/images/image9.png" },
-    // { id: "8", src: "/images/image8.png" },
-    // { id: "9", src: "/images/image13.png" },
-    // { id: "10", src: "/images/image11.png" },
-    // { id: "11", src: "/images/image4.png" },
-    // { id: "12", src: "/images/image1.png" },
-    // { id: "13", src: "/images/image12.png" },
-    // { id: 1, src: "https://tailwindcss.com/plus-assets/img/heroes/ui-blocks-col-1-row-1.png" },
-    // { id: 2, src: "https://tailwindcss.com/plus-assets/img/heroes/ui-blocks-col-1-row-2.png" },
-    // { id: 3, src: "https://tailwindcss.com/plus-assets/img/heroes/ui-blocks-col-1-row-3.png" },
-    // { id: 4, src: "https://tailwindcss.com/plus-assets/img/heroes/ui-blocks-col-1-row-4.png" },
-    // { id: 5, src: "https://tailwindcss.com/plus-assets/img/heroes/ui-blocks-col-2-row-1.png" },
-    // { id: 6, src: "https://tailwindcss.com/plus-assets/img/heroes/ui-blocks-col-2-row-2.png" },
-    // { id: 7, src: "https://tailwindcss.com/plus-assets/img/heroes/ui-blocks-col-2-row-3.png" },
-    // { id: 8, src: "https://tailwindcss.com/plus-assets/img/heroes/ui-blocks-col-2-row-4.png" },
-    // { id: 9, src: "https://tailwindcss.com/plus-assets/img/heroes/ui-blocks-col-2-row-5.png" },
-    // { id: 10, src: "https://tailwindcss.com/plus-assets/img/heroes/ui-blocks-col-2-row-6.png" },
-    // { id: 11, src: "https://tailwindcss.com/plus-assets/img/heroes/ui-blocks-col-3-row-1.png" },
-    // { id: 12, src: "https://tailwindcss.com/plus-assets/img/heroes/ui-blocks-col-3-row-2.png" },
-    // { id: 13, src: "https://tailwindcss.com/plus-assets/img/heroes/ui-blocks-col-3-row-3.png" },
-    // { id: 14, src: "https://tailwindcss.com/plus-assets/img/heroes/ui-blocks-col-3-row-4.png" },
-    // { id: 15, src: "https://tailwindcss.com/plus-assets/img/heroes/ui-blocks-col-3-row-5.png" },
-    // { id: 16, src: "https://tailwindcss.com/plus-assets/img/heroes/ui-blocks-col-3-row-6.png" },
-    // { id: 17, src: "https://tailwindcss.com/plus-assets/img/heroes/ui-blocks-col-3-row-7.png" },
-    // { id: 18, src: "https://tailwindcss.com/plus-assets/img/heroes/ui-blocks-col-4-row-1.png" },
-    // { id: 19, src: "https://tailwindcss.com/plus-assets/img/heroes/ui-blocks-col-4-row-2.png" },
-    // { id: 20, src: "https://tailwindcss.com/plus-assets/img/heroes/ui-blocks-col-4-row-3.png" },
-  ]);
+  const [imageOrder, setImageOrder] = useState([]);
 
   useEffect(() => {
     const timer = setTimeout(resetView, 300);
@@ -74,8 +42,11 @@ export default function Home() {
     }));
   };
 
-  const resetControls = () => {
-    setControls(defaultControls);
+  const resetControl = (key) => {
+    setControls(prev => ({
+      ...prev,
+      [key]: defaultControls[key]
+    }));
   };
 
   const resetView = () => {
@@ -84,9 +55,15 @@ export default function Home() {
     }
   };
 
+  const recalculatePadding = () => {
+    if (canvasRef.current) {
+      canvasRef.current.calculatePadding();
+    }
+  };
+
   const addImageFromUrl = (url) => {
     const newImage = {
-      id: Date.now().toString(),
+      id: `img-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
       src: url
     };
     setImageOrder(prev => [...prev, newImage]);
@@ -107,23 +84,30 @@ export default function Home() {
     console.log("Capture clicked");
   };
 
-  // Use the current imageOrder for the gallery
-  const repeatedImages = Array(controls.repeat).fill(imageOrder).flat();
+  // Use the current imageOrder for the gallery with unique IDs for repeated items
+  const repeatedImages = Array(controls.repeat)
+    .fill(null)
+    .flatMap((_, repeatIndex) => 
+      imageOrder.map((image, imageIndex) => ({
+        ...image,
+        id: `${image.id}-repeat-${repeatIndex}`
+      }))
+    );
 
   return (
     <div className="min-h-screen">
       {/* Header - hide in fullscreen */}
       {!isFullscreen && <Header />}
 
-      <div className="flex">
+      <div className="flex flex-col lg:flex-row">
         {/* Main Gallery Area */}
-        <div className="flex-1">
+        <div className="flex-1 order-1 lg:order-1">
           {/* Gallery */}
           <div
             ref={galleryContainerRef}
             className={`z-10 overflow-hidden relative ${isFullscreen
               ? "h-screen w-screen fixed top-0 left-0"
-              : "sticky top-14 h-[calc(100vh-3.5rem)]"
+              : "sticky top-14 h-[60vh] lg:h-[calc(100vh-3.5rem)]"
               }`}
           >
             <InfiniteCanvas
@@ -143,22 +127,25 @@ export default function Home() {
 
         {/* Right Sidebar for Image Management - hide in fullscreen */}
         {!isFullscreen && (
-          <GallerySidebar
-            controls={controls}
-            defaultControls={defaultControls}
-            updateControl={updateControl}
-            resetControls={resetControls}
-            imageOrder={imageOrder}
-            addImageFromUrl={addImageFromUrl}
-            removeImage={removeImage}
-            setImageOrder={setImageOrder}
-            resetView={resetView}
-            onCapture={handleCapture}
-            onHighlightImage={highlightImage}
-            isFullscreen={isFullscreen}
-            toggleFullscreen={toggleFullscreen}
-            isFullscreenSupported={isSupported}
-          />
+          <div className="order-2 lg:order-2">
+            <GallerySidebar
+              controls={controls}
+              defaultControls={defaultControls}
+              updateControl={updateControl}
+              resetControl={resetControl}
+              imageOrder={imageOrder}
+              addImageFromUrl={addImageFromUrl}
+              removeImage={removeImage}
+              setImageOrder={setImageOrder}
+              resetView={resetView}
+              recalculatePadding={recalculatePadding}
+              onCapture={handleCapture}
+              onHighlightImage={highlightImage}
+              isFullscreen={isFullscreen}
+              toggleFullscreen={toggleFullscreen}
+              isFullscreenSupported={isSupported}
+            />
+          </div>
         )}
       </div>
     </div>

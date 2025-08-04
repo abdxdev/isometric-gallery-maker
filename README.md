@@ -1,36 +1,48 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Isometric Gallery Maker
 
-## Getting Started
+Create stunning 3D isometric gallery mockups from your images with an easy-to-use web interface.
 
-First, run the development server:
+## Features
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+- 🎨 Drag & drop image gallery builder
+- 📐 3D isometric perspective views
+- 🎛️ Real-time customization (columns, gaps, colors, rotations)
+- 📱 Responsive design for all devices
+- 🖼️ Upload files or add from URLs
+- 🌓 Dark/light mode support
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Quick Start
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+1. **Install dependencies:**
+   ```bash
+   npm install
+   ```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+2. **Run the app:**
+   ```bash
+   npm run dev
+   ```
 
-## Learn More
+3. **Open** [http://localhost:3000](http://localhost:3000)
 
-To learn more about Next.js, take a look at the following resources:
+## How to Use
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+1. **Add Images**: Upload files or paste URLs
+2. **Customize**: Adjust columns, gaps, colors, and 3D rotation
+3. **Organize**: Drag and drop to reorder images
+4. **Export**: Use fullscreen mode and capture functionality
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Built With
 
-## Deploy on Vercel
+- Next.js 15 + React 19
+- Tailwind CSS
+- Radix UI components
+- React Infinite Canvas
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Author
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+**Abd** - [GitHub](https://github.com/abdxdev)
+
+---
+
+⭐ Star this project if you find it helpful!
