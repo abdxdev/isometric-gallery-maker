@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { SketchPicker } from "react-color";
+import { ChromePicker } from "react-color";
 
 export function ReactColorPicker({ value, onChange, label }) {
   const [showPicker, setShowPicker] = useState(false);
@@ -58,7 +58,7 @@ export function ReactColorPicker({ value, onChange, label }) {
             className="fixed inset-0"
             onClick={handleClose}
           />
-          <SketchPicker
+          <ChromePicker
             color={color}
             onChange={handleChange}
             disableAlpha={false}
