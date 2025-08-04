@@ -4,18 +4,16 @@
 
 Create stunning 3D isometric gallery mockups from your images with an easy-to-use web interface.
 
-## 🚀 Live Demo
+## Try it now
 
-**[Try it now: https://isometric-gallery-maker.abd-dev.studio/](https://isometric-gallery-maker.abd-dev.studio/)**
+**Visit: [isometric-gallery-maker.abd-dev.studio](https://isometric-gallery-maker.abd-dev.studio/)**
 
 ## Features
 
-- 🎨 Drag & drop image gallery builder
-- 📐 3D isometric perspective views
-- 🎛️ Real-time customization (columns, gaps, colors, rotations)
-- 📱 Responsive design for all devices
-- 🖼️ Upload files or add from URLs
-- 🌓 Dark/light mode support
+- Drag & drop image gallery builder
+- 3D isometric perspective views
+- Real-time customization (columns, gaps, colors, rotations)
+- Upload files or add from URLs
 
 ## Quick Start
 
@@ -49,7 +47,7 @@ Create stunning 3D isometric gallery mockups from your images with an easy-to-us
 
 ## Author
 
-**Abd** - [GitHub](https://github.com/abdxdev)
+**abdxdev** - [GitHub](https://github.com/abdxdev)
 
 ---
 
