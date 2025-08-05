@@ -52,7 +52,7 @@ export function Sidebar({ controls, updateControl, resetControl, imageOrder, loa
                 <div className="flex items-center gap-2">
                   <Label className="text-sm font-medium">Add from URL</Label>
                 </div>
-                <div className="flex w-full max-w-sm items-center gap-2">
+                <div className="flex w-full items-center gap-2">
                   <Input placeholder="https://example.com/image.jpg" value={urlInput} onChange={(e) => setUrlInput(e.target.value)} onKeyDown={(e) => e.key === "Enter" && handleUrlSubmit()} className="flex-1" />
                   <Button type="submit" variant="outline" onClick={handleUrlSubmit}>
                     <Plus className="w-4 h-4" />
@@ -113,7 +113,9 @@ export function Sidebar({ controls, updateControl, resetControl, imageOrder, loa
               <div className="space-y-2">
                 <Label htmlFor="columns">Columns</Label>
                 <div className="flex gap-2">
-                  <NumberInput id="columns" value={controls.columns} onValueChange={(value) => updateControl("columns", value)} min={1} max={5} stepper={1} className="flex-1" />
+                  <div className="flex-1">
+                    <NumberInput id="columns" value={controls.columns} onValueChange={(value) => updateControl("columns", value)} min={1} max={5} stepper={1} className="w-full" />
+                  </div>
                   <ResetButton onClick={() => resetControl("columns")} title="Reset Columns" />
                 </div>
               </div>
@@ -121,7 +123,9 @@ export function Sidebar({ controls, updateControl, resetControl, imageOrder, loa
               <div className="space-y-2">
                 <Label htmlFor="gap">Gap</Label>
                 <div className="flex gap-2">
-                  <NumberInput id="gap" value={controls.gap} onValueChange={(value) => updateControl("gap", value)} min={0} max={100} stepper={5} className="flex-1" />
+                  <div className="flex-1">
+                    <NumberInput id="gap" value={controls.gap} onValueChange={(value) => updateControl("gap", value)} min={0} max={100} stepper={5} className="w-full" />
+                  </div>
                   <ResetButton onClick={() => resetControl("gap")} title="Reset Gap" />
                 </div>
               </div>
@@ -129,7 +133,9 @@ export function Sidebar({ controls, updateControl, resetControl, imageOrder, loa
               <div className="space-y-2">
                 <Label htmlFor="repeat">Repeat</Label>
                 <div className="flex gap-2">
-                  <NumberInput id="repeat" value={controls.repeat} onValueChange={(value) => updateControl("repeat", value)} min={1} max={10} stepper={1} className="flex-1" />
+                  <div className="flex-1">
+                    <NumberInput id="repeat" value={controls.repeat} onValueChange={(value) => updateControl("repeat", value)} min={1} max={10} stepper={1} className="w-full" />
+                  </div>
                   <ResetButton onClick={() => resetControl("repeat")} title="Reset Repeat" />
                 </div>
               </div>
@@ -157,7 +163,9 @@ export function Sidebar({ controls, updateControl, resetControl, imageOrder, loa
               <div className="space-y-2">
                 <Label htmlFor="borderThickness">Border Thickness</Label>
                 <div className="flex gap-2">
-                  <NumberInput id="borderThickness" value={controls.borderThickness} onValueChange={(value) => updateControl("borderThickness", value)} min={0} max={20} stepper={1} className="flex-1" />
+                  <div className="flex-1">
+                    <NumberInput id="borderThickness" value={controls.borderThickness} onValueChange={(value) => updateControl("borderThickness", value)} min={0} max={20} stepper={1} className="w-full" />
+                  </div>
                   <ResetButton onClick={() => resetControl("borderThickness")} title="Reset Border Thickness" />
                 </div>
               </div>

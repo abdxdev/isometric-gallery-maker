@@ -7,6 +7,7 @@ import { Header } from "@/components/header";
 import { WelcomeDialog } from "@/components/welcome-dialog";
 import { useState, useRef, useMemo } from "react";
 import { useFullscreen } from "@/hooks/useFullscreen";
+// import { Keyboard } from "@/components/keyboard";
 
 const sampleImages = [
   { id: 1, src: "https://tailwindcss.com/plus-assets/img/heroes/ui-blocks-col-1-row-1.png" },
@@ -186,6 +187,13 @@ export default function Home() {
           </div>
         )}
       </div>
+			{/* {!isFullscreen && (
+				<div className="fixed bottom-0 left-0 right-0 w-full flex justify-center bg-background border-t border-border z-50">
+					<div className="max-w-md w-full">
+						<Keyboard mode="auto" className="w-full" />
+					</div>
+				</div>
+			)} */}
     </div>
   );
 }
