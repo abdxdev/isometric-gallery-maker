@@ -73,6 +73,37 @@ export function Sidebar({ controls, updateControl, resetControl, imageOrder, loa
             </div>
           </AccordionContent>
         </AccordionItem>
+        {/* Image Order Section */}
+        <AccordionItem value="order">
+          <AccordionTrigger className="text-md">Image Order</AccordionTrigger>
+          <AccordionContent>
+            <div className="space-y-4">
+              {imageOrder.length === 0 ? (
+                <>
+                  {/* Empty state */}
+                  <p className="text-sm text-muted-foreground text-center">No images added yet</p>
+                  <Button onClick={loadSampleImages} variant="outline" className="w-full">
+                    <ImageIcon className="w-4 h-4" />
+                    Load Sample Images
+                  </Button>
+                </>
+              ) : (
+                <>
+                  {/* Description */}
+                  <p className="text-sm text-muted-foreground">Drag and drop images to reorder them</p>
+                  {/* Image Sortable Component */}
+                  <div className="space-y-2">
+                    <ImageSortable imageList={imageOrder} onImageOrderChange={setImageOrder} onImageRemove={removeImage} onHighlightImage={onHighlightImage} columns={3} />
+                    <Button onClick={clearAll} variant="outline" className="w-full" disabled={imageOrder.length === 0}>
+                      <X className="w-4 h-4" />
+                      Clear All
+                    </Button>
+                  </div>
+                </>
+              )}
+            </div>
+          </AccordionContent>
+        </AccordionItem>
         {/* Controls Section */}
         <AccordionItem value="controls">
           <AccordionTrigger className="text-md">Gallery Controls</AccordionTrigger>
@@ -160,37 +191,6 @@ export function Sidebar({ controls, updateControl, resetControl, imageOrder, loa
                 </Button>
                 <p className="text-xs text-muted-foreground text-center">Use if images appear cut off</p>
               </div>
-            </div>
-          </AccordionContent>
-        </AccordionItem>
-        {/* Image Order Section */}
-        <AccordionItem value="order">
-          <AccordionTrigger className="text-md">Image Order</AccordionTrigger>
-          <AccordionContent>
-            <div className="space-y-4">
-              {imageOrder.length === 0 ? (
-                <>
-                  {/* Empty state */}
-                  <p className="text-sm text-muted-foreground text-center">No images added yet</p>
-                  <Button onClick={loadSampleImages} variant="outline" className="w-full">
-                    <ImageIcon className="w-4 h-4" />
-                    Load Sample Images
-                  </Button>
-                </>
-              ) : (
-                <>
-                  {/* Description */}
-                  <p className="text-sm text-muted-foreground">Drag and drop images to reorder them</p>
-                  {/* Image Sortable Component */}
-                  <div className="space-y-2">
-                    <ImageSortable imageList={imageOrder} onImageOrderChange={setImageOrder} onImageRemove={removeImage} onHighlightImage={onHighlightImage} columns={3} />
-                    <Button onClick={clearAll} variant="outline" className="w-full" disabled={imageOrder.length === 0}>
-                      <X className="w-4 h-4" />
-                      Clear All
-                    </Button>
-                  </div>
-                </>
-              )}
             </div>
           </AccordionContent>
         </AccordionItem>

@@ -25,7 +25,6 @@ export const InfiniteCanvas = forwardRef(function InfiniteCanvas({ images, class
 
   const highlightImage = (imageId) => {
     setHighlightedImageId(imageId);
-    // Auto-remove highlight after 3 seconds
     setTimeout(() => {
       setHighlightedImageId(null);
     }, 3000);
@@ -181,7 +180,7 @@ export const InfiniteCanvas = forwardRef(function InfiniteCanvas({ images, class
                         border: `${controls.borderThickness}px solid ${controls.borderColor}`,
                       }}
                     />
-                    <div className={cn("absolute inset-0 pointer-events-none border-2 transition-all duration-500 ease-in-out", highlightedImageId === image.id ? "border-blue-500 bg-blue-500/30 opacity-100" : "border-transparent bg-transparent opacity-0")} />
+                    <div className={cn("absolute inset-0 pointer-events-none border-2 transition-all duration-300 ease-in-out", highlightedImageId === image.id ? "border-blue-500 bg-blue-500/30 opacity-100" : "border-transparent bg-transparent opacity-0")} />
                   </div>
                 </div>
               ))}
