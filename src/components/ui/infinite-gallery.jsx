@@ -142,7 +142,7 @@ export const InfiniteCanvas = forwardRef(function InfiniteCanvas({ images, class
         >
           <div
             style={{
-              // transform: `rotateX(${controls.rotateXOuter}deg) rotateY(${controls.rotateYOuter}deg)`,
+              transform: `rotateX(${controls.rotateXOuter}deg) rotateY(${controls.rotateYOuter}deg)`,
               transformStyle: "preserve-3d",
               position: "relative",
             }}
@@ -153,7 +153,7 @@ export const InfiniteCanvas = forwardRef(function InfiniteCanvas({ images, class
               style={{
                 columns: controls.columns,
                 columnGap: `${controls.gap}px`,
-                // transform: `rotateX(-90deg)`,
+                transform: `rotateX(-90deg)`,
                 transformOrigin: "center center",
                 position: "relative",
                 transition: "opacity 0.3s ease-in-out",
@@ -165,7 +165,7 @@ export const InfiniteCanvas = forwardRef(function InfiniteCanvas({ images, class
                     <Image
                       height={720}
                       width={1280}
-                      className="w-full object-cover object-center"
+                      className="object-cover object-center min-w-[1280px] min-h-[720px]"
                       src={image.src}
                       alt={`gallery-photo-${index}`}
                       style={{
