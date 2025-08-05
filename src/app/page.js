@@ -7,8 +7,6 @@ import { Header } from "@/components/header";
 import { WelcomeDialog } from "@/components/welcome-dialog";
 import { useState, useRef, useEffect } from "react";
 import { useFullscreen } from "@/hooks/useFullscreen";
-import { preloadImages } from "@/hooks/useImagePreloader";
-
 
 const sampleImages = [
   { id: 1, src: "https://tailwindcss.com/plus-assets/img/heroes/ui-blocks-col-1-row-1.png" },
@@ -48,13 +46,6 @@ export default function Home() {
   const [controls, setControls] = useState(defaultControls);
   const [imageOrder, setImageOrder] = useState([]);
   const [nextImageId, setNextImageId] = useState(sampleImages.length + 1);
-  const [isLoadingImages, setIsLoadingImages] = useState(false);
-
-  useEffect(() => {
-    const timer = setTimeout(resetView, 300);
-    return () => clearTimeout(timer);
-  }, [imageOrder]);
-
 
   const canvasRef = useRef();
   const galleryContainerRef = useRef();
@@ -81,21 +72,10 @@ export default function Home() {
     }
   };
 
-  const recalculatePadding = () => {
+  const recalculateBounding = () => {
     if (canvasRef.current) {
-      canvasRef.current.calculatePadding();
+      canvasRef.current.calculateBounding();
     }
-  };
-
-  const handleFileUpload = (event) => {
-    const files = Array.from(event.target.files);
-    files.forEach((file) => {
-      if (file.type.startsWith("image/")) {
-        const url = URL.createObjectURL(file);
-        addImageFromUrl(url);
-      }
-    });
-    event.target.value = "";
   };
 
   const addImageFromUrl = (url) => {
@@ -111,36 +91,25 @@ export default function Home() {
     setImageOrder(prev => prev.filter(img => img.id !== id));
   };
 
-  const loadSampleImages = async () => {
-    setIsLoadingImages(true);
+  const loadSampleImages = () => {
+    setImageOrder(sampleImages);
+    setNextImageId(sampleImages.length + 1);
+  };
 
-    try {
-      // Preload all sample images before setting them
-      const imageSources = sampleImages.map(img => img.src);
-      console.log('Starting to preload', imageSources.length, 'images...');
-
-      const results = await preloadImages(imageSources);
-
-      // Count successful loads
-      const successCount = results.filter(result => result.status === 'fulfilled').length;
-      const failureCount = results.length - successCount;
-
-      console.log(`Preloading complete: ${successCount} succeeded, ${failureCount} failed`);
-
-      if (failureCount > 0) {
-        console.warn("Some images failed to preload, but proceeding anyway");
+  const handleFileUpload = (event) => {
+    const files = Array.from(event.target.files);
+    files.forEach((file) => {
+      if (file.type.startsWith("image/")) {
+        const url = URL.createObjectURL(file);
+        const newImage = {
+          id: nextImageId,
+          src: url
+        };
+        setImageOrder(prev => [...prev, newImage]);
+        setNextImageId(prev => prev + 1);
       }
-
-      // Set images after preloading attempt (successful or not)
-      setImageOrder(sampleImages);
-
-    } catch (error) {
-      console.error("Error during image preloading:", error);
-      // Still set the images even if preloading fails
-      setImageOrder(sampleImages);
-    } finally {
-      setIsLoadingImages(false);
-    }
+    });
+    event.target.value = "";
   };
 
   const highlightImage = (imageId) => {
@@ -154,15 +123,17 @@ export default function Home() {
     console.log("Capture clicked");
   };
 
-  const repeatedImages = Array(controls.repeat)
-    .fill(null)
-    .flatMap((_, repeatIndex) =>
-      imageOrder.map((image, imageIndex) => ({
-        ...image,
-        id: `${image.id}_repeat_${repeatIndex}`,
-        originalId: image.id // Keep track of the original ID for highlighting
-      }))
-    );
+  // Image Variable
+  const images = Array.from({ length: controls.repeat }, (_, repeatIndex) =>
+    imageOrder.map((image, imageIndex) => 
+      repeatIndex === 0 ? image : { ...image, id: nextImageId + (repeatIndex - 1) * imageOrder.length + imageIndex }
+    )
+  ).flat();
+  useEffect(() => {
+    if (controls.repeat > 1 && imageOrder.length > 0) {
+      setNextImageId(prev => prev + (controls.repeat - 1) * imageOrder.length);
+    }
+  }, [controls.repeat, imageOrder.length]);
 
   return (
     <div className="min-h-screen">
@@ -185,7 +156,7 @@ export default function Home() {
           >
             <InfiniteCanvas
               ref={canvasRef}
-              images={repeatedImages}
+              images={images}
               className="w-full h-full"
               controls={controls}
             />
@@ -203,22 +174,22 @@ export default function Home() {
           <div className="order-2 lg:order-2">
             <Sidebar
               controls={controls}
+              defaultControls={defaultControls}
               updateControl={updateControl}
               resetControl={resetControl}
-              imageOrder={imageOrder}
+              imageOrder={imageOrder} //
               loadSampleImages={loadSampleImages}
               handleFileUpload={handleFileUpload}
               addImageFromUrl={addImageFromUrl}
               removeImage={removeImage}
               setImageOrder={setImageOrder}
               resetView={resetView}
-              recalculatePadding={recalculatePadding}
+              recalculateBounding={recalculateBounding}
               onCapture={handleCapture}
               onHighlightImage={highlightImage}
               isFullscreen={isFullscreen}
               toggleFullscreen={toggleFullscreen}
               isFullscreenSupported={isSupported}
-              isLoadingImages={isLoadingImages}
             />
           </div>
         )}

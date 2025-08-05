@@ -2,9 +2,16 @@ import { useState, useEffect, useCallback } from 'react';
 
 export const useFullscreen = (targetElementRef = null) => {
   const [isFullscreen, setIsFullscreen] = useState(false);
+  const [mounted, setMounted] = useState(false);
+
+  // Set mounted to true after hydration
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
   // Check if fullscreen API is available
   const isSupported = useCallback(() => {
-    if (typeof window === 'undefined' || typeof document === 'undefined') {
+    if (!mounted || typeof window === 'undefined' || typeof document === 'undefined') {
       return false;
     }
     return !!(
@@ -13,7 +20,7 @@ export const useFullscreen = (targetElementRef = null) => {
       document.mozFullScreenEnabled ||
       document.msFullscreenEnabled
     );
-  }, []);
+  }, [mounted]);
   // Enter fullscreen
   const enterFullscreen = useCallback(async () => {
     if (typeof window === 'undefined' || !isSupported()) {

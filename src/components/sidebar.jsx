@@ -19,7 +19,7 @@ function ResetButton({ onClick, title, className = "flex-shrink-0" }) {
   );
 }
 
-export function Sidebar({ controls, updateControl, resetControl, imageOrder, loadSampleImages, handleFileUpload, addImageFromUrl, removeImage, setImageOrder, resetView, recalculatePadding, onCapture, onHighlightImage, isFullscreen, toggleFullscreen, isFullscreenSupported, isLoadingImages }) {
+export function Sidebar({ controls, updateControl, resetControl, imageOrder, loadSampleImages, handleFileUpload, addImageFromUrl, removeImage, setImageOrder, resetView, recalculateBounding, onCapture, onHighlightImage, isFullscreen, toggleFullscreen, isFullscreenSupported, isLoadingImages }) {
   const [urlInput, setUrlInput] = useState("");
   const fileInputRef = useRef();
 
@@ -29,7 +29,7 @@ export function Sidebar({ controls, updateControl, resetControl, imageOrder, loa
       setUrlInput("");
     }
   };
-  
+
   const triggerFileUpload = () => {
     fileInputRef.current?.click();
   };
@@ -152,11 +152,11 @@ export function Sidebar({ controls, updateControl, resetControl, imageOrder, loa
                   <ResetButton onClick={() => resetControl("rotateYOuter")} title="Reset Rotate Y" />
                 </div>
               </div>
-              {/* Recalculate Padding Button */}
+              {/* Recalculate Bounding Button */}
               <div className="space-y-2">
-                <Button onClick={recalculatePadding} variant="outline" className="w-full">
+                <Button onClick={recalculateBounding} variant="outline" className="w-full">
                   <RefreshCw className="w-4 h-4" />
-                  Recalculate Padding
+                  Recalculate Bounding
                 </Button>
                 <p className="text-xs text-muted-foreground text-center">Use if images appear cut off</p>
               </div>
@@ -168,23 +168,13 @@ export function Sidebar({ controls, updateControl, resetControl, imageOrder, loa
           <AccordionTrigger className="text-md">Image Order</AccordionTrigger>
           <AccordionContent>
             <div className="space-y-4">
-              {" "}
               {imageOrder.length === 0 ? (
                 <>
                   {/* Empty state */}
                   <p className="text-sm text-muted-foreground text-center">No images added yet</p>
-                  <Button onClick={loadSampleImages} variant="outline" className="w-full" disabled={isLoadingImages}>
-                    {isLoadingImages ? (
-                      <>
-                        <Loader2 className="w-4 h-4 animate-spin" />
-                        Loading Images...
-                      </>
-                    ) : (
-                      <>
-                        <ImageIcon className="w-4 h-4" />
-                        Load Sample Images
-                      </>
-                    )}
+                  <Button onClick={loadSampleImages} variant="outline" className="w-full">
+                    <ImageIcon className="w-4 h-4" />
+                    Load Sample Images
                   </Button>
                 </>
               ) : (

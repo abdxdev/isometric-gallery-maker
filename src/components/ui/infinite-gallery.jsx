@@ -1,110 +1,137 @@
 "use client";
 
 import { useRef, useState, useEffect, useCallback, forwardRef, useImperativeHandle } from "react";
-import { ReactInfiniteCanvas, ReactInfiniteCanvasHandle } from "react-infinite-canvas";
+import { ReactInfiniteCanvas } from "react-infinite-canvas";
 import { cn } from "@/lib/utils";
 import { calculateIsometricBoundingBox } from "@/lib/isometric-bounding-box";
-import { useImageLoad } from "@/hooks/useElementResize";
-
-// Helper function to convert hex color to RGBA with opacity
-const hexToRgba = (hex, opacity) => {
-  const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-  if (result) {
-    const r = parseInt(result[1], 16);
-    const g = parseInt(result[2], 16);
-    const b = parseInt(result[3], 16);
-    return `rgba(${r}, ${g}, ${b}, ${opacity})`;
-  }
-  return hex; // fallback to original color if parsing fails
-};
 
 export const InfiniteCanvas = forwardRef(function InfiniteCanvas({ images, className, controls, style }, ref) {
-  const canvasRef = useRef();
   const contentRef = useRef();
+  const internalCanvasRef = useRef();
+  const isStabilizingRef = useRef(false);
+  const debounceTimerRef = useRef(null);
+
   const [dimensions, setDimensions] = useState({ width: "100%", height: "100%" });
-  const [height, setHeight] = useState(0);
-  const [highlightedImageId, setHighlightedImageId] = useState(null);
-  const [isHighlightVisible, setIsHighlightVisible] = useState(false);
-  const [imagesLoaded, setImagesLoaded] = useState(false);
 
-  const resetView = useCallback(() => {
-    if (canvasRef.current) {
-      canvasRef.current.fitContentToView({});
-      canvasRef.current.scrollNodeToCenter({});
+  const resetView = () => {
+    if (internalCanvasRef.current) {
+      internalCanvasRef.current.fitContentToView({});
+      internalCanvasRef.current.scrollNodeToCenter({});
+      console.log("Reset view called");
     }
-  }, []);
+  };
 
-  const calculatePadding = useCallback(() => {
-    if (!contentRef.current) return;
-    const original = {
-      width: contentRef.current.offsetWidth,
-      height: contentRef.current.offsetHeight,
+  const calculateBounding = useCallback(() => {
+    console.log("Calculating bounding box with stabilization");
+    if (!contentRef.current || isStabilizingRef.current) return;
+
+    isStabilizingRef.current = true;
+    let previousDimensions = null;
+    let iterations = 0;
+    const maxIterations = 20;
+
+
+    const stabilize = () => {
+      if (!contentRef.current || iterations >= maxIterations) {
+        isStabilizingRef.current = false;
+        if (iterations >= maxIterations) {
+          console.log("Max iterations reached, stopping stabilization");
+        }
+        if (internalCanvasRef.current) {
+          setTimeout(() => {
+            resetView();
+          }, 100);
+        }
+        return;
+      }
+
+      const current = {
+        width: contentRef.current.offsetWidth,
+        height: contentRef.current.offsetHeight,
+      };
+
+      if (previousDimensions && Math.abs(current.width - previousDimensions.width) < 0.5 && Math.abs(current.height - previousDimensions.height) < 0.5) {
+        console.log(`Dimensions stabilized after ${iterations} iterations`);
+        isStabilizingRef.current = false;
+        if (internalCanvasRef.current) {
+          setTimeout(() => {
+            resetView();
+          }, 100);
+        }
+        return;
+      }
+
+      previousDimensions = { ...current };
+      iterations++;
+
+      const result = calculateIsometricBoundingBox(current.width, current.height, controls.rotateXOuter, controls.rotateYOuter);
+
+      setDimensions({
+        width: result.width,
+        height: result.height,
+      });
+
+      console.log(`Iteration ${iterations} - original:`, current, "calculated:", result);
+
+      // Use requestAnimationFrame to allow the DOM to update before next calculation
+      requestAnimationFrame(() => {
+        setTimeout(stabilize, 10);
+      });
     };
-    setHeight(original.height);
-    // Calculate isometric bounding box
-    const result = calculateIsometricBoundingBox(original.width, original.height, controls.rotateXOuter, controls.rotateYOuter);
-    setDimensions({
-      width: result.width,
-      height: result.height,
-    });
-    console.log("Original dimensions:", original);
-    console.log("Calculated dimensions:", result);
+
+    stabilize();
   }, [controls.rotateXOuter, controls.rotateYOuter]);
 
-  // Use the image load hook to wait for all images to load
-  const imageLoadRef = useImageLoad(() => {
-    setImagesLoaded(true);
-    // Calculate padding after images are loaded
-    setTimeout(calculatePadding, 100);
-  }, images);
+  useEffect(() => {
+    if (contentRef.current) {
+      calculateBounding();
+      console.log("useEffect: Calculating bounding box with stabilization");
+    }
+  }, [controls.rotateXOuter, controls.rotateYOuter, calculateBounding]);
 
-  const highlightImage = useCallback((imageId) => {
-    setHighlightedImageId(imageId);
-    setIsHighlightVisible(true);
+  useEffect(() => {
+    if (!contentRef.current) return;
 
-    // Start fade out after 2.7 seconds
-    setTimeout(() => {
-      setIsHighlightVisible(false);
-    }, 2700);
+    const resizeObserver = new ResizeObserver((entries) => {
+      if (debounceTimerRef.current) {
+        clearTimeout(debounceTimerRef.current);
+      }
+      for (const entry of entries) {
+        if (entry.contentRect.width > 0 && entry.contentRect.height > 0 && !isStabilizingRef.current) {
+          console.log("Content resized, triggering stabilization");
+          calculateBounding();
+        }
+      }
+    });
 
-    // Remove highlight completely after 3 seconds (including fade transition)
-    setTimeout(() => {
-      setHighlightedImageId(null);
-    }, 3000);
-  }, []);
+    resizeObserver.observe(contentRef.current);
 
-  // Expose functions to parent component
+    return () => {
+      resizeObserver.disconnect();
+      if (debounceTimerRef.current) {
+        clearTimeout(debounceTimerRef.current);
+      }
+    };
+  }, [calculateBounding]);
+
   useImperativeHandle(
     ref,
     () => ({
       resetView,
-      highlightImage,
-      calculatePadding,
+      calculateBounding,
     }),
-    [resetView, highlightImage, calculatePadding]
+    [resetView, calculateBounding]
   );
 
-  // Reset images loaded state when images change
-  useEffect(() => {
-    setImagesLoaded(false);
-  }, [images]);
-
-  // Recalculate padding when controls change and images are loaded
-  useEffect(() => {
-    if (imagesLoaded && contentRef.current && images.length > 0) {
-      const timer = setTimeout(calculatePadding, 50);
-      return () => clearTimeout(timer);
-    }
-  }, [imagesLoaded, controls, calculatePadding]);
   return (
     <div
       className={cn("overflow-visible", className)}
       style={{
-        backgroundColor: controls?.backgroundColor || "#f9fafb",
+        backgroundColor: controls.backgroundColor,
         ...style,
       }}
     >
-      <ReactInfiniteCanvas ref={canvasRef} onCanvasMount={resetView}>
+      <ReactInfiniteCanvas ref={internalCanvasRef}>
         <div
           className="flex items-center justify-center outline-gray-950"
           style={{
@@ -120,49 +147,29 @@ export const InfiniteCanvas = forwardRef(function InfiniteCanvas({ images, class
               position: "relative",
             }}
           >
-            {" "}
             <div
-              ref={(node) => {
-                contentRef.current = node;
-                if (imageLoadRef.current !== node) {
-                  imageLoadRef.current = node;
-                }
-              }}
+              ref={contentRef}
               className="gap-10 space-y-4"
               style={{
-                columns: controls?.columns,
-                columnGap: `${controls?.gap || 10}px`,
-                transform: `translate(-50%, -50%) rotateX(-90deg) translateZ(${height / 2}px)`,
+                columns: controls.columns,
+                columnGap: `${controls.gap}px`,
+                transform: `rotateX(-90deg)`,
                 transformOrigin: "center center",
                 position: "relative",
-                left: "50%",
-                top: "50%",
-                opacity: imagesLoaded ? 1 : 0.5,
                 transition: "opacity 0.3s ease-in-out",
               }}
             >
               {images.map((image, index) => (
-                <div key={image.id || index} className="break-inside-avoid" style={{ marginBottom: `${controls?.gap || 10}px` }}>
+                <div key={image.id || index} className="break-inside-avoid" style={{ marginBottom: `${controls.gap}px` }}>
                   <div className="relative">
-                    {" "}
                     <img
                       className="w-full object-cover object-center"
                       src={image.src}
                       alt={`gallery-photo-${index}`}
-                      loading="eager"
-                      decoding="async"
                       style={{
-                        border: `${controls?.borderThickness || 1}px solid ${hexToRgba(controls?.borderColor || "#000000", controls?.borderOpacity || 1)}`,
-                      }}
-                      onLoad={() => {
-                        // Individual image load handler for better UX
-                        if (!imagesLoaded) {
-                          // Force a recalculation when each image loads
-                          setTimeout(calculatePadding, 10);
-                        }
+                        border: `${controls.borderThickness}px solid ${controls.borderColor}`,
                       }}
                     />
-                    {highlightedImageId && (image.originalId === highlightedImageId || image.id === highlightedImageId) && <div className={`absolute inset-0 border-10 border-primary shadow-lg shadow-blue-500/30 transition-all duration-300 ease-in-out ${isHighlightVisible ? "opacity-100" : "opacity-0"}`} />}
                   </div>
                 </div>
               ))}
