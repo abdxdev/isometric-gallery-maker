@@ -9,6 +9,7 @@ import { useState, useRef, useEffect } from "react";
 import { useFullscreen } from "@/hooks/useFullscreen";
 import { preloadImages } from "@/hooks/useImagePreloader";
 
+
 const sampleImages = [
   { id: 1, src: "https://tailwindcss.com/plus-assets/img/heroes/ui-blocks-col-1-row-1.png" },
   { id: 2, src: "https://tailwindcss.com/plus-assets/img/heroes/ui-blocks-col-1-row-2.png" },
@@ -46,7 +47,7 @@ export default function Home() {
 
   const [controls, setControls] = useState(defaultControls);
   const [imageOrder, setImageOrder] = useState([]);
-  const [nextImageId, setNextImageId] = useState(21); // Start after sample images (1-20)
+  const [nextImageId, setNextImageId] = useState(sampleImages.length + 1);
   const [isLoadingImages, setIsLoadingImages] = useState(false);
 
   useEffect(() => {
@@ -86,6 +87,17 @@ export default function Home() {
     }
   };
 
+  const handleFileUpload = (event) => {
+    const files = Array.from(event.target.files);
+    files.forEach((file) => {
+      if (file.type.startsWith("image/")) {
+        const url = URL.createObjectURL(file);
+        addImageFromUrl(url);
+      }
+    });
+    event.target.value = "";
+  };
+
   const addImageFromUrl = (url) => {
     const newImage = {
       id: nextImageId,
@@ -101,27 +113,27 @@ export default function Home() {
 
   const loadSampleImages = async () => {
     setIsLoadingImages(true);
-    
+
     try {
       // Preload all sample images before setting them
       const imageSources = sampleImages.map(img => img.src);
       console.log('Starting to preload', imageSources.length, 'images...');
-      
+
       const results = await preloadImages(imageSources);
-      
+
       // Count successful loads
       const successCount = results.filter(result => result.status === 'fulfilled').length;
       const failureCount = results.length - successCount;
-      
+
       console.log(`Preloading complete: ${successCount} succeeded, ${failureCount} failed`);
-      
+
       if (failureCount > 0) {
         console.warn("Some images failed to preload, but proceeding anyway");
       }
-      
+
       // Set images after preloading attempt (successful or not)
       setImageOrder(sampleImages);
-      
+
     } catch (error) {
       console.error("Error during image preloading:", error);
       // Still set the images even if preloading fails
@@ -144,7 +156,7 @@ export default function Home() {
 
   const repeatedImages = Array(controls.repeat)
     .fill(null)
-    .flatMap((_, repeatIndex) => 
+    .flatMap((_, repeatIndex) =>
       imageOrder.map((image, imageIndex) => ({
         ...image,
         id: `${image.id}_repeat_${repeatIndex}`,
@@ -194,7 +206,8 @@ export default function Home() {
               updateControl={updateControl}
               resetControl={resetControl}
               imageOrder={imageOrder}
-              sampleImages={loadSampleImages}
+              loadSampleImages={loadSampleImages}
+              handleFileUpload={handleFileUpload}
               addImageFromUrl={addImageFromUrl}
               removeImage={removeImage}
               setImageOrder={setImageOrder}

@@ -4,6 +4,7 @@ import { forwardRef, useCallback, useEffect, useState } from 'react';
 import { NumericFormat } from 'react-number-format';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { cn } from '@/lib/utils';
 
 export const NumberInput = forwardRef(
   (
@@ -20,6 +21,7 @@ export const NumberInput = forwardRef(
       suffix,
       prefix,
       value: controlledValue,
+      className,
       ...props
     },
     ref
@@ -91,7 +93,7 @@ export const NumberInput = forwardRef(
         <Input 
           {...inputProps}
           ref={inputRef}
-          className="[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none rounded-r-none relative h-9"
+          className={cn("[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none rounded-r-none relative h-9", className)}
         />
       )),
       []

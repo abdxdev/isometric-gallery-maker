@@ -1,14 +1,15 @@
 "use client";
 
-import { ImageImporter } from "@/components/image-importer";
 import { ImageSortable } from "@/components/image-sortable";
 import { Button } from "@/components/ui/button";
 import { NumberInput } from "@/components/ui/number-input";
 import { Label } from "@/components/ui/label";
 import { Slider } from "@/components/ui/slider";
 import { ReactColorPicker } from "@/components/ui/react-color-picker";
+import { Input } from "@/components/ui/input";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
-import { Minimize2, Maximize2, Focus, Camera, X, RefreshCw, ImageIcon, Loader2 } from "lucide-react";
+import { Minimize2, Maximize2, Focus, Camera, X, RefreshCw, ImageIcon, Loader2, Plus, Upload } from "lucide-react";
+import { useState, useRef } from "react";
 
 function ResetButton({ onClick, title, className = "flex-shrink-0" }) {
   return (
@@ -18,19 +19,26 @@ function ResetButton({ onClick, title, className = "flex-shrink-0" }) {
   );
 }
 
-export function Sidebar({ controls, updateControl, resetControl, imageOrder, sampleImages, addImageFromUrl, removeImage, setImageOrder, resetView, recalculatePadding, onCapture, onHighlightImage, isFullscreen, toggleFullscreen, isFullscreenSupported, isLoadingImages }) {
+export function Sidebar({ controls, updateControl, resetControl, imageOrder, loadSampleImages, handleFileUpload, addImageFromUrl, removeImage, setImageOrder, resetView, recalculatePadding, onCapture, onHighlightImage, isFullscreen, toggleFullscreen, isFullscreenSupported, isLoadingImages }) {
+  const [urlInput, setUrlInput] = useState("");
+  const fileInputRef = useRef();
+
+  const handleUrlSubmit = () => {
+    if (urlInput.trim()) {
+      addImageFromUrl(urlInput.trim());
+      setUrlInput("");
+    }
+  };
+  
+  const triggerFileUpload = () => {
+    fileInputRef.current?.click();
+  };
+
   const clearAll = () => {
     setImageOrder([]);
     removeImage();
   };
 
-  const loadSampleImages = () => {
-    if (typeof sampleImages === 'function') {
-      sampleImages(); // Call the function if it's a function
-    } else {
-      setImageOrder(sampleImages); // Use the array if it's an array
-    }
-  };
   return (
     <div className="w-full lg:w-86 flex flex-col p-4 lg:border-l border-border">
       <Accordion type="multiple" defaultValue={["import", "controls", "order", "actions"]} className="w-full space-y-2">
@@ -38,7 +46,31 @@ export function Sidebar({ controls, updateControl, resetControl, imageOrder, sam
         <AccordionItem value="import">
           <AccordionTrigger className="text-md">Import Images</AccordionTrigger>
           <AccordionContent>
-            <ImageImporter onImageAdd={addImageFromUrl} onImageRemove={removeImage} recentImages={imageOrder} />
+            <div className="space-y-4">
+              {/* URL Import */}
+              <div className="space-y-2">
+                <div className="flex items-center gap-2">
+                  <Label className="text-sm font-medium">Add from URL</Label>
+                </div>
+                <div className="flex w-full max-w-sm items-center gap-2">
+                  <Input placeholder="https://example.com/image.jpg" value={urlInput} onChange={(e) => setUrlInput(e.target.value)} onKeyDown={(e) => e.key === "Enter" && handleUrlSubmit()} className="flex-1" />
+                  <Button type="submit" variant="outline" onClick={handleUrlSubmit}>
+                    <Plus className="w-4 h-4" />
+                  </Button>
+                </div>
+              </div>
+              {/* File Upload */}
+              <div className="space-y-2">
+                <div className="flex items-center gap-2">
+                  <Label className="text-sm font-medium">Upload Files</Label>
+                </div>
+                <input ref={fileInputRef} type="file" accept="image/*" multiple onChange={handleFileUpload} className="hidden" />
+                <Button onClick={triggerFileUpload} variant="outline" className="w-full">
+                  <Upload size={16} className="w-4 h-4" />
+                  Choose Images
+                </Button>
+              </div>
+            </div>
           </AccordionContent>
         </AccordionItem>
         {/* Controls Section */}
@@ -135,16 +167,13 @@ export function Sidebar({ controls, updateControl, resetControl, imageOrder, sam
         <AccordionItem value="order">
           <AccordionTrigger className="text-md">Image Order</AccordionTrigger>
           <AccordionContent>
-            <div className="space-y-4">              {imageOrder.length === 0 ? (
+            <div className="space-y-4">
+              {" "}
+              {imageOrder.length === 0 ? (
                 <>
                   {/* Empty state */}
                   <p className="text-sm text-muted-foreground text-center">No images added yet</p>
-                  <Button 
-                    onClick={loadSampleImages} 
-                    variant="outline" 
-                    className="w-full"
-                    disabled={isLoadingImages}
-                  >
+                  <Button onClick={loadSampleImages} variant="outline" className="w-full" disabled={isLoadingImages}>
                     {isLoadingImages ? (
                       <>
                         <Loader2 className="w-4 h-4 animate-spin" />
