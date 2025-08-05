@@ -5,7 +5,7 @@ import { Sidebar } from "@/components/sidebar";
 import { FullscreenToggle } from "@/components/fullscreen-toggle";
 import { Header } from "@/components/header";
 import { WelcomeDialog } from "@/components/welcome-dialog";
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useMemo } from "react";
 import { useFullscreen } from "@/hooks/useFullscreen";
 
 const sampleImages = [
@@ -123,24 +123,18 @@ export default function Home() {
     console.log("Capture clicked");
   };
 
-  // Image Variable
-  const images = Array.from({ length: controls.repeat }, (_, repeatIndex) =>
-    imageOrder.map((image, imageIndex) => 
-      repeatIndex === 0 ? image : { ...image, id: nextImageId + (repeatIndex - 1) * imageOrder.length + imageIndex }
-    )
-  ).flat();
-  useEffect(() => {
-    if (controls.repeat > 1 && imageOrder.length > 0) {
-      setNextImageId(prev => prev + (controls.repeat - 1) * imageOrder.length);
+  const repeatedImages = useMemo(() => {
+    const result = [];
+    for (let i = 0; i < controls.repeat; i++) {
+      result.push(...imageOrder);
     }
-  }, [controls.repeat, imageOrder.length]);
+    return result;
+  }, [imageOrder, controls.repeat]);
 
   return (
     <div className="min-h-screen">
-      {/* Welcome Dialog */}
       <WelcomeDialog onLoadSamples={loadSampleImages} />
 
-      {/* Header - hide in fullscreen */}
       {!isFullscreen && <Header />}
 
       <div className="flex flex-col lg:flex-row">
@@ -156,12 +150,11 @@ export default function Home() {
           >
             <InfiniteCanvas
               ref={canvasRef}
-              images={images}
+              images={repeatedImages}
               className="w-full h-full"
               controls={controls}
             />
 
-            {/* Floating fullscreen exit button when in fullscreen */}
             <FullscreenToggle
               isFullscreen={isFullscreen}
               onToggleFullscreen={toggleFullscreen}
@@ -169,7 +162,6 @@ export default function Home() {
           </div>
         </div>
 
-        {/* Right Sidebar for Image Management - hide in fullscreen */}
         {!isFullscreen && (
           <div className="order-2 lg:order-2">
             <Sidebar

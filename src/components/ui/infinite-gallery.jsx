@@ -13,6 +13,7 @@ export const InfiniteCanvas = forwardRef(function InfiniteCanvas({ images, class
   const debounceTimerRef = useRef(null);
 
   const [dimensions, setDimensions] = useState({ width: "100%", height: "100%" });
+  const [highlightedImageId, setHighlightedImageId] = useState(null);
 
   const resetView = () => {
     if (internalCanvasRef.current) {
@@ -20,6 +21,14 @@ export const InfiniteCanvas = forwardRef(function InfiniteCanvas({ images, class
       internalCanvasRef.current.scrollNodeToCenter({});
       console.log("Reset view called");
     }
+  };
+
+  const highlightImage = (imageId) => {
+    setHighlightedImageId(imageId);
+    // Auto-remove highlight after 3 seconds
+    setTimeout(() => {
+      setHighlightedImageId(null);
+    }, 3000);
   };
 
   const calculateBounding = useCallback(() => {
@@ -113,14 +122,14 @@ export const InfiniteCanvas = forwardRef(function InfiniteCanvas({ images, class
       }
     };
   }, [calculateBounding]);
-
   useImperativeHandle(
     ref,
     () => ({
       resetView,
       calculateBounding,
+      highlightImage,
     }),
-    [resetView, calculateBounding]
+    [resetView, calculateBounding, highlightImage]
   );
 
   return (
@@ -163,8 +172,8 @@ export const InfiniteCanvas = forwardRef(function InfiniteCanvas({ images, class
                 <div key={image.id || index} className="break-inside-avoid" style={{ marginBottom: `${controls.gap}px` }}>
                   <div className="relative">
                     <Image
-                      height={720}
-                      width={1280}
+                      height={1080}
+                      width={1920}
                       className="object-cover object-center min-w-[1280px] min-h-[720px]"
                       src={image.src}
                       alt={`gallery-photo-${index}`}
@@ -172,6 +181,7 @@ export const InfiniteCanvas = forwardRef(function InfiniteCanvas({ images, class
                         border: `${controls.borderThickness}px solid ${controls.borderColor}`,
                       }}
                     />
+                    <div className={cn("absolute inset-0 pointer-events-none border-2 transition-all duration-500 ease-in-out", highlightedImageId === image.id ? "border-blue-500 bg-blue-500/30 opacity-100" : "border-transparent bg-transparent opacity-0")} />
                   </div>
                 </div>
               ))}
