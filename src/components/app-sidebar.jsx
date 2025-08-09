@@ -14,29 +14,14 @@ import {
 // Menu items.
 const items = [
   {
-    title: "Home",
-    url: "#",
+    title: "Isometric Mockup",
+    url: "isometric-mockup",
     icon: Home,
   },
   {
-    title: "Inbox",
-    url: "#",
+    title: "Embed Viewer",
+    url: "embed-viewer",
     icon: Inbox,
-  },
-  {
-    title: "Calendar",
-    url: "#",
-    icon: Calendar,
-  },
-  {
-    title: "Search",
-    url: "#",
-    icon: Search,
-  },
-  {
-    title: "Settings",
-    url: "#",
-    icon: Settings,
   },
 ]
 
@@ -47,7 +32,7 @@ export function AppSidebar({ headerHeight = 56 }) {
     >
       <SidebarContent>
         <SidebarGroup>
-          <SidebarGroupLabel>Application</SidebarGroupLabel>
+          {/* <SidebarGroupLabel>Application</SidebarGroupLabel> */}
           <SidebarGroupContent>
             <SidebarMenu>
               {items.map((item) => (
