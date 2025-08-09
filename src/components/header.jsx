@@ -6,14 +6,16 @@ import { AbdIcon } from "@/components/svg/abd";
 import { GitHubStarCounter } from "@/components/github-star-counter";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { MoreVertical } from "lucide-react";
+import { SidebarTrigger } from "@/components/ui/sidebar";
 
 export function Header() {
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-      <div className="flex h-14 items-center justify-between px-6 max-w-none gap-6">
+      <div className="flex h-14 items-center justify-between px-3 max-w-none gap-4">
         <div className="flex items-center gap-2">
-          <h1 className="text-sm font-semibold sm:text-lg">Isometric Gallery Maker</h1>
-          <p className="text-xs sm:text-sm border px-1.5 bg-accent">BETA</p>
+          <SidebarTrigger className="-ml-1" />
+          <h1 className="text-sm font-semibold ">Isometric Gallery Maker</h1>
+          <p className="text-xs border px-1 bg-accent">BETA</p>
         </div>
         <div className="flex items-center space-x-2">
           {/* Desktop: Show both GitHub star counter and More tools button */}

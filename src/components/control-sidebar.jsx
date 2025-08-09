@@ -19,7 +19,7 @@ function ResetButton({ onClick, title, className = "flex-shrink-0" }) {
   );
 }
 
-export function Sidebar({ controls, updateControl, resetControl, imageOrder, loadSampleImages, handleFileUpload, addImageFromUrl, removeImage, setImageOrder, resetView, recalculateBounding, onCapture, onHighlightImage, isFullscreen, toggleFullscreen, isFullscreenSupported, isLoadingImages }) {
+export function ControlSidebar({ controls, updateControl, resetControl, imageOrder, loadSampleImages, handleFileUpload, addImageFromUrl, removeImage, setImageOrder, resetView, recalculateBounding, onCapture, onHighlightImage, isFullscreen, toggleFullscreen, isFullscreenSupported, isLoadingImages }) {
   const [urlInput, setUrlInput] = useState("");
   const fileInputRef = useRef();
 
@@ -93,7 +93,7 @@ export function Sidebar({ controls, updateControl, resetControl, imageOrder, loa
                   <p className="text-sm text-muted-foreground">Drag and drop images to reorder them</p>
                   {/* Image Sortable Component */}
                   <div className="space-y-2">
-                    <ImageSortable imageList={imageOrder} onImageOrderChange={setImageOrder} onImageRemove={removeImage} onHighlightImage={onHighlightImage} columns={3} />
+                    <ImageSortable imageList={imageOrder} onImageOrderChange={setImageOrder} onImageRemove={removeImage} onHighlightImage={onHighlightImage} />
                     <Button onClick={clearAll} variant="outline" className="w-full" disabled={imageOrder.length === 0}>
                       <X className="w-4 h-4" />
                       Clear All

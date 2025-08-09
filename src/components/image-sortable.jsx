@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { X, ImagePlayIcon } from "lucide-react";
 import { useState, useEffect } from "react";
 
-export function ImageSortable({ imageList, onImageOrderChange, onImageRemove, onHighlightImage, columns = 3 }) {
+export function ImageSortable({ imageList, onImageOrderChange, onImageRemove, onHighlightImage}) {
   const [images, setImages] = useState(imageList);
 
   // Update images when imageList prop changes
@@ -29,7 +29,7 @@ export function ImageSortable({ imageList, onImageOrderChange, onImageRemove, on
   };
   return (
     <Sortable.Root value={images} onValueChange={handleValueChange} orientation="mixed" getItemValue={(item) => item.id}>
-      <Sortable.Content className="grid auto-rows-fr gap-1" style={{ gridTemplateColumns: `repeat(${columns}, minmax(0, 1fr))` }}>
+      <Sortable.Content className="grid auto-rows-fr gap-1 grid-cols-4 sm:grid-cols-6 md:grid-cols-6 lg:grid-cols-3">
         {images.map((image) => (
           <Sortable.Item key={image.id} value={image.id} asChild asHandle>
             <div className="relative aspect-square cursor-grab active:cursor-grabbing rounded-lg overflow-hidden border-2 border-border hover:border-primary transition-colors group">
