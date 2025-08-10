@@ -1,4 +1,4 @@
-# Isometric Gallery Maker
+# Screenshoots
 
 ![screenshot](screenshots/screenshot_1.png)
 
@@ -6,7 +6,7 @@ Create stunning 3D isometric gallery mockups from your images with an easy-to-us
 
 ## Try it now
 
-**Visit: [isometric-gallery-maker.abd-dev.studio](https://isometric-gallery-maker.abd-dev.studio/)**
+**Visit: [screenshoots.abd-dev.studio](https://screenshoots.abd-dev.studio/)**
 
 ## Features
 

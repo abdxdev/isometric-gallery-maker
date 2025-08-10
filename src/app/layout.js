@@ -17,8 +17,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata = {
-  title: "Isometric Gallery Maker",
-  description: "Create stunning 3D isometric gallery mockups from your images with customizable layouts and rotations.",
+  title: "Screenshoots",
+  description: "Preview URLs in device frames, create isometric galleries, and style screenshots with overlays and gradients.",
 };
 
 export default function RootLayout({ children }) {

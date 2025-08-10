@@ -34,7 +34,7 @@ export function WelcomeDialog({ onLoadSamples, onCancel }) {
         <DialogHeader>
           <div className="flex items-center gap-2 mb-2">
             <Sparkles className="h-6 w-6 text-primary" />
-            <DialogTitle className="text-xl">Welcome to Isometric Gallery Maker!</DialogTitle>
+            <DialogTitle className="text-xl">Welcome to Screenshoots!</DialogTitle>
           </div>
           <DialogDescription className=" space-y-3">
             <p className="text-base">

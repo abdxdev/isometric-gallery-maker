@@ -6,7 +6,7 @@ import { GitHubIcon } from "@/components/svg/github";
 import { Star } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-export function GitHubStarCounter({ repo = "abdxdev/isometric-gallery-maker", className, variant }) {
+export function GitHubStarCounter({ repo = "abdxdev/screenshoots", className, variant }) {
   const [starCount, setStarCount] = useState(null);
   const [loading, setLoading] = useState(true);
 

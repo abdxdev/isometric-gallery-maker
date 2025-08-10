@@ -1,4 +1,4 @@
-import { Calendar, Home, Inbox, Search, Settings } from "lucide-react"
+import { Home, Inbox } from "lucide-react"
 
 import {
   Sidebar,
@@ -11,16 +11,25 @@ import {
 } from "@/components/ui/sidebar"
 
 // Menu items.
+// const items = [
+//   {
+//     title: "Isometric Gallery Mockup",
+//     url: "isometric-mockup",
+//   },
+//   {
+//     title: "",
+//     url: "embed-viewer",
+//   },
+// ]
+
 const items = [
   {
-    title: "Isometric Mockup",
-    url: "isometric-mockup",
-    icon: Home,
+    title: "Isometric Gallery",
+    url: "isometric-gallery",
   },
   {
-    title: "Embed Viewer",
-    url: "embed-viewer",
-    icon: Inbox,
+    title: "Screen Decorator",
+    url: "screen-decorator",
   },
 ]
 
@@ -37,7 +46,7 @@ export function AppSidebar({ headerHeight = 56 }) {
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton asChild>
                     <a href={item.url}>
-                      <item.icon />
+                      {item.icon && <item.icon />}
                       <span>{item.title}</span>
                     </a>
                   </SidebarMenuButton>

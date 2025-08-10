@@ -15,15 +15,15 @@ export function Header() {
         <div className="flex items-center gap-2">
           <SidebarTrigger className="-ml-1" />
           <a href="/" className="flex items-center gap-2">
-            <h1 className="text-sm font-semibold ">Isometric Gallery Maker</h1>
+            <h1 className="text-sm font-semibold ">Screenshoots</h1>
           </a>
           <p className="text-xs border px-1 bg-accent">BETA</p>
         </div>
         <div className="flex items-center space-x-2">
           {/* Desktop: Show both GitHub star counter and More tools button */}
-          <GitHubStarCounter repo="abdxdev/isometric-gallery-maker" className="hidden sm:flex" />
+          <GitHubStarCounter repo="abdxdev/screenshoots" className="hidden sm:flex" />
           <Button variant="outline" size="sm" asChild className="hidden sm:flex items-center gap-1.5 h-8 px-3 text-xs">
-            <a href="https://abd-dev.studio?ref=isometric-gallery-maker" target="_blank" rel="noopener noreferrer" title="Portfolio" className="text-muted-foreground hover:text-foreground transition-colors">
+            <a href="https://abd-dev.studio?ref=screenshoots" target="_blank" rel="noopener noreferrer" title="Portfolio" className="text-muted-foreground hover:text-foreground transition-colors">
               <AbdIcon className="h-3 w-3" />
               <span className="font-medium">More tools</span>
             </a>
@@ -40,10 +40,10 @@ export function Header() {
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="w-56">
               <div className="p-2">
-                <GitHubStarCounter repo="abdxdev/isometric-gallery-maker" className="w-full justify-center" varient="ghost" />
+                <GitHubStarCounter repo="abdxdev/screenshoots" className="w-full justify-center" varient="ghost" />
               </div>
               <DropdownMenuItem asChild>
-                <a href="https://abd-dev.studio?ref=isometric-gallery-maker" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2">
+                <a href="https://abd-dev.studio?ref=screenshoots" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2">
                   <AbdIcon className="h-3 w-3" />
                   <span>More tools</span>
                 </a>

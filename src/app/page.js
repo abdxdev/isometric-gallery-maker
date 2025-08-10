@@ -18,29 +18,29 @@ export default function Home() {
 				<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
 					<Card>
 						<CardHeader>
-							<CardTitle>Isometric Mockup</CardTitle>
+							<CardTitle>Isometric Gallery</CardTitle>
 						</CardHeader>
 						<CardContent className="space-y-3">
 							<p className="text-sm text-muted-foreground">
 								Create 3D isometric galleries with customizable layout, colors, and rotation.
 							</p>
-							<Link href="/isometric-mockup">
-								<Button className="w-full">Open Isometric Mockup</Button>
+							<Link href="/isometric-gallery">
+								<Button className="w-full">Open Isometric Gallery</Button>
 							</Link>
 						</CardContent>
 					</Card>
 
 					<Card>
 						<CardHeader>
-							<CardTitle>Embed Viewer</CardTitle>
+							<CardTitle>Isometric Gallery</CardTitle>
 						</CardHeader>
 						<CardContent className="space-y-3">
 							<p className="text-sm text-muted-foreground">
-								Preview any URL in different device sizes. Shares the same side controls.
+								Preview any URL in different device sizes. Decorate with custom backgrounds and borders.
 							</p>
-							<Link href="/embed-viewer">
+							<Link href="/screen-decorator">
 								<Button variant="outline" className="w-full">
-									Open Embed Viewer
+									Open Screen Decorator
 								</Button>
 							</Link>
 						</CardContent>
