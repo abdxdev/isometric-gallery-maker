@@ -14,7 +14,9 @@ export function Header() {
       <div className="flex h-14 items-center justify-between px-3 max-w-none gap-4">
         <div className="flex items-center gap-2">
           <SidebarTrigger className="-ml-1" />
-          <h1 className="text-sm font-semibold ">Isometric Gallery Maker</h1>
+          <a href="/" className="flex items-center gap-2">
+            <h1 className="text-sm font-semibold ">Isometric Gallery Maker</h1>
+          </a>
           <p className="text-xs border px-1 bg-accent">BETA</p>
         </div>
         <div className="flex items-center space-x-2">

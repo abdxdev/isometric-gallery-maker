@@ -1,0 +1,199 @@
+[
+  {
+    "type": "device",
+    "name": "iphone",
+    "dimensions": {
+      "width": 375,
+      "height": 812
+    },
+    "or": [
+      {
+        "type": "orientation",
+        "name": "portrait",
+        "multiply": [
+          {
+            "and": [
+              {
+                "type": "asset",
+                "src": "public/assets/elements/iphone/portrait/status-bar.svg",
+                "alt": "Status Bar",
+                "pos": "top",
+                "absolute": false
+              },
+              {
+                "type": "asset",
+                "src": "public/assets/elements/iphone/portrait/home-indicator.svg",
+                "alt": "Home Indicator",
+                "pos": "bottom",
+                "absolute": true
+              }
+            ]
+          },
+          {
+            "or": [
+              {
+                "name": "safari",
+                "and": [
+                  {
+                    "type": "asset",
+                    "src": "public/assets/elements/iphone/portrait/safari/Safari Top.svg",
+                    "alt": "Safari Top",
+                    "pos": "top",
+                    "absolute": false
+                  },
+                  {
+                    "type": "asset",
+                    "src": "public/assets/elements/iphone/portrait/safari/Safari Bottom.svg",
+                    "alt": "Safari Bottom",
+                    "pos": "bottom",
+                    "absolute": false
+                  }
+                ]
+              },
+              {
+                "name": "chrome",
+                "and": [
+                  {
+                    "type": "asset",
+                    "src": "public/assets/elements/iphone/portrait/chrome/Chrome - Top.svg",
+                    "alt": "Chrome Top",
+                    "pos": "top",
+                    "absolute": false
+                  },
+                  {
+                    "type": "asset",
+                    "src": "public/assets/elements/iphone/portrait/chrome/Chrome - Bottom.svg",
+                    "alt": "Chrome Bottom",
+                    "pos": "bottom",
+                    "absolute": false
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "orientation",
+        "name": "landscape",
+        "multiply": [
+          {
+            "and": [
+              {
+                "type": "asset",
+                "src": "public/assets/elements/iphone/landscape/home-indicator.svg",
+                "alt": "Home Indicator",
+                "pos": "bottom",
+                "absolute": true
+              }
+            ]
+          },
+          {
+            "or": [
+              {
+                "name": "safari",
+                "or": [
+                  {
+                    "type": "asset",
+                    "src": "public/assets/elements/iphone/landscape/safari/Safari - Top.svg",
+                    "alt": "Safari Top",
+                    "pos": "top",
+                    "absolute": false
+                  }
+                ]
+              },
+              {
+                "name": "chrome",
+                "or": [
+                  {
+                    "type": "asset",
+                    "src": "public/assets/elements/iphone/landscape/chrome/Chrome - Top.svg",
+                    "alt": "Chrome Top",
+                    "pos": "top",
+                    "absolute": false
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "type": "device",
+    "name": "mac",
+    "dimensions": {
+      "width": 1280,
+      "height": 784
+    },
+    "or": [
+      {
+        "name": "safari",
+        "or": [
+          {
+            "name": "light",
+            "or": [
+              {
+                "type": "asset",
+                "src": "public/assets/elements/mac/safari/Light.svg",
+                "alt": "Safari Light",
+                "pos": "top",
+                "absolute": false
+              }
+            ]
+          },
+          {
+            "name": "dark",
+            "or": [
+              {
+                "type": "asset",
+                "src": "public/assets/elements/mac/safari/Dark.svg",
+                "alt": "Safari Dark",
+                "pos": "top",
+                "absolute": false
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "chrome",
+        "or": [
+          {
+            "name": "light",
+            "or": [
+              {
+                "type": "asset",
+                "src": "public/assets/elements/mac/chrome/Light.svg",
+                "alt": "Chrome Light",
+                "pos": "top",
+                "absolute": false
+              }
+            ]
+          },
+          {
+            "name": "dark",
+            "or": [
+              {
+                "type": "asset",
+                "src": "public/assets/elements/mac/chrome/Dark.svg",
+                "alt": "Chrome Dark",
+                "pos": "top",
+                "absolute": false
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "type": "device",
+    "name": "general",
+    "dimensions": {
+      "width": 360,
+      "height": 812
+    }
+  }
+]
