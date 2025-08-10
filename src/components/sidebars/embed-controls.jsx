@@ -8,6 +8,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import devicesJson from "@/lib/device-elements.json";
 import { buildControlGroups, computeDeviceDimensions } from "@/components/device-overlays";
+import { ReactColorPicker } from "@/components/ui/react-color-picker";
+import { RefreshCw } from "lucide-react";
 
 function safeUrl(u) {
   if (!u) return "";
@@ -18,7 +20,15 @@ function safeUrl(u) {
   }
 }
 
-export function EmbedControls({ url, setUrl, dimentions, setDimentions, containerRef, device, setDevice, selections = {}, setSelections, toggles = {}, setToggles }) {
+function ResetButton({ onClick, title, className = "flex-shrink-0" }) {
+  return (
+    <Button onClick={onClick} variant="outline" size="icon" className={className} title={title}>
+      <RefreshCw className="w-4 h-4" />
+    </Button>
+  );
+}
+
+export function EmbedControls({ url, setUrl, dimentions, setDimentions, device, setDevice, selections = {}, setSelections, toggles = {}, setToggles, backgroundColor, setBackgroundColor }) {
   const devices = devicesJson;
 
   // defaults
@@ -48,6 +58,23 @@ export function EmbedControls({ url, setUrl, dimentions, setDimentions, containe
         </div>
       </div>
 
+      {/* Theme toggle (light/dark) */}
+      <div className="w-full">
+        <ToggleGroup
+          type="single"
+          className="w-full"
+          value={selections?.__theme__ || "light"}
+          onValueChange={(v) => setSelections?.({ ...(selections || {}), __theme__: v || (selections?.__theme__ || "light") })}
+        >
+          <ToggleGroupItem value="light" aria-label="light">
+            <span className="px-2 text-xs">light</span>
+          </ToggleGroupItem>
+          <ToggleGroupItem value="dark" aria-label="dark">
+            <span className="px-2 text-xs">dark</span>
+          </ToggleGroupItem>
+        </ToggleGroup>
+      </div>
+
       {/* Manual dimensions override */}
       <div className="space-y-2 w-full">
         <Label className="text-sm font-medium">Dimensions</Label>
@@ -60,6 +87,17 @@ export function EmbedControls({ url, setUrl, dimentions, setDimentions, containe
             <span className="text-xs">H</span>
             <input type="number" value={dimentions.h} onChange={(e) => setDimentions({ ...dimentions, h: Number(e.target.value) })} className="w-full input input-sm px-2 py-1 border rounded" />
           </div>
+        </div>
+      </div>
+
+      {/* Background Color Control */}
+      <div className="space-y-2 w-full">
+        <Label htmlFor="backgroundColor">Background Color</Label>
+        <div className="flex gap-2">
+          <div className="flex-1">
+            <ReactColorPicker value={backgroundColor} onChange={(value) => setBackgroundColor?.(value)} />
+          </div>
+          <ResetButton onClick={() => setBackgroundColor?.("rgba(249, 250, 251, 1)")} title="Reset Background Color" />
         </div>
       </div>
 

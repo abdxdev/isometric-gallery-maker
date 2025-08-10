@@ -6,7 +6,7 @@ function normalizeSrc(src) {
 }
 
 function isAsset(node) {
-  return node && node.type === "asset" && typeof node.src === "string";
+  return node && node.type === "asset" && (typeof node.src === "string" || typeof node.src === "object");
 }
 
 function asArray(v) {
@@ -33,8 +33,19 @@ function pathKey(path) {
 
 function labelFor(node) {
   if (!node) return "";
-  if (isAsset(node)) return node.alt || node.name || "asset";
+  if (isAsset(node)) return node.name || "asset";
   return node.name || node.label || "option";
+}
+
+function resolveAssetSrc(src, selections) {
+  if (!src) return "";
+  if (typeof src === "string") return normalizeSrc(src);
+  if (typeof src === "object") {
+    const theme = (selections && selections.__theme__) || "light";
+    const picked = src[theme] || src.light || src.dark;
+    return normalizeSrc(picked || "");
+  }
+  return "";
 }
 
 export function buildControlGroups(devices, deviceName, selections = {}) {
@@ -48,43 +59,40 @@ export function buildControlGroups(devices, deviceName, selections = {}) {
     if (!node) return;
     if (isAsset(node)) return;
 
-    if (node.or) {
-      const key = pathKey([...path, "or"]);
-      const children = asArray(node.or);
+    if (node.one) {
+      const key = pathKey([...path, "one"]);
+      const children = asArray(node.one);
       const options = children.map((child) => labelFor(child));
 
       if (children.length === 1) {
-        // Auto-select the only option and do not expose a control
         const only = children[0];
         const selLabel = labelFor(only);
-        walk(only, [...path, "or", `sel:${selLabel}`]);
+        walk(only, [...path, "one", `sel:${selLabel}`]);
         return;
       }
 
-      // 2+ options → show control and gate deeper until selected
       if (options.length > 1) {
-        // Prefer using a common child type as label; not used in UI currently
-        const childTypes = children.map((c) => c && c.type).filter(Boolean);
-        const groupLabel = node.label || (childTypes.length && childTypes.every((t) => t === childTypes[0]) ? childTypes[0] : null) || "Option";
-        orGroups.push({ key, label: groupLabel, options });
+        // label not shown in UI, keep for completeness
+        orGroups.push({ key, label: node.label || "option", options });
       }
       const sel = selections[key];
-      if (!sel) return;
+      if (!sel) return; // gate deeper until selected
       const selectedChild = children.find((child) => labelFor(child) === sel);
-      if (selectedChild) walk(selectedChild, [...path, "or", `sel:${sel}`]);
+      if (selectedChild) walk(selectedChild, [...path, "one", `sel:${sel}`]);
       return;
     }
 
-    if (node.and) {
-      const key = pathKey([...path, "and"]);
-      const label = node.name || node.label || "Group";
-      const items = asArray(node.and).map((child, idx) => ({ key: pathKey([...path, "and", String(idx)]), label: labelFor(child) }));
-      andGroups.push({ key, label, items });
-      asArray(node.and).forEach((child, idx) => walk(child, [...path, "and", String(idx)]));
-    }
-
-    if (node.multiply) {
-      asArray(node.multiply).forEach((child, idx) => walk(child, [...path, "multiply", String(idx)]));
+    if (node.many) {
+      const key = pathKey([...path, "many"]);
+      const label = node.name || node.label || "group";
+      const children = asArray(node.many);
+      const items = children
+        .map((child, idx) => (isAsset(child) ? { key: pathKey([...path, "many", String(idx)]), label: labelFor(child) } : null))
+        .filter(Boolean);
+      if (items.length > 0) {
+        andGroups.push({ key, label, items });
+      }
+      children.forEach((child, idx) => walk(child, [...path, "many", String(idx)]));
     }
   }
 
@@ -98,38 +106,33 @@ export function collectAssets(devices, deviceName, selections = {}, toggles = {}
 
   function evalNode(node, path) {
     if (!node) return [];
-    if (isAsset(node)) return [{ ...node, src: normalizeSrc(node.src) }];
+    if (isAsset(node)) return [{ ...node, src: resolveAssetSrc(node.src, selections) }];
 
-    if (node.or) {
-      const key = pathKey([...path, "or"]);
-      const options = asArray(node.or);
+    if (node.one) {
+      const key = pathKey([...path, "one"]);
+      const options = asArray(node.one);
       const sel = selections[key];
 
       if (sel) {
         const selectedChild = options.find((child) => labelFor(child) === sel);
-        return selectedChild ? evalNode(selectedChild, [...path, "or", `sel:${sel}`]) : [];
+        return selectedChild ? evalNode(selectedChild, [...path, "one", `sel:${sel}`]) : [];
       }
 
-      // Auto-select when only one option exists
       if (options.length === 1) {
         const only = options[0];
         const selLabel = labelFor(only);
-        return evalNode(only, [...path, "or", `sel:${selLabel}`]);
+        return evalNode(only, [...path, "one", `sel:${selLabel}`]);
       }
 
       return [];
     }
 
-    if (node.and) {
-      return asArray(node.and).flatMap((child, idx) => {
-        const childKey = pathKey([...path, "and", String(idx)]);
+    if (node.many) {
+      return asArray(node.many).flatMap((child, idx) => {
+        const childKey = pathKey([...path, "many", String(idx)]);
         if (toggles[childKey] === false) return [];
-        return evalNode(child, [...path, "and", String(idx)]);
+        return evalNode(child, [...path, "many", String(idx)]);
       });
-    }
-
-    if (node.multiply) {
-      return asArray(node.multiply).flatMap((child, idx) => evalNode(child, [...path, "multiply", String(idx)]));
     }
 
     return [];
@@ -146,16 +149,16 @@ export function computeDeviceDimensions(devices, deviceName, selections = {}) {
   const device = getDevice(devices, deviceName);
   if (!device) return { w: 1024, h: 768 };
   let dims = device.dimensions ? { w: device.dimensions.width, h: device.dimensions.height } : { w: 1024, h: 768 };
-  let selectedOrientation = null;
+  let selectedOrientation = null; // track selected orientation name
 
   function walk(node, path) {
     if (!node) return;
     if (node.dimensions && node.dimensions.width && node.dimensions.height) {
       dims = { w: node.dimensions.width, h: node.dimensions.height };
     }
-    if (node.or) {
-      const key = pathKey([...path, "or"]);
-      const options = asArray(node.or);
+    if (node.one) {
+      const key = pathKey([...path, "one"]);
+      const options = asArray(node.one);
       const sel = selections[key];
 
       if (sel) {
@@ -164,26 +167,24 @@ export function computeDeviceDimensions(devices, deviceName, selections = {}) {
           if (selectedChild.type === "orientation") {
             selectedOrientation = (selectedChild.name || "").toLowerCase();
           }
-          walk(selectedChild, [...path, "or", `sel:${sel}`]);
+          walk(selectedChild, [...path, "one", `sel:${sel}`]);
         }
         return;
       }
 
-      // Auto-select when single option
       if (options.length === 1) {
         const only = options[0];
         const selLabel = labelFor(only);
         if (only.type === "orientation") {
           selectedOrientation = (only.name || "").toLowerCase();
         }
-        walk(only, [...path, "or", `sel:${selLabel}`]);
+        walk(only, [...path, "one", `sel:${selLabel}`]);
         return;
       }
 
       return;
     }
-    if (node.and) asArray(node.and).forEach((child, idx) => walk(child, [...path, "and", String(idx)]));
-    if (node.multiply) asArray(node.multiply).forEach((child, idx) => walk(child, [...path, "multiply", String(idx)]));
+    if (node.many) asArray(node.many).forEach((child, idx) => walk(child, [...path, "many", String(idx)]));
   }
 
   walk({ ...device, name: device.name }, [device.name]);
@@ -202,7 +203,7 @@ export function DeviceOverlays({ devices, device, selections, toggles }) {
   return (
     <>
       {overlays.map((a, idx) => (
-        <AssetImg key={`ov-${idx}`} src={a.src} alt={a.alt} pos={a.pos} />
+        <AssetImg key={`ov-${idx}`} src={a.src} alt={a.name} pos={a.pos} />
       ))}
     </>
   );

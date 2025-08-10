@@ -14,7 +14,6 @@ function safeUrl(u) {
 
 export default function Page() {
   const iframeRef = useRef(null);
-  const containerRef = useRef(null);
 
   const [url, setUrl] = useState("https://example.com");
   const [dimentions, setDimentions] = useState({ w: 1024, h: 768 });
@@ -22,6 +21,9 @@ export default function Page() {
   const [device, setDevice] = useState();
   const [selections, setSelections] = useState({});
   const [toggles, setToggles] = useState({});
+
+  // New: background color for the device container
+  const [backgroundColor, setBackgroundColor] = useState("rgba(249, 250, 251, 1)");
 
   const [isResizing, setIsResizing] = useState(false);
   const [startPos, setStartPos] = useState({ x: 0, y: 0 });
@@ -66,21 +68,22 @@ export default function Page() {
           setUrl={setUrl}
           dimentions={dimentions}
           setDimentions={setDimentions}
-          containerRef={containerRef}
           device={device}
           setDevice={setDevice}
           selections={selections}
           setSelections={setSelections}
           toggles={toggles}
           setToggles={setToggles}
+          backgroundColor={backgroundColor}
+          setBackgroundColor={setBackgroundColor}
         />
       </SidebarPortal>
 
       <div className="w-full h-full relative">
-        <div ref={containerRef} className="w-full h-full overflow-x-auto overflow-y-auto flex items-center justify-center">
+        <div className="w-full h-full overflow-x-auto overflow-y-auto flex items-center justify-center">
           {/* Fixed-size device box */}
           <div className="relative" style={{ width: viewW + "px", height: viewH + "px" }}>
-            <div className="relative flex flex-col w-full h-full">
+            <div className="relative flex flex-col w-full h-full" style={{ backgroundColor }}>
               {/* Top stacked bars */}
               {assets.flowTop.map((a, idx) => (
                 <img key={`top-${idx}`} src={a.src} alt={a.alt} className="block w-full h-auto select-none pointer-events-none" />

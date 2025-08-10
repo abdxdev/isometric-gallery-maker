@@ -1,71 +1,113 @@
 [
   {
     "type": "device",
-    "name": "iphone",
+    "name": "iPhone",
     "dimensions": {
       "width": 375,
       "height": 812
     },
-    "or": [
+    "one": [
       {
         "type": "orientation",
         "name": "portrait",
-        "multiply": [
+        "one": [
           {
-            "and": [
+            "name": "Safari",
+            "many": [
               {
                 "type": "asset",
-                "src": "public/assets/elements/iphone/portrait/status-bar.svg",
-                "alt": "Status Bar",
+                "name": "Status Bar",
+                "src": {
+                  "light": "public/assets/elements/iphone1/safari/Dark=False, Dynamic Island=True.svg",
+                  "dark": "public/assets/elements/iphone1/safari/Dark=True, Dynamic Island=True.svg"
+                },
                 "pos": "top",
                 "absolute": false
               },
               {
-                "type": "asset",
-                "src": "public/assets/elements/iphone/portrait/home-indicator.svg",
-                "alt": "Home Indicator",
-                "pos": "bottom",
-                "absolute": true
+                "one": [
+                  {
+                    "type": "asset",
+                    "name": "Bottom",
+                    "src": {
+                      "light": "public/assets/elements/iphone1/safari/Dark=False, Scroll=False, Landscape=False.svg",
+                      "dark": "public/assets/elements/iphone1/safari/Dark=True, Scroll=False, Landscape=False.svg"
+                    },
+                    "pos": "bottom",
+                    "absolute": false
+                  },
+                  {
+                    "type": "asset",
+                    "name": "With Scroll",
+                    "src": {
+                      "light": "public/assets/elements/iphone1/safari/Dark=False, Scroll=True, Landscape=False.svg",
+                      "dark": "public/assets/elements/iphone1/safari/Dark=True, Scroll=True, Landscape=False.svg"
+                    },
+                    "pos": "bottom",
+                    "absolute": false
+                  },
+                  {
+                    "type": "asset",
+                    "name": "Nav Bar",
+                    "src": {
+                      "light": "public/assets/elements/iphone1/Dark=False, Scroll=True, Landscape=True.svg",
+                      "dark": "public/assets/elements/iphone1/Dark=True, Scroll=True, Landscape=True.svg"
+                    },
+                    "pos": "bottom",
+                    "absolute": true
+                  }
+                ]
               }
             ]
           },
           {
-            "or": [
+            "name": "Chrome",
+            "many": [
               {
-                "name": "safari",
-                "and": [
+                "one": [
                   {
                     "type": "asset",
-                    "src": "public/assets/elements/iphone/portrait/safari/Safari Top.svg",
-                    "alt": "Safari Top",
+                    "name": "Top",
+                    "src": {
+                      "light": "public/assets/elements/iphone1/chrome/Dark=False, Scroll=False, Landscape=False.svg",
+                      "dark": "public/assets/elements/iphone1/chrome/Dark=True, Scroll=False, Landscape=False.svg"
+                    },
                     "pos": "top",
                     "absolute": false
                   },
                   {
                     "type": "asset",
-                    "src": "public/assets/elements/iphone/portrait/safari/Safari Bottom.svg",
-                    "alt": "Safari Bottom",
-                    "pos": "bottom",
+                    "name": "With Scroll",
+                    "src": {
+                      "light": "public/assets/elements/iphone1/chrome/Dark=False, Scroll=True, Landscape=False.svg",
+                      "dark": "public/assets/elements/iphone1/chrome/Dark=True, Scroll=True, Landscape=False.svg"
+                    },
+                    "pos": "top",
                     "absolute": false
                   }
                 ]
               },
               {
-                "name": "chrome",
-                "and": [
+                "one": [
                   {
                     "type": "asset",
-                    "src": "public/assets/elements/iphone/portrait/chrome/Chrome - Top.svg",
-                    "alt": "Chrome Top",
-                    "pos": "top",
+                    "name": "Bottom",
+                    "src": {
+                      "light": "public/assets/elements/iphone1/chrome/Dark=False.svg",
+                      "dark": "public/assets/elements/iphone1/chrome/Dark=True.svg"
+                    },
+                    "pos": "bottom",
                     "absolute": false
                   },
                   {
                     "type": "asset",
-                    "src": "public/assets/elements/iphone/portrait/chrome/Chrome - Bottom.svg",
-                    "alt": "Chrome Bottom",
+                    "name": "Nav Bar",
+                    "src": {
+                      "light": "public/assets/elements/iphone1/Dark=False, Scroll=True, Landscape=True.svg",
+                      "dark": "public/assets/elements/iphone1/Dark=True, Scroll=True, Landscape=True.svg"
+                    },
                     "pos": "bottom",
-                    "absolute": false
+                    "absolute": true
                   }
                 ]
               }
@@ -76,43 +118,68 @@
       {
         "type": "orientation",
         "name": "landscape",
-        "multiply": [
+        "one": [
           {
-            "and": [
+            "name": "safari",
+            "many": [
               {
                 "type": "asset",
-                "src": "public/assets/elements/iphone/landscape/home-indicator.svg",
-                "alt": "Home Indicator",
+                "name": "Top",
+                "src": {
+                  "light": "public/assets/elements/iphone1/safari/Dark=False, Scroll=False, Landscape=True.svg",
+                  "dark": "public/assets/elements/iphone1/safari/Dark=True, Scroll=False, Landscape=True.svg"
+                },
+                "pos": "top",
+                "absolute": false
+              },
+              {
+                "type": "asset",
+                "name": "Nav Bar",
+                "src": {
+                  "light": "public/assets/elements/iphone1/Dark=False, Scroll=True, Landscape=True Big.svg",
+                  "dark": "public/assets/elements/iphone1/Dark=True, Scroll=True, Landscape=True Big.svg"
+                },
                 "pos": "bottom",
                 "absolute": true
               }
             ]
           },
           {
-            "or": [
+            "name": "chrome",
+            "many": [
               {
-                "name": "safari",
-                "or": [
+                "one": [
                   {
                     "type": "asset",
-                    "src": "public/assets/elements/iphone/landscape/safari/Safari - Top.svg",
-                    "alt": "Safari Top",
+                    "name": "Top",
+                    "src": {
+                      "light": "public/assets/elements/iphone1/chrome/Dark=False, Scroll=False, Landscape=True.svg",
+                      "dark": "public/assets/elements/iphone1/chrome/Dark=True, Scroll=False, Landscape=True.svg"
+                    },
+                    "pos": "top",
+                    "absolute": false
+                  },
+                  {
+                    "type": "asset",
+                    "name": "With Scroll",
+                    "src": {
+                      "light": "public/assets/elements/iphone1/chrome/Dark=False, Scroll=True, Landscape=True.svg",
+                      "dark": "public/assets/elements/iphone1/chrome/Dark=True, Scroll=True, Landscape=True.svg"
+                    },
                     "pos": "top",
                     "absolute": false
                   }
                 ]
               },
               {
-                "name": "chrome",
-                "or": [
-                  {
-                    "type": "asset",
-                    "src": "public/assets/elements/iphone/landscape/chrome/Chrome - Top.svg",
-                    "alt": "Chrome Top",
-                    "pos": "top",
-                    "absolute": false
-                  }
-                ]
+                "type": "asset",
+                "name": "Nav Bar",
+                "src": {
+                  "light": "public/assets/elements/iphone1/Dark=False, Scroll=True, Landscape=True Big.svg",
+                  "dark": "public/assets/elements/iphone1/Dark=True, Scroll=True, Landscape=True Big.svg"
+                },
+                "pos": "bottom",
+                "absolute": true
               }
             ]
           }
@@ -122,78 +189,32 @@
   },
   {
     "type": "device",
-    "name": "mac",
+    "name": "Mac",
     "dimensions": {
       "width": 1280,
       "height": 784
     },
-    "or": [
+    "one": [
       {
-        "name": "safari",
-        "or": [
-          {
-            "name": "light",
-            "or": [
-              {
-                "type": "asset",
-                "src": "public/assets/elements/mac/safari/Light.svg",
-                "alt": "Safari Light",
-                "pos": "top",
-                "absolute": false
-              }
-            ]
-          },
-          {
-            "name": "dark",
-            "or": [
-              {
-                "type": "asset",
-                "src": "public/assets/elements/mac/safari/Dark.svg",
-                "alt": "Safari Dark",
-                "pos": "top",
-                "absolute": false
-              }
-            ]
-          }
-        ]
+        "type": "asset",
+        "name": "Safari",
+        "src": {
+          "light": "public/assets/elements/mac/safari/Light.svg",
+          "dark": "public/assets/elements/mac/safari/Dark.svg"
+        },
+        "pos": "top",
+        "absolute": false
       },
       {
-        "name": "chrome",
-        "or": [
-          {
-            "name": "light",
-            "or": [
-              {
-                "type": "asset",
-                "src": "public/assets/elements/mac/chrome/Light.svg",
-                "alt": "Chrome Light",
-                "pos": "top",
-                "absolute": false
-              }
-            ]
-          },
-          {
-            "name": "dark",
-            "or": [
-              {
-                "type": "asset",
-                "src": "public/assets/elements/mac/chrome/Dark.svg",
-                "alt": "Chrome Dark",
-                "pos": "top",
-                "absolute": false
-              }
-            ]
-          }
-        ]
+        "type": "asset",
+        "name": "Chrome",
+        "src": {
+          "light": "public/assets/elements/mac/chrome/Light.svg",
+          "dark": "public/assets/elements/mac/chrome/Dark.svg"
+        },
+        "pos": "top",
+        "absolute": false
       }
     ]
-  },
-  {
-    "type": "device",
-    "name": "general",
-    "dimensions": {
-      "width": 360,
-      "height": 812
-    }
   }
 ]
