@@ -14,65 +14,141 @@ function safeUrl(u) {
 
 export default function Page() {
   const iframeRef = useRef(null);
+  const scrollAreaRef = useRef(null);
+  const [available, setAvailable] = useState({ w: 0, h: 0 });
+
+  const defaultDeviceName = devicesJson[0]?.name;
+  const defaultDims = devicesJson[0]?.dimensions
+    ? { w: devicesJson[0].dimensions.width, h: devicesJson[0].dimensions.height }
+    : { w: 1024, h: 768 };
 
   const [url, setUrl] = useState("https://example.com");
-  const [dimentions, setDimentions] = useState({ w: 1024, h: 768 });
+  const [dimentions, setDimentions] = useState(defaultDims);
 
-  const [device, setDevice] = useState();
+  const MAX_W = 1920;
+  const MAX_H = 1080;
+  const viewW = Math.min(dimentions.w, MAX_W);
+  const viewH = Math.min(dimentions.h, MAX_H);
+
+  const [device, setDevice] = useState(defaultDeviceName);
   const [selections, setSelections] = useState({});
   const [toggles, setToggles] = useState({});
 
-  // New: background color for the device container
   const [backgroundColor, setBackgroundColor] = useState("rgba(249, 250, 251, 1)");
 
-  // New: frame styles
   const [frame, setFrame] = useState({
     borderColor: "rgba(3, 7, 18, 0.12)",
     borderThickness: 10,
     borderRadius: 16,
   });
 
-  // New: mesh gradient background controls
   const [gradient, setGradient] = useState({ opacity: 0.75, key: 0 });
-  const gradientStyle = useMemo(() => generateJSXMeshGradient(6), [gradient.key]);
-
-  // Shadow under iframe content
-  const [contentShadowEnabled, setContentShadowEnabled] = useState(false);
-
-  const [resize, setResize] = useState({
-    isResizing: false,
-    startPos: { x: 0, y: 0 },
-    startSize: { w: 1024, h: 768 },
-  });
-
+  const [gradientStyle, setGradientStyle] = useState({});
   useEffect(() => {
-    function onMouseMove(e) {
-      if (!resize.isResizing) return;
-      const dx = e.clientX - resize.startPos.x;
-      const dy = e.clientY - resize.startPos.y;
-      setDimentions({
-        w: Math.max(200, Math.round(resize.startSize.w + dx)),
-        h: Math.max(200, Math.round(resize.startSize.h + dy))
-      });
-    }
-    function onMouseUp() { setResize((r) => ({ ...r, isResizing: false })); }
-    window.addEventListener("mousemove", onMouseMove);
-    window.addEventListener("mouseup", onMouseUp);
-    return () => {
-      window.removeEventListener("mousemove", onMouseMove);
-      window.removeEventListener("mouseup", onMouseUp);
+    setGradientStyle(generateJSXMeshGradient(6));
+  }, [gradient.key]);
+
+  const [contentShadowEnabled, setContentShadowEnabled] = useState(false);
+  const [pageZoom, setPageZoom] = useState(1);
+  const [canInnerZoom, setCanInnerZoom] = useState(false);
+
+  // Compute available space on mount and resize
+  useEffect(() => {
+    const computeAvailable = () => {
+      const viewportW = window.innerWidth;
+      const parent = scrollAreaRef.current?.parentElement || scrollAreaRef.current;
+      const parentH = parent ? parent.clientHeight : window.innerHeight;
+
+      const leftGap = document.querySelector('[data-slot="sidebar-gap"]');
+      const rightSidebar = document.querySelector('[data-slot="control-sidebar"]');
+      const layout = document.querySelector('[data-slot="screenshoots-layout"]');
+
+      const hasFixedAncestor = (() => {
+        let el = scrollAreaRef.current;
+        while (el && el !== document.body) {
+          const pos = window.getComputedStyle(el).position;
+          if (pos === "fixed") return true;
+          el = el.parentElement;
+        }
+        return false;
+      })();
+
+      if (hasFixedAncestor) {
+        setAvailable({ w: Math.max(0, Math.floor(viewportW)), h: parentH });
+        return;
+      }
+
+      const isRow = layout ? window.getComputedStyle(layout).flexDirection.includes("row") : true;
+
+      const leftW = leftGap ? leftGap.getBoundingClientRect().width : 0;
+      const rightW = isRow && rightSidebar ? rightSidebar.getBoundingClientRect().width : 0;
+
+      const w = Math.max(0, Math.floor(viewportW - leftW - rightW));
+      setAvailable({ w, h: parentH });
     };
-  }, [resize]);
 
-  // function startResize(e) {
-  //   setResize({ isResizing: true, startPos: { x: e.clientX, y: e.clientY }, startSize: dimentions });
-  // }
+    computeAvailable();
 
-  const MAX_SIZE = 1500;
-  const viewW = Math.min(dimentions.w, MAX_SIZE);
-  const viewH = Math.min(dimentions.h, MAX_SIZE);
+    const roLeft = new ResizeObserver(computeAvailable);
+    const roRight = new ResizeObserver(computeAvailable);
+    const roParent = new ResizeObserver(computeAvailable);
+
+    const leftGap = document.querySelector('[data-slot="sidebar-gap"]');
+    const rightSidebar = document.querySelector('[data-slot="control-sidebar"]');
+    const parent = scrollAreaRef.current?.parentElement || scrollAreaRef.current;
+
+    if (leftGap) roLeft.observe(leftGap);
+    if (rightSidebar) roRight.observe(rightSidebar);
+    if (parent) roParent.observe(parent);
+
+    window.addEventListener("resize", computeAvailable);
+
+    const onTransitionEnd = () => computeAvailable();
+    leftGap?.addEventListener("transitionend", onTransitionEnd);
+    rightSidebar?.addEventListener("transitionend", onTransitionEnd);
+
+    return () => {
+      roLeft.disconnect();
+      roRight.disconnect();
+      roParent.disconnect();
+      window.removeEventListener("resize", computeAvailable);
+      leftGap?.removeEventListener("transitionend", onTransitionEnd);
+      rightSidebar?.removeEventListener("transitionend", onTransitionEnd);
+    };
+  }, []);
+
+  // Re-apply inner zoom when slider changes (if accessible)
+  useEffect(() => {
+    const iframe = iframeRef.current;
+    if (!iframe || !canInnerZoom) return;
+    try {
+      const doc = iframe.contentDocument || iframe.contentWindow?.document;
+      if (doc?.documentElement) {
+        doc.documentElement.style.zoom = String(pageZoom);
+      }
+    } catch {
+      // cross-origin, ignore
+    }
+  }, [pageZoom, canInnerZoom]);
+
+  // Reset access flag on URL change
+  useEffect(() => {
+    setCanInnerZoom(false);
+  }, [url]);
 
   const assets = useMemo(() => collectAssets(devicesJson, device || devicesJson[0]?.name, selections, toggles), [device, selections, toggles]);
+
+  const deviceTotalWidth = viewW + frame.borderThickness * 2;
+  const overflowX = available.w > 0 && deviceTotalWidth > available.w;
+  const deviceTotalHeight = viewH + frame.borderThickness * 2;
+  const overflowY = available.h > 0 && deviceTotalHeight > available.h;
+
+  useEffect(() => {
+    if (scrollAreaRef.current) {
+      if (overflowX) scrollAreaRef.current.scrollLeft = 0;
+      if (overflowY) scrollAreaRef.current.scrollTop = 0;
+    }
+  }, [overflowX, overflowY, available.w, available.h, deviceTotalWidth, deviceTotalHeight]);
 
   return (
     <>
@@ -90,34 +166,37 @@ export default function Page() {
           setToggles={setToggles}
           backgroundColor={backgroundColor}
           setBackgroundColor={setBackgroundColor}
-          // new frame controls
           frameBorderColor={frame.borderColor}
           setFrameBorderColor={(v) => setFrame((f) => ({ ...f, borderColor: v }))}
           frameBorderThickness={frame.borderThickness}
           setFrameBorderThickness={(v) => setFrame((f) => ({ ...f, borderThickness: v }))}
           frameBorderRadius={frame.borderRadius}
           setFrameBorderRadius={(v) => setFrame((f) => ({ ...f, borderRadius: v }))}
-          // mesh background controls
           gradientOpacity={gradient.opacity}
           setGradientOpacity={(v) => setGradient((g) => ({ ...g, opacity: v }))}
           onRandomizeGradient={() => setGradient((g) => ({ ...g, key: g.key + 1 }))}
           contentShadowEnabled={contentShadowEnabled}
           setContentShadowEnabled={setContentShadowEnabled}
+          pageZoom={pageZoom}
+          setPageZoom={setPageZoom}
         />
       </SidebarPortal>
 
       <div className="w-full h-full relative gradient-box">
-        {/* Mesh gradient background layer */}
         <div
           className="absolute inset-0 pointer-events-none"
           style={{ ...gradientStyle, opacity: gradient.opacity }}
           aria-hidden
+          suppressHydrationWarning
         />
 
-        <div className="relative z-10 w-full h-full overflow-x-auto overflow-y-auto flex items-center justify-center">
-          {/* Fixed-size device box */}
+        <div
+          ref={scrollAreaRef}
+          className={`relative z-10 w-full h-full overflow-x-auto overflow-y-auto flex ${overflowY ? "items-start" : "items-center"} ${overflowX ? "justify-start" : "justify-center"}`}
+          style={{ maxWidth: available.w ? available.w + "px" : undefined, maxHeight: available.h ? available.h + "px" : undefined }}
+        >
           <div
-            className="relative m-15"
+            className="relative flex-none m-15"
             style={{
               width: viewW + "px",
               height: viewH + "px",
@@ -129,36 +208,49 @@ export default function Page() {
             }}
           >
             <div className="relative flex flex-col w-full h-full" style={{ backgroundColor }}>
-              {/* Top stacked bars */}
               {assets.flowTop.map((a, idx) => (
                 <img key={`top-${idx}`} src={a.src} alt={a.alt} className="block w-full h-auto select-none pointer-events-none" />
               ))}
 
-              {/* Iframe fills remaining space */}
-              <div className="relative flex-1 min-h-0">
-                <iframe
-                  ref={iframeRef}
-                  title="embed-preview"
-                  src={safeUrl(url)}
-                  sandbox="allow-forms allow-scripts allow-same-origin allow-popups"
-                  className="absolute inset-0 w-full h-full z-0"
-                />
-                {/* Absolute overlays */}
+              <div className="relative flex-1 min-h-0 overflow-hidden">
+                <div
+                  style={
+                    canInnerZoom
+                      ? { width: "100%", height: "100%" }
+                      : { width: `${viewW / pageZoom}px`, height: `${viewH / pageZoom}px`, transform: `scale(${pageZoom})`, transformOrigin: "top left" }
+                  }
+                >
+                  <iframe
+                    ref={iframeRef}
+                    title="embed-preview"
+                    src={safeUrl(url)}
+                    sandbox="allow-forms allow-scripts allow-same-origin allow-popups"
+                    className="w-full h-full z-0"
+                    style={{ border: 0 }}
+                    onLoad={() => {
+                      try {
+                        const doc = iframeRef.current?.contentDocument || iframeRef.current?.contentWindow?.document;
+                        if (doc?.documentElement) {
+                          doc.documentElement.style.zoom = String(pageZoom);
+                          setCanInnerZoom(true);
+                        } else {
+                          setCanInnerZoom(false);
+                        }
+                      } catch {
+                        setCanInnerZoom(false);
+                      }
+                    }}
+                  />
+                </div>
               </div>
               <div className="pointer-events-none absolute inset-0 z-10">
                 <DeviceOverlays devices={devicesJson} device={device || devicesJson[0]?.name} selections={selections} toggles={toggles} />
               </div>
 
-              {/* Bottom stacked bars */}
               {assets.flowBottom.map((a, idx) => (
                 <img key={`bottom-${idx}`} src={a.src} alt={a.alt} className="block w-full h-auto select-none pointer-events-none" />
               ))}
             </div>
-
-            {/* Resize handle */}
-            {/* <div onMouseDown={startResize} className="absolute right-0 bottom-0 w-4 h-4 cursor-se-resize" style={{ background: "transparent" }} aria-hidden>
-              <MoveDiagonal2 className="w-4 h-4 text-gray-500" />
-            </div> */}
           </div>
         </div>
       </div>

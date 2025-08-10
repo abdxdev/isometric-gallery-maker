@@ -13,7 +13,7 @@ export default function ScreenshootsLayout({ children }) {
 
 
   const content = (
-    <div className="flex flex-col lg:flex-row">
+    <div className="flex flex-col lg:flex-row" data-slot="screenshoots-layout">
       {/* Main Area for children */}
       <div className="flex-1 order-1 lg:order-1">
         <div
