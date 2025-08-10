@@ -73,7 +73,15 @@ export function buildControlGroups(devices, deviceName, selections = {}) {
 
       if (options.length > 1) {
         // label not shown in UI, keep for completeness
-        orGroups.push({ key, label: node.label || "option", options });
+        const optionsMeta = children.map((child) => {
+          const label = labelFor(child);
+          return {
+            label,
+            key: pathKey([...path, "one", `sel:${label}`]),
+            localMode: isAsset(child) ? !!child["local-mode"] : false,
+          };
+        });
+        orGroups.push({ key, label: node.label || "option", options, optionsMeta });
       }
       const sel = selections[key];
       if (!sel) return; // gate deeper until selected
@@ -87,7 +95,11 @@ export function buildControlGroups(devices, deviceName, selections = {}) {
       const label = node.name || node.label || "group";
       const children = asArray(node.many);
       const items = children
-        .map((child, idx) => (isAsset(child) ? { key: pathKey([...path, "many", String(idx)]), label: labelFor(child) } : null))
+        .map((child, idx) =>
+          isAsset(child)
+            ? { key: pathKey([...path, "many", String(idx)]), label: labelFor(child), localMode: !!child["local-mode"] }
+            : null
+        )
         .filter(Boolean);
       if (items.length > 0) {
         andGroups.push({ key, label, items });
@@ -106,7 +118,13 @@ export function collectAssets(devices, deviceName, selections = {}, toggles = {}
 
   function evalNode(node, path) {
     if (!node) return [];
-    if (isAsset(node)) return [{ ...node, src: resolveAssetSrc(node.src, selections) }];
+    if (isAsset(node)) {
+      const key = pathKey(path);
+      const toggleVal = toggles[key];
+      if (toggleVal === false) return [];
+      const useSel = node["local-mode"] && (toggleVal === "light" || toggleVal === "dark") ? { ...(selections || {}), __theme__: toggleVal } : selections;
+      return [{ ...node, src: resolveAssetSrc(node.src, useSel) }];
+    }
 
     if (node.one) {
       const key = pathKey([...path, "one"]);
@@ -130,7 +148,21 @@ export function collectAssets(devices, deviceName, selections = {}, toggles = {}
     if (node.many) {
       return asArray(node.many).flatMap((child, idx) => {
         const childKey = pathKey([...path, "many", String(idx)]);
-        if (toggles[childKey] === false) return [];
+        const toggleVal = toggles[childKey];
+        if (toggleVal === false) return [];
+
+        // If direct child is an asset, handle possible local-mode theme override
+        if (isAsset(child)) {
+          if (child["local-mode"]) {
+            // toggleVal may be "inherit" | "light" | "dark" | true | undefined
+            const localTheme = toggleVal === "light" || toggleVal === "dark" ? toggleVal : undefined;
+            const sel = localTheme ? { ...(selections || {}), __theme__: localTheme } : selections;
+            return [{ ...child, src: resolveAssetSrc(child.src, sel) }];
+          }
+          // Non-local-mode or no override
+          return [{ ...child, src: resolveAssetSrc(child.src, selections) }];
+        }
+
         return evalNode(child, [...path, "many", String(idx)]);
       });
     }

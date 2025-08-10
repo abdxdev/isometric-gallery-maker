@@ -18,9 +18,10 @@
                 "type": "asset",
                 "name": "Status Bar",
                 "src": {
-                  "light": "public/assets/elements/iphone1/safari/Dark=False, Dynamic Island=True.svg",
-                  "dark": "public/assets/elements/iphone1/safari/Dark=True, Dynamic Island=True.svg"
+                  "light": "public/assets/elements/iphone/safari/Dark=False, Dynamic Island=True.svg",
+                  "dark": "public/assets/elements/iphone/safari/Dark=True, Dynamic Island=True.svg"
                 },
+                "local-mode": true,
                 "pos": "top",
                 "absolute": false
               },
@@ -30,8 +31,8 @@
                     "type": "asset",
                     "name": "Bottom",
                     "src": {
-                      "light": "public/assets/elements/iphone1/safari/Dark=False, Scroll=False, Landscape=False.svg",
-                      "dark": "public/assets/elements/iphone1/safari/Dark=True, Scroll=False, Landscape=False.svg"
+                      "light": "public/assets/elements/iphone/safari/Dark=False, Scroll=False, Landscape=False.svg",
+                      "dark": "public/assets/elements/iphone/safari/Dark=True, Scroll=False, Landscape=False.svg"
                     },
                     "pos": "bottom",
                     "absolute": false
@@ -40,8 +41,8 @@
                     "type": "asset",
                     "name": "With Scroll",
                     "src": {
-                      "light": "public/assets/elements/iphone1/safari/Dark=False, Scroll=True, Landscape=False.svg",
-                      "dark": "public/assets/elements/iphone1/safari/Dark=True, Scroll=True, Landscape=False.svg"
+                      "light": "public/assets/elements/iphone/safari/Dark=False, Scroll=True, Landscape=False.svg",
+                      "dark": "public/assets/elements/iphone/safari/Dark=True, Scroll=True, Landscape=False.svg"
                     },
                     "pos": "bottom",
                     "absolute": false
@@ -50,9 +51,10 @@
                     "type": "asset",
                     "name": "Nav Bar",
                     "src": {
-                      "light": "public/assets/elements/iphone1/Dark=False, Scroll=True, Landscape=True.svg",
-                      "dark": "public/assets/elements/iphone1/Dark=True, Scroll=True, Landscape=True.svg"
+                      "light": "public/assets/elements/iphone/Dark=False, Scroll=True, Landscape=True.svg",
+                      "dark": "public/assets/elements/iphone/Dark=True, Scroll=True, Landscape=True.svg"
                     },
+                    "local-mode": true,
                     "pos": "bottom",
                     "absolute": true
                   }
@@ -69,8 +71,8 @@
                     "type": "asset",
                     "name": "Top",
                     "src": {
-                      "light": "public/assets/elements/iphone1/chrome/Dark=False, Scroll=False, Landscape=False.svg",
-                      "dark": "public/assets/elements/iphone1/chrome/Dark=True, Scroll=False, Landscape=False.svg"
+                      "light": "public/assets/elements/iphone/chrome/Dark=False, Scroll=False, Landscape=False.svg",
+                      "dark": "public/assets/elements/iphone/chrome/Dark=True, Scroll=False, Landscape=False.svg"
                     },
                     "pos": "top",
                     "absolute": false
@@ -79,8 +81,8 @@
                     "type": "asset",
                     "name": "With Scroll",
                     "src": {
-                      "light": "public/assets/elements/iphone1/chrome/Dark=False, Scroll=True, Landscape=False.svg",
-                      "dark": "public/assets/elements/iphone1/chrome/Dark=True, Scroll=True, Landscape=False.svg"
+                      "light": "public/assets/elements/iphone/chrome/Dark=False, Scroll=True, Landscape=False.svg",
+                      "dark": "public/assets/elements/iphone/chrome/Dark=True, Scroll=True, Landscape=False.svg"
                     },
                     "pos": "top",
                     "absolute": false
@@ -93,8 +95,8 @@
                     "type": "asset",
                     "name": "Bottom",
                     "src": {
-                      "light": "public/assets/elements/iphone1/chrome/Dark=False.svg",
-                      "dark": "public/assets/elements/iphone1/chrome/Dark=True.svg"
+                      "light": "public/assets/elements/iphone/chrome/Dark=False.svg",
+                      "dark": "public/assets/elements/iphone/chrome/Dark=True.svg"
                     },
                     "pos": "bottom",
                     "absolute": false
@@ -103,9 +105,10 @@
                     "type": "asset",
                     "name": "Nav Bar",
                     "src": {
-                      "light": "public/assets/elements/iphone1/Dark=False, Scroll=True, Landscape=True.svg",
-                      "dark": "public/assets/elements/iphone1/Dark=True, Scroll=True, Landscape=True.svg"
+                      "light": "public/assets/elements/iphone/Dark=False, Scroll=True, Landscape=True.svg",
+                      "dark": "public/assets/elements/iphone/Dark=True, Scroll=True, Landscape=True.svg"
                     },
+                    "local-mode": true,
                     "pos": "bottom",
                     "absolute": true
                   }
@@ -126,8 +129,8 @@
                 "type": "asset",
                 "name": "Top",
                 "src": {
-                  "light": "public/assets/elements/iphone1/safari/Dark=False, Scroll=False, Landscape=True.svg",
-                  "dark": "public/assets/elements/iphone1/safari/Dark=True, Scroll=False, Landscape=True.svg"
+                  "light": "public/assets/elements/iphone/safari/Dark=False, Scroll=False, Landscape=True.svg",
+                  "dark": "public/assets/elements/iphone/safari/Dark=True, Scroll=False, Landscape=True.svg"
                 },
                 "pos": "top",
                 "absolute": false
@@ -136,9 +139,10 @@
                 "type": "asset",
                 "name": "Nav Bar",
                 "src": {
-                  "light": "public/assets/elements/iphone1/Dark=False, Scroll=True, Landscape=True Big.svg",
-                  "dark": "public/assets/elements/iphone1/Dark=True, Scroll=True, Landscape=True Big.svg"
+                  "light": "public/assets/elements/iphone/Dark=False, Scroll=True, Landscape=True Big.svg",
+                  "dark": "public/assets/elements/iphone/Dark=True, Scroll=True, Landscape=True Big.svg"
                 },
+                "local-mode": true,
                 "pos": "bottom",
                 "absolute": true
               }
@@ -153,8 +157,8 @@
                     "type": "asset",
                     "name": "Top",
                     "src": {
-                      "light": "public/assets/elements/iphone1/chrome/Dark=False, Scroll=False, Landscape=True.svg",
-                      "dark": "public/assets/elements/iphone1/chrome/Dark=True, Scroll=False, Landscape=True.svg"
+                      "light": "public/assets/elements/iphone/chrome/Dark=False, Scroll=False, Landscape=True.svg",
+                      "dark": "public/assets/elements/iphone/chrome/Dark=True, Scroll=False, Landscape=True.svg"
                     },
                     "pos": "top",
                     "absolute": false
@@ -163,8 +167,8 @@
                     "type": "asset",
                     "name": "With Scroll",
                     "src": {
-                      "light": "public/assets/elements/iphone1/chrome/Dark=False, Scroll=True, Landscape=True.svg",
-                      "dark": "public/assets/elements/iphone1/chrome/Dark=True, Scroll=True, Landscape=True.svg"
+                      "light": "public/assets/elements/iphone/chrome/Dark=False, Scroll=True, Landscape=True.svg",
+                      "dark": "public/assets/elements/iphone/chrome/Dark=True, Scroll=True, Landscape=True.svg"
                     },
                     "pos": "top",
                     "absolute": false
@@ -175,9 +179,10 @@
                 "type": "asset",
                 "name": "Nav Bar",
                 "src": {
-                  "light": "public/assets/elements/iphone1/Dark=False, Scroll=True, Landscape=True Big.svg",
-                  "dark": "public/assets/elements/iphone1/Dark=True, Scroll=True, Landscape=True Big.svg"
+                  "light": "public/assets/elements/iphone/Dark=False, Scroll=True, Landscape=True Big.svg",
+                  "dark": "public/assets/elements/iphone/Dark=True, Scroll=True, Landscape=True Big.svg"
                 },
+                "local-mode": true,
                 "pos": "bottom",
                 "absolute": true
               }
