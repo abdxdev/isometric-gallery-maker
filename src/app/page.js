@@ -32,7 +32,7 @@ export default function Home() {
 
 					<Card>
 						<CardHeader>
-							<CardTitle>Isometric Gallery</CardTitle>
+							<CardTitle>Screen Decorator</CardTitle>
 						</CardHeader>
 						<CardContent className="space-y-3">
 							<p className="text-sm text-muted-foreground">
