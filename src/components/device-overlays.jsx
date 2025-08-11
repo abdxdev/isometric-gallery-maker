@@ -78,7 +78,7 @@ export function buildControlGroups(devices, deviceName, selections = {}) {
           return {
             label,
             key: pathKey([...path, "one", `sel:${label}`]),
-            localMode: isAsset(child) ? !!child["local-mode"] : false,
+            localMode: isAsset(child) ? !!child["changableTheme"] : false,
           };
         });
         orGroups.push({ key, label: node.label || "option", options, optionsMeta });
@@ -97,7 +97,7 @@ export function buildControlGroups(devices, deviceName, selections = {}) {
       const items = children
         .map((child, idx) =>
           isAsset(child)
-            ? { key: pathKey([...path, "many", String(idx)]), label: labelFor(child), localMode: !!child["local-mode"] }
+            ? { key: pathKey([...path, "many", String(idx)]), label: labelFor(child), localMode: !!child["changableTheme"] }
             : null
         )
         .filter(Boolean);
@@ -122,7 +122,7 @@ export function collectAssets(devices, deviceName, selections = {}, toggles = {}
       const key = pathKey(path);
       const toggleVal = toggles[key];
       if (toggleVal === false) return [];
-      const useSel = node["local-mode"] && (toggleVal === "light" || toggleVal === "dark") ? { ...(selections || {}), __theme__: toggleVal } : selections;
+      const useSel = node["changableTheme"] && (toggleVal === "light" || toggleVal === "dark") ? { ...(selections || {}), __theme__: toggleVal } : selections;
       return [{ ...node, src: resolveAssetSrc(node.src, useSel) }];
     }
 
@@ -151,15 +151,15 @@ export function collectAssets(devices, deviceName, selections = {}, toggles = {}
         const toggleVal = toggles[childKey];
         if (toggleVal === false) return [];
 
-        // If direct child is an asset, handle possible local-mode theme override
+        // If direct child is an asset, handle possible changableTheme theme override
         if (isAsset(child)) {
-          if (child["local-mode"]) {
+          if (child["changableTheme"]) {
             // toggleVal may be "inherit" | "light" | "dark" | true | undefined
             const localTheme = toggleVal === "light" || toggleVal === "dark" ? toggleVal : undefined;
             const sel = localTheme ? { ...(selections || {}), __theme__: localTheme } : selections;
             return [{ ...child, src: resolveAssetSrc(child.src, sel) }];
           }
-          // Non-local-mode or no override
+          // Non-changableTheme or no override
           return [{ ...child, src: resolveAssetSrc(child.src, selections) }];
         }
 

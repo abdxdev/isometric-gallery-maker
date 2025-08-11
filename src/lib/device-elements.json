@@ -21,21 +21,19 @@
                   "light": "public/assets/iphone/safari/Dark=False, Dynamic Island=True.svg",
                   "dark": "public/assets/iphone/safari/Dark=True, Dynamic Island=True.svg"
                 },
-                "local-mode": true,
                 "pos": "top",
-                "absolute": false
+                "changableTheme": true
               },
               {
                 "one": [
                   {
                     "type": "asset",
-                    "name": "Bottom",
+                    "name": "Url Bar",
                     "src": {
                       "light": "public/assets/iphone/safari/Dark=False, Scroll=False, Landscape=False.svg",
                       "dark": "public/assets/iphone/safari/Dark=True, Scroll=False, Landscape=False.svg"
                     },
-                    "pos": "bottom",
-                    "absolute": false
+                    "pos": "bottom"
                   },
                   {
                     "type": "asset",
@@ -44,8 +42,7 @@
                       "light": "public/assets/iphone/safari/Dark=False, Scroll=True, Landscape=False.svg",
                       "dark": "public/assets/iphone/safari/Dark=True, Scroll=True, Landscape=False.svg"
                     },
-                    "pos": "bottom",
-                    "absolute": false
+                    "pos": "bottom"
                   },
                   {
                     "type": "asset",
@@ -54,8 +51,8 @@
                       "light": "public/assets/iphone/Dark=False, Scroll=True, Landscape=True.svg",
                       "dark": "public/assets/iphone/Dark=True, Scroll=True, Landscape=True.svg"
                     },
-                    "local-mode": true,
                     "pos": "bottom",
+                    "changableTheme": true,
                     "absolute": true
                   }
                 ]
@@ -69,13 +66,12 @@
                 "one": [
                   {
                     "type": "asset",
-                    "name": "Top",
+                    "name": "Url Bar",
                     "src": {
                       "light": "public/assets/iphone/chrome/Dark=False, Scroll=False, Landscape=False.svg",
                       "dark": "public/assets/iphone/chrome/Dark=True, Scroll=False, Landscape=False.svg"
                     },
-                    "pos": "top",
-                    "absolute": false
+                    "pos": "top"
                   },
                   {
                     "type": "asset",
@@ -84,8 +80,7 @@
                       "light": "public/assets/iphone/chrome/Dark=False, Scroll=True, Landscape=False.svg",
                       "dark": "public/assets/iphone/chrome/Dark=True, Scroll=True, Landscape=False.svg"
                     },
-                    "pos": "top",
-                    "absolute": false
+                    "pos": "top"
                   }
                 ]
               },
@@ -93,24 +88,23 @@
                 "one": [
                   {
                     "type": "asset",
-                    "name": "Bottom",
-                    "src": {
-                      "light": "public/assets/iphone/chrome/Dark=False.svg",
-                      "dark": "public/assets/iphone/chrome/Dark=True.svg"
-                    },
-                    "pos": "bottom",
-                    "absolute": false
-                  },
-                  {
-                    "type": "asset",
                     "name": "Nav Bar",
                     "src": {
                       "light": "public/assets/iphone/Dark=False, Scroll=True, Landscape=True.svg",
                       "dark": "public/assets/iphone/Dark=True, Scroll=True, Landscape=True.svg"
                     },
-                    "local-mode": true,
                     "pos": "bottom",
+                    "changableTheme": true,
                     "absolute": true
+                  },
+                  {
+                    "type": "asset",
+                    "name": "With Buttons",
+                    "src": {
+                      "light": "public/assets/iphone/chrome/Dark=False.svg",
+                      "dark": "public/assets/iphone/chrome/Dark=True.svg"
+                    },
+                    "pos": "bottom"
                   }
                 ]
               }
@@ -127,13 +121,12 @@
             "many": [
               {
                 "type": "asset",
-                "name": "Top",
+                "name": "Url Bar",
                 "src": {
                   "light": "public/assets/iphone/safari/Dark=False, Scroll=False, Landscape=True.svg",
                   "dark": "public/assets/iphone/safari/Dark=True, Scroll=False, Landscape=True.svg"
                 },
-                "pos": "top",
-                "absolute": false
+                "pos": "top"
               },
               {
                 "type": "asset",
@@ -142,8 +135,8 @@
                   "light": "public/assets/iphone/Dark=False, Scroll=True, Landscape=True Big.svg",
                   "dark": "public/assets/iphone/Dark=True, Scroll=True, Landscape=True Big.svg"
                 },
-                "local-mode": true,
                 "pos": "bottom",
+                "changableTheme": true,
                 "absolute": true
               }
             ]
@@ -155,13 +148,12 @@
                 "one": [
                   {
                     "type": "asset",
-                    "name": "Top",
+                    "name": "Url Bar",
                     "src": {
                       "light": "public/assets/iphone/chrome/Dark=False, Scroll=False, Landscape=True.svg",
                       "dark": "public/assets/iphone/chrome/Dark=True, Scroll=False, Landscape=True.svg"
                     },
-                    "pos": "top",
-                    "absolute": false
+                    "pos": "top"
                   },
                   {
                     "type": "asset",
@@ -170,8 +162,7 @@
                       "light": "public/assets/iphone/chrome/Dark=False, Scroll=True, Landscape=True.svg",
                       "dark": "public/assets/iphone/chrome/Dark=True, Scroll=True, Landscape=True.svg"
                     },
-                    "pos": "top",
-                    "absolute": false
+                    "pos": "top"
                   }
                 ]
               },
@@ -182,8 +173,8 @@
                   "light": "public/assets/iphone/Dark=False, Scroll=True, Landscape=True Big.svg",
                   "dark": "public/assets/iphone/Dark=True, Scroll=True, Landscape=True Big.svg"
                 },
-                "local-mode": true,
                 "pos": "bottom",
+                "changableTheme": true,
                 "absolute": true
               }
             ]
@@ -207,8 +198,7 @@
           "light": "public/assets/mac/safari/Light.svg",
           "dark": "public/assets/mac/safari/Dark.svg"
         },
-        "pos": "top",
-        "absolute": false
+        "pos": "top"
       },
       {
         "type": "asset",
@@ -217,8 +207,182 @@
           "light": "public/assets/mac/chrome/Light.svg",
           "dark": "public/assets/mac/chrome/Dark.svg"
         },
-        "pos": "top",
-        "absolute": false
+        "pos": "top"
+      }
+    ]
+  },
+  {
+    "type": "device",
+    "name": "Android",
+    "dimensions": {
+      "width": 360,
+      "height": 800
+    },
+    "one": [
+      {
+        "type": "orientation",
+        "name": "portrait",
+        "one": [
+          {
+            "name": "Chrome",
+            "many": [
+              {
+                "one": [
+                  {
+                    "type": "asset",
+                    "name": "Status Bar",
+                    "src": {
+                      "light": "public/assets/android/chrome/Dark=False.svg",
+                      "dark": "public/assets/android/chrome/Dark=True.svg"
+                    },
+                    "pos": "top"
+                  },
+                  {
+                    "type": "asset",
+                    "name": "Url Bar",
+                    "src": {
+                      "light": "public/assets/android/chrome/Dark=False, Scroll=False, Landscape=False.svg",
+                      "dark": "public/assets/android/chrome/Dark=True, Scroll=False, Landscape=False.svg"
+                    },
+                    "pos": "top"
+                  },
+                  {
+                    "type": "asset",
+                    "name": "With Scroll",
+                    "src": {
+                      "light": "public/assets/android/chrome/Dark=False, Scroll=True, Landscape=False.svg",
+                      "dark": "public/assets/android/chrome/Dark=True, Scroll=True, Landscape=False.svg"
+                    },
+                    "pos": "top"
+                  }
+                ]
+              },
+              {
+                "one": [
+                  {
+                    "type": "asset",
+                    "name": "Nav Bar",
+                    "src": {
+                      "light": "public/assets/android/chrome/Dark=False, Controls=False.svg",
+                      "dark": "public/assets/android/chrome/Dark=True, Controls=False.svg"
+                    },
+                    "pos": "bottom"
+                  },
+                  {
+                    "type": "asset",
+                    "name": "With Controls",
+                    "src": {
+                      "light": "public/assets/android/chrome/Dark=False, Controls=True.svg",
+                      "dark": "public/assets/android/chrome/Dark=True, Controls=True.svg"
+                    },
+                    "pos": "bottom"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "name": "General",
+            "many": [
+              {
+                "type": "asset",
+                "name": "Status Bar",
+                "src": {
+                  "light": "public/assets/android/general/Mode=Light.svg",
+                  "dark": "public/assets/android/general/Mode=Dark.svg"
+                },
+                "pos": "top"
+              },
+              {
+                "one": [
+                  {
+                    "type": "asset",
+                    "name": "Nav Bar",
+                    "src": {
+                      "light": "public/assets/android/general/Dark=False.svg",
+                      "dark": "public/assets/android/general/Dark=True.svg"
+                    },
+                    "pos": "bottom"
+                  },
+                  {
+                    "type": "asset",
+                    "name": "Url Bar",
+                    "src": {
+                      "light": "public/assets/android/general/Dark=False, Landscape=False.svg",
+                      "dark": "public/assets/android/general/Dark=True, Landscape=False.svg"
+                    },
+                    "pos": "bottom"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "orientation",
+        "name": "landscape",
+        "one": [
+          {
+            "name": "Chrome",
+            "many": [
+              {
+                "type": "asset",
+                "name": "Url Bar",
+                "src": {
+                  "light": "public/assets/android/chrome/Dark=False, Scroll=False, Landscape=True.svg",
+                  "dark": "public/assets/android/chrome/Dark=True, Scroll=False, Landscape=True.svg"
+                },
+                "pos": "top"
+              },
+              {
+                "one": [
+                  {
+                    "type": "asset",
+                    "name": "Nav Bar",
+                    "src": {
+                      "light": "public/assets/android/chrome/Nav Bar Controls=False, Landscape=True, Dark=False.svg",
+                      "dark": "public/assets/android/chrome/Nav Bar Controls=False, Landscape=True, Dark=True.svg"
+                    },
+                    "pos": "bottom"
+                  },
+                  {
+                    "type": "asset",
+                    "name": "With Controls",
+                    "src": {
+                      "light": "public/assets/android/chrome/Nav Bar Controls=True, Landscape=True, Dark=False.svg",
+                      "dark": "public/assets/android/chrome/Nav Bar Controls=True, Landscape=True, Dark=True.svg"
+                    },
+                    "pos": "bottom"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "name": "General",
+            "many": [
+              {
+                "type": "asset",
+                "name": "Url Bar",
+                "src": {
+                  "light": "public/assets/android/general/Dark=False, Landscape=True.svg",
+                  "dark": "public/assets/android/general/Dark=True, Landscape=True.svg"
+                },
+                "pos": "top"
+              },
+              {
+                "type": "asset",
+                "name": "Nav Bar",
+                "src": {
+                  "light": "public/assets/android/general/Dark=False-1.svg",
+                  "dark": "public/assets/android/general/Dark=True-1.svg"
+                },
+                "pos": "bottom"
+              }
+            ]
+          }
+        ]
       }
     ]
   }
