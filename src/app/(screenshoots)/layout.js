@@ -14,8 +14,8 @@ export default function ScreenshootsLayout({ children }) {
   // Listen for header-triggered fullscreen toggle
   useEffect(() => {
     const handler = () => { toggleFullscreen(); };
-    window.addEventListener("screenshoots:toggle-fullscreen", handler);
-    return () => window.removeEventListener("screenshoots:toggle-fullscreen", handler);
+    window.addEventListener("toggle-fullscreen", handler);
+    return () => window.removeEventListener("toggle-fullscreen", handler);
   }, [toggleFullscreen]);
 
   const content = (

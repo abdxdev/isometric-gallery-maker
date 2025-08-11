@@ -2,6 +2,8 @@ import { Geist, Geist_Mono } from "next/font/google";
 import { ThemeProvider } from "@/components/theme-provider"
 import "./globals.css";
 import { Header } from "@/components/header";
+import { ScreenshootsIcon } from "@/components/svg/screenshoots";
+
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -26,7 +28,17 @@ export default function RootLayout({ children }) {
       >
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange >
           <div className="flex flex-col w-full h-screen">
-            <Header />
+            <Header
+              name="Screenshoots"
+              logo={<ScreenshootsIcon className="h-6 w-6" />}
+              isBeta={true}
+              pages={[
+                { href: "/isometric-gallery", label: "Isometric Gallery" },
+                { href: "/screen-decorator", label: "Screen Decorator" },
+              ]}
+              githubRepo="abdxdev/screenshoots"
+              portfolioUrl="https://abd-dev.studio"
+            />
             {children}
           </div>
         </ThemeProvider>
