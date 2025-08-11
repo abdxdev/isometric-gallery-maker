@@ -6,7 +6,7 @@ import { GitHubIcon } from "@/components/svg/github";
 import { Star } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-export function GitHubStarCounter({ repo = "abdxdev/screenshoots", className, variant }) {
+export function GitHubStarCounter({ repo, className, variant, showName, textClassName }) {
   const [starCount, setStarCount] = useState(null);
   const [loading, setLoading] = useState(true);
 
@@ -46,8 +46,11 @@ export function GitHubStarCounter({ repo = "abdxdev/screenshoots", className, va
 
   return (
     <Button variant={variant || "outline"} size="sm" asChild className={cn("flex items-center gap-1 sm:gap-1.5 h-6 sm:h-8 px-2 sm:px-3 text-xs", className)}>
-      <a href={`https://github.com/${repo}`} target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-foreground transition-colors">
+      <a href={`https://github.com/${repo}`} target="_blank" rel="noopener noreferrer" className={cn("text-muted-foreground hover:text-foreground transition-colors", textClassName)}>
         <GitHubIcon className="h-2.5 sm:h-3 w-2.5 sm:w-3" />
+        {showName && <span className="font-medium">{repo}</span>}
+        {/* expander */}
+        <div className="hidden sm:inline-block w-px h-4 bg-border mx-1" />
         <Star className="h-2.5 sm:h-3 w-2.5 sm:w-3 fill-current" />
         {loading ? <span className="w-4 sm:w-6 text-center">...</span> : <span className="font-medium">{starCount !== null ? formatStarCount(starCount) : "Star"}</span>}
       </a>
