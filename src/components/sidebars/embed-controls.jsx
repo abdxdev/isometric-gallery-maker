@@ -31,7 +31,22 @@ function ResetButton({ onClick, title, className = "flex-shrink-0" }) {
   );
 }
 
-export function EmbedControls({ url, setUrl, dimentions, setDimentions, device, setDevice, selections = {}, setSelections, toggles = {}, setToggles, backgroundColor, setBackgroundColor, frameBorderColor, setFrameBorderColor, frameBorderThickness, setFrameBorderThickness, frameBorderRadius, setFrameBorderRadius, gradientOpacity, setGradientOpacity, onRandomizeGradient, contentShadowEnabled = false, setContentShadowEnabled, pageZoom = 1, setPageZoom, backgroundMargin = 60, setBackgroundMargin }) {
+export function EmbedControls({
+  controls,
+  updateControl,
+  resetControl,
+  randomizeGradient,
+  url,
+  setUrl,
+  dimentions,
+  setDimentions,
+  device,
+  setDevice,
+  selections,
+  setSelections,
+  toggles,
+  setToggles,
+}) {
   const devices = devicesJson;
 
   // defaults
@@ -61,8 +76,8 @@ export function EmbedControls({ url, setUrl, dimentions, setDimentions, device, 
   useEffect(() => {
     const theme = selections?.__theme__ || "light";
     const desired = theme === "dark" ? "rgba(0, 0, 0, 1)" : "rgba(255, 255, 255, 1)";
-    if (backgroundColor !== desired) setBackgroundColor?.(desired);
-  }, [selections?.__theme__, backgroundColor]);
+    if (controls.backgroundColor !== desired) updateControl?.("backgroundColor", desired);
+  }, [selections?.__theme__, controls.backgroundColor]);
 
   return (
     <Accordion type="multiple" defaultValue={["url", "deviceOptions", "controls"]} className="w-full space-y-2">
@@ -341,85 +356,124 @@ export function EmbedControls({ url, setUrl, dimentions, setDimentions, device, 
             <div className="space-y-2">
               <Label htmlFor="pageZoom">Page Zoom</Label>
               <div className="flex gap-2 items-center">
-                <Slider id="pageZoom" value={[pageZoom]} onValueChange={(vals) => setPageZoom?.(Number(vals[0]))} min={0.25} max={3} step={0.05} className="flex-1" />
+                <Slider id="pageZoom" value={[controls.pageZoom]} onValueChange={(vals) => updateControl?.("pageZoom", Number(vals[0]))} min={0.25} max={3} step={0.05} className="flex-1" />
                 <div className="w-30">
-                  <NumberInput value={pageZoom} onValueChange={(v) => setPageZoom?.(Math.max(0.25, Math.min(3, Number(v))))} min={0.25} max={3} stepper={0.05} decimalScale={2} />
+                  <NumberInput value={controls.pageZoom} onValueChange={(v) => updateControl?.("pageZoom", Math.max(0.25, Math.min(3, Number(v))))} min={0.25} max={3} stepper={0.05} decimalScale={2} />
                 </div>
-                <ResetButton onClick={() => setPageZoom?.(1)} title="Reset Zoom" />
+                <ResetButton onClick={() => resetControl?.("pageZoom")} title="Reset Zoom" />
               </div>
             </div>
 
-            {/* Border Color */}
+            {/* Border Toggle & Settings */}
             <div className="space-y-2">
-              <Label htmlFor="borderColor">Border Color</Label>
-              <div className="flex gap-2">
-                <div className="flex-1">
-                  <ReactColorPicker value={frameBorderColor} onChange={(value) => setFrameBorderColor?.(value)} />
-                </div>
-                <ResetButton onClick={() => setFrameBorderColor?.("rgba(3, 7, 18, 0.12)")} title="Reset Border Color" />
+              <Label className="text-sm font-medium">Frame Border</Label>
+              <div className="flex gap-2 items-center">
+                <Button type="button" variant={controls.borderEnabled ? "default" : "outline"} onClick={() => updateControl?.("borderEnabled", !controls.borderEnabled)} className="w-full">
+                  {controls.borderEnabled ? "Border: On" : "Border: Off"}
+                </Button>
               </div>
-            </div>
-            {/* Border Thickness */}
-            <div className="space-y-2">
-              <Label htmlFor="borderThickness">Border Thickness</Label>
-              <div className="flex gap-2">
-                <div className="flex-1">
-                  <NumberInput id="borderThickness" value={frameBorderThickness} onValueChange={(v) => setFrameBorderThickness?.(Number(v))} min={0} max={40} stepper={1} className="w-full" />
+              {controls.borderEnabled && (
+                <div className="space-y-2 mt-1">
+                  <div className="space-y-1">
+                    <Label>Border Color</Label>
+                    <div className="flex gap-2">
+                      <div className="flex-1">
+                        <ReactColorPicker value={controls.borderColor} onChange={(value) => updateControl?.("borderColor", value)} />
+                      </div>
+                      <ResetButton onClick={() => resetControl?.("borderColor")} title="Reset Border Color" />
+                    </div>
+                  </div>
+                  <div className="space-y-1">
+                    <Label>Border Thickness</Label>
+                    <div className="flex gap-2">
+                      <div className="flex-1">
+                        <NumberInput value={controls.borderThickness} onValueChange={(v) => updateControl?.("borderThickness", Number(v))} min={0} max={40} stepper={1} className="w-full" />
+                      </div>
+                      <ResetButton onClick={() => resetControl?.("borderThickness")} title="Reset Border Thickness" />
+                    </div>
+                  </div>
+                  <div className="space-y-1">
+                    <Label>Border Radius</Label>
+                    <div className="flex gap-2">
+                      <div className="flex-1">
+                        <NumberInput value={controls.borderRadius} onValueChange={(v) => updateControl?.("borderRadius", Number(v))} min={0} max={200} stepper={1} className="w-full" />
+                      </div>
+                      <ResetButton onClick={() => resetControl?.("borderRadius")} title="Reset Border Radius" />
+                    </div>
+                  </div>
                 </div>
-                <ResetButton onClick={() => setFrameBorderThickness?.(4)} title="Reset Border Thickness" />
-              </div>
-            </div>
-            {/* Border Radius */}
-            <div className="space-y-2">
-              <Label htmlFor="borderRadius">Border Radius</Label>
-              <div className="flex gap-2">
-                <div className="flex-1">
-                  <NumberInput id="borderRadius" value={frameBorderRadius} onValueChange={(v) => setFrameBorderRadius?.(Number(v))} min={0} max={200} stepper={1} className="w-full" />
-                </div>
-                <ResetButton onClick={() => setFrameBorderRadius?.(16)} title="Reset Border Radius" />
-              </div>
+              )}
             </div>
 
             {/* Shadow toggle */}
             <div className="space-y-2">
               <Label className="text-sm font-medium">Shadow</Label>
               <div>
-                <Button type="button" aria-pressed={!!contentShadowEnabled} variant={contentShadowEnabled ? "default" : "outline"} onClick={() => setContentShadowEnabled?.(!contentShadowEnabled)} className="w-full">
-                  {contentShadowEnabled ? "Shadow: On" : "Shadow: Off"}
+                <Button type="button" aria-pressed={!!controls.contentShadowEnabled} variant={controls.contentShadowEnabled ? "default" : "outline"} onClick={() => updateControl?.("contentShadowEnabled", !controls.contentShadowEnabled)} className="w-full">
+                  {controls.contentShadowEnabled ? "Shadow: On" : "Shadow: Off"}
                 </Button>
               </div>
             </div>
 
-            {/* Background Color */}
+            {/* Background Color / Gradient Controls */}
             <div className="space-y-2">
-              <Label htmlFor="backgroundColor">Background</Label>
-              <div className="flex gap-2 mt-1">
-                <Button variant="outline" onClick={onRandomizeGradient} className="w-full">
-                  Randomize Background
+              <Label className="text-sm font-medium">Background Gradient</Label>
+              <div className="flex flex-col gap-2">
+                <Button type="button" variant={controls.gradientEnabled ? "default" : "outline"} onClick={() => updateControl?.("gradientEnabled", !controls.gradientEnabled)} className="w-full">
+                  {controls.gradientEnabled ? "Gradient: On" : "Gradient: Off"}
+                </Button>
+                {controls.gradientEnabled && (
+                  <>
+                    <div className="flex gap-2">
+                      <Button variant="outline" onClick={randomizeGradient} className="flex-1">
+                        Randomize
+                      </Button>
+                    </div>
+                    <div className="space-y-1 opacity-100">
+                      <Label htmlFor="gradientOpacity">Gradient Opacity</Label>
+                      <div className="flex gap-2 items-center">
+                        <Slider id="gradientOpacity" value={[controls.gradientOpacity]} onValueChange={(vals) => updateControl?.("gradientOpacity", Number(vals[0]))} min={0} max={1} step={0.01} className="flex-1" />
+                        <div className="w-30">
+                          <NumberInput value={controls.gradientOpacity} onValueChange={(v) => updateControl?.("gradientOpacity", Math.max(0, Math.min(1, Number(v))))} min={0} max={1} stepper={0.01} decimalScale={2} />
+                        </div>
+                        <ResetButton onClick={() => resetControl?.("gradientOpacity")} title="Reset Opacity" />
+                      </div>
+                    </div>
+                    <div className="space-y-1">
+                      <Label htmlFor="backgroundMargin">Background Margin</Label>
+                      <div className="flex gap-2 items-center">
+                        <Slider id="backgroundMargin" value={[controls.backgroundMargin || 0]} onValueChange={(vals) => updateControl?.("backgroundMargin", Number(vals[0]))} min={0} max={200} step={1} className="flex-1" />
+                        <div className="w-30">
+                          <NumberInput value={controls.backgroundMargin || 0} onValueChange={(v) => updateControl?.("backgroundMargin", Math.max(0, Math.min(200, Number(v))))} min={0} max={200} stepper={1} />
+                        </div>
+                        <ResetButton onClick={() => resetControl?.("backgroundMargin")} title="Reset Margin" />
+                      </div>
+                    </div>
+                  </>
+                )}
+              </div>
+            </div>
+
+            {/* Noise Toggle + Opacity */}
+            <div className="space-y-2">
+              <Label className="text-sm font-medium">Noise Texture</Label>
+              <div className="flex gap-2 items-center">
+                <Button type="button" variant={controls.noiseEnabled ? "default" : "outline"} onClick={() => updateControl?.("noiseEnabled", !controls.noiseEnabled)} className="w-full">
+                  {controls.noiseEnabled ? "Noise: On" : "Noise: Off"}
                 </Button>
               </div>
-            </div>
-            {/* Background Opacity */}
-            <div className="space-y-2">
-              <Label htmlFor="gradientOpacity">Background Opacity</Label>
-              <div className="flex gap-2 items-center">
-                <Slider id="gradientOpacity" value={[gradientOpacity]} onValueChange={(vals) => setGradientOpacity?.(Number(vals[0]))} min={0} max={1} step={0.01} className="flex-1" />
-                <div className="w-30">
-                  <NumberInput value={gradientOpacity} onValueChange={(v) => setGradientOpacity?.(Math.max(0, Math.min(1, Number(v))))} min={0} max={1} stepper={0.01} decimalScale={2} />
+              {controls.noiseEnabled && (
+                <div className="space-y-1">
+                  <Label htmlFor="noiseTexture">Noise Texture</Label>
+                  <div className="flex gap-2 items-center">
+                    <Slider id="noiseTexture" value={[controls.noiseTexture]} onValueChange={(vals) => updateControl?.("noiseTexture", Number(vals[0]))} min={0} max={1} step={0.01} className="flex-1" />
+                    <div className="w-30">
+                      <NumberInput value={controls.noiseTexture} onValueChange={(v) => updateControl?.("noiseTexture", Math.max(0, Math.min(1, Number(v))))} min={0} max={1} stepper={0.01} decimalScale={2} />
+                    </div>
+                    <ResetButton onClick={() => resetControl?.("noiseTexture")} title="Reset Noise Texture" />
+                  </div>
                 </div>
-                <ResetButton onClick={() => setGradientOpacity?.(1)} title="Reset Opacity" />
-              </div>
-            </div>
-            {/* Background Margin */}
-            <div className="space-y-2">
-              <Label htmlFor="backgroundMargin">Background Margin</Label>
-              <div className="flex gap-2 items-center">
-                <Slider id="backgroundMargin" value={[backgroundMargin]} onValueChange={(vals) => setBackgroundMargin?.(Number(vals[0]))} min={0} max={300} step={1} className="flex-1" />
-                <div className="w-30">
-                  <NumberInput value={backgroundMargin} onValueChange={(v) => setBackgroundMargin?.(Math.max(0, Math.min(300, Number(v))))} min={0} max={300} stepper={1} />
-                </div>
-                <ResetButton onClick={() => setBackgroundMargin?.(60)} title="Reset Background Margin" />
-              </div>
+              )}
             </div>
           </div>
         </AccordionContent>

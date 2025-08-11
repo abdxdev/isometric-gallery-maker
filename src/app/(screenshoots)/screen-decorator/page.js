@@ -6,6 +6,7 @@ import { EmbedControls } from "@/components/sidebars/embed-controls";
 import devicesJson from "@/lib/device-elements.json";
 import { DeviceOverlays, collectAssets } from "@/components/device-overlays";
 import { generateJSXMeshGradient } from "meshgrad";
+import { generateNoiseDataUrl } from "@/lib/noise-texture";
 
 function safeUrl(u) {
   if (!u) return "";
@@ -15,6 +16,45 @@ function safeUrl(u) {
 export default function Page() {
   const iframeRef = useRef(null);
 
+  // Consolidated controls state (pattern similar to isometric controls)
+  const CONTROL_DEFAULTS = {
+    backgroundColor: "rgba(249, 250, 251, 1)",
+    borderColor: "rgba(3, 7, 18, 0.12)",
+    borderThickness: 10,
+    borderRadius: 16,
+    borderEnabled: true,
+    gradientEnabled: true,
+    gradientOpacity: 0.75,
+    gradientKey: 0,
+    noiseEnabled: true,
+    noiseTexture: 0.35,
+    contentShadowEnabled: false,
+    pageZoom: 1,
+    backgroundMargin: 60,
+  };
+  const [controls, setControls] = useState(CONTROL_DEFAULTS);
+  const updateControl = (key, value) => setControls((c) => ({ ...c, [key]: value }));
+  const resetControl = (key) => setControls((c) => ({ ...c, [key]: CONTROL_DEFAULTS[key] }));
+  const randomizeGradient = () => setControls((c) => ({ ...c, gradientKey: c.gradientKey + 1 }));
+
+  // Destructure for convenience
+  const {
+    backgroundColor,
+    borderColor,
+    borderThickness,
+    borderRadius,
+    borderEnabled,
+    gradientEnabled,
+    gradientOpacity,
+    gradientKey,
+    noiseEnabled,
+    noiseTexture,
+    contentShadowEnabled,
+    pageZoom,
+    backgroundMargin,
+  } = controls;
+
+  // Derived values
   const defaultDeviceName = devicesJson[0]?.name;
   const defaultDims = devicesJson[0]?.dimensions
     ? { w: devicesJson[0].dimensions.width, h: devicesJson[0].dimensions.height }
@@ -32,42 +72,43 @@ export default function Page() {
   const [selections, setSelections] = useState({});
   const [toggles, setToggles] = useState({});
 
-  const [backgroundColor, setBackgroundColor] = useState("rgba(249, 250, 251, 1)");
-
-  const [frame, setFrame] = useState({
-    borderColor: "rgba(3, 7, 18, 0.12)",
-    borderThickness: 10,
-    borderRadius: 16,
-  });
-
-  const [gradient, setGradient] = useState({ opacity: 0.75, key: 0 });
+  // Generate gradient style when key changes
   const [gradientStyle, setGradientStyle] = useState({});
+  useEffect(() => { setGradientStyle(generateJSXMeshGradient(6)); }, [gradientKey]);
+
+  // Noise texture
+  const noiseDataUrl = useMemo(() => {
+    if (!noiseEnabled) return null;
+    return generateNoiseDataUrl({ size: 128, opacity: noiseTexture, monochrome: true });
+  }, [noiseEnabled, noiseTexture]);
+
+  // Auto adjust background margin when gradient toggles
   useEffect(() => {
-    setGradientStyle(generateJSXMeshGradient(6));
-  }, [gradient.key]);
+    setControls((c) => {
+      const desired = c.gradientEnabled ? CONTROL_DEFAULTS.backgroundMargin : 0;
+      return c.backgroundMargin === desired ? c : { ...c, backgroundMargin: desired };
+    });
+  }, [gradientEnabled]);
 
-  const [contentShadowEnabled, setContentShadowEnabled] = useState(false);
-  const [pageZoom, setPageZoom] = useState(1);
+  // Auto adjust border thickness when border toggles
+  useEffect(() => {
+    setControls((c) => {
+      const desired = c.borderEnabled ? CONTROL_DEFAULTS.borderThickness : 0;
+      return c.borderThickness === desired ? c : { ...c, borderThickness: desired };
+    });
+  }, [borderEnabled]);
+
+  // Page zoom handling (inner zoom)
   const [canInnerZoom, setCanInnerZoom] = useState(false);
-
-  const [backgroundMargin, setBackgroundMargin] = useState(60);
-
   useEffect(() => {
     const iframe = iframeRef.current;
     if (!iframe || !canInnerZoom) return;
     try {
       const doc = iframe.contentDocument || iframe.contentWindow?.document;
-      if (doc?.documentElement) {
-        doc.documentElement.style.zoom = String(pageZoom);
-      }
-    } catch {
-      // cross-origin, ignore
-    }
+      if (doc?.documentElement) doc.documentElement.style.zoom = String(pageZoom);
+    } catch { /* ignore */ }
   }, [pageZoom, canInnerZoom]);
-
-  useEffect(() => {
-    setCanInnerZoom(false);
-  }, [url]);
+  useEffect(() => { setCanInnerZoom(false); }, [url]);
 
   const assets = useMemo(() => collectAssets(devicesJson, device || devicesJson[0]?.name, selections, toggles), [device, selections, toggles]);
 
@@ -75,6 +116,11 @@ export default function Page() {
     <>
       <SidebarPortal>
         <EmbedControls
+          controls={controls}
+          updateControl={updateControl}
+          resetControl={resetControl}
+          randomizeGradient={randomizeGradient}
+          // device & url specifics
           url={url}
           setUrl={setUrl}
           dimentions={dimentions}
@@ -85,23 +131,6 @@ export default function Page() {
           setSelections={setSelections}
           toggles={toggles}
           setToggles={setToggles}
-          backgroundColor={backgroundColor}
-          setBackgroundColor={setBackgroundColor}
-          frameBorderColor={frame.borderColor}
-          setFrameBorderColor={(v) => setFrame((f) => ({ ...f, borderColor: v }))}
-          frameBorderThickness={frame.borderThickness}
-          setFrameBorderThickness={(v) => setFrame((f) => ({ ...f, borderThickness: v }))}
-          frameBorderRadius={frame.borderRadius}
-          setFrameBorderRadius={(v) => setFrame((f) => ({ ...f, borderRadius: v }))}
-          gradientOpacity={gradient.opacity}
-          setGradientOpacity={(v) => setGradient((g) => ({ ...g, opacity: v }))}
-          onRandomizeGradient={() => setGradient((g) => ({ ...g, key: g.key + 1 }))}
-          contentShadowEnabled={contentShadowEnabled}
-          setContentShadowEnabled={setContentShadowEnabled}
-          pageZoom={pageZoom}
-          setPageZoom={setPageZoom}
-          backgroundMargin={backgroundMargin}
-          setBackgroundMargin={setBackgroundMargin}
         />
       </SidebarPortal>
 
@@ -112,16 +141,36 @@ export default function Page() {
               <div
                 className="absolute pointer-events-none"
                 style={{
-                  ...gradientStyle,
-                  opacity: gradient.opacity,
+                  ...(gradientEnabled
+                    ? { ...gradientStyle, opacity: gradientOpacity }
+                    : { background: backgroundColor, opacity: 1 }),
                   top: 0,
                   left: 0,
-                  width: viewW + (backgroundMargin + frame.borderThickness) * 2 + "px",
-                  height: viewH + (backgroundMargin + frame.borderThickness) * 2 + "px",
+                  width: viewW + (backgroundMargin + borderThickness) * 2 + "px",
+                  height: viewH + (backgroundMargin + borderThickness) * 2 + "px",
+                  zIndex: 0,
                 }}
                 aria-hidden
                 suppressHydrationWarning
               />
+              {noiseDataUrl && (
+                <div
+                  className="absolute pointer-events-none"
+                  style={{
+                    top: 0,
+                    left: 0,
+                    width: viewW + (backgroundMargin + borderThickness) * 2 + "px",
+                    height: viewH + (backgroundMargin + borderThickness) * 2 + "px",
+                    backgroundImage: `url(${noiseDataUrl})`,
+                    backgroundRepeat: "repeat",
+                    backgroundSize: "128px 128px",
+                    opacity: noiseEnabled ? noiseTexture / 2 : 0,
+                    mixBlendMode: "normal",
+                    zIndex: 1,
+                  }}
+                  aria-hidden
+                />
+              )}
 
               <div
                 className="relative outline outline-white/30"
@@ -129,8 +178,8 @@ export default function Page() {
                   boxSizing: "content-box",
                   width: viewW + "px",
                   height: viewH + "px",
-                  border: `${frame.borderThickness}px solid ${frame.borderColor}`,
-                  borderRadius: frame.borderRadius + "px",
+                  border: borderEnabled ? `${borderThickness}px solid ${borderColor}` : "none",
+                  borderRadius: borderEnabled ? borderRadius + "px" : 0,
                   overflow: "hidden",
                   backgroundClip: "padding-box",
                   filter: contentShadowEnabled ? "drop-shadow(0 8px 24px rgba(0,0,0,0.25))" : undefined,
