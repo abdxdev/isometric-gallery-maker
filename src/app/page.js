@@ -3,13 +3,17 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { ScreenshootsIcon } from "@/components/svg/screenshoots";
 
 export default function Home() {
 	return (
 		<div className="min-h-screen p-6 md:p-10">
 			<div className="max-w-3xl mx-auto space-y-8">
 				<div className="space-y-3">
-					<h1 className="text-3xl md:text-4xl font-semibold tracking-tight">Welcome</h1>
+					<div className="flex items-center gap-3">
+						<ScreenshootsIcon className="h-8 w-8 text-primary" />
+						<h1 className="text-3xl md:text-4xl font-semibold tracking-tight">Welcome</h1>
+					</div>
 					<p className="text-muted-foreground">
 						Preview URLs in device frames, create isometric galleries, and style screenshots with overlays and gradients. Choose a tool below to get started.
 					</p>

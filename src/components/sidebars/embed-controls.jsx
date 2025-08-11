@@ -13,7 +13,6 @@ import { RefreshCw } from "lucide-react";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { NumberInput } from "@/components/ui/number-input";
 import { Slider } from "@/components/ui/slider";
-import { Checkbox } from "@/components/ui/checkbox";
 
 function safeUrl(u) {
   if (!u) return "";
@@ -32,7 +31,7 @@ function ResetButton({ onClick, title, className = "flex-shrink-0" }) {
   );
 }
 
-export function EmbedControls({ url, setUrl, dimentions, setDimentions, device, setDevice, selections = {}, setSelections, toggles = {}, setToggles, backgroundColor, setBackgroundColor, frameBorderColor, setFrameBorderColor, frameBorderThickness, setFrameBorderThickness, frameBorderRadius, setFrameBorderRadius, gradientOpacity, setGradientOpacity, onRandomizeGradient, contentShadowEnabled = false, setContentShadowEnabled, pageZoom = 1, setPageZoom }) {
+export function EmbedControls({ url, setUrl, dimentions, setDimentions, device, setDevice, selections = {}, setSelections, toggles = {}, setToggles, backgroundColor, setBackgroundColor, frameBorderColor, setFrameBorderColor, frameBorderThickness, setFrameBorderThickness, frameBorderRadius, setFrameBorderRadius, gradientOpacity, setGradientOpacity, onRandomizeGradient, contentShadowEnabled = false, setContentShadowEnabled, pageZoom = 1, setPageZoom, backgroundMargin = 60, setBackgroundMargin }) {
   const devices = devicesJson;
 
   // defaults
@@ -87,7 +86,7 @@ export function EmbedControls({ url, setUrl, dimentions, setDimentions, device, 
 
       {/* Device + Options together, directly below URL */}
       <AccordionItem value="deviceOptions">
-        <AccordionTrigger className="text-md">Device & Options</AccordionTrigger>
+        <AccordionTrigger className="text-md">Device Options</AccordionTrigger>
         <AccordionContent>
           <div className="space-y-4 w-full">
             {/* Device */}
@@ -112,9 +111,7 @@ export function EmbedControls({ url, setUrl, dimentions, setDimentions, device, 
                 <SelectTrigger className="w-full">
                   <div className="flex items-center gap-2 min-w-0">
                     <SelectValue placeholder="Device" />
-                    {!isCustom && deviceDims && (
-                      <span className="text-xs text-muted-foreground whitespace-nowrap">{`${deviceDims.w} × ${deviceDims.h}`}</span>
-                    )}
+                    {!isCustom && deviceDims && <span className="text-xs text-muted-foreground whitespace-nowrap">{`${deviceDims.w} × ${deviceDims.h}`}</span>}
                   </div>
                 </SelectTrigger>
                 <SelectContent className="w-full">
@@ -170,18 +167,6 @@ export function EmbedControls({ url, setUrl, dimentions, setDimentions, device, 
                 </div>
               </div>
             )}
-
-            {/* Page Zoom (stays here) */}
-            <div className="space-y-2">
-              <Label htmlFor="pageZoom">Page Zoom</Label>
-              <div className="flex gap-2 items-center">
-                <Slider id="pageZoom" value={[pageZoom]} onValueChange={(vals) => setPageZoom?.(Number(vals[0]))} min={0.25} max={3} step={0.05} className="flex-1" />
-                <div className="w-30">
-                  <NumberInput value={pageZoom} onValueChange={(v) => setPageZoom?.(Math.max(0.25, Math.min(3, Number(v))))} min={0.25} max={3} stepper={0.05} decimalScale={2} />
-                </div>
-                <ResetButton onClick={() => setPageZoom?.(1)} title="Reset Zoom" />
-              </div>
-            </div>
 
             {/* Device-specific options (hidden for Custom) */}
             {!isCustom && (
@@ -352,24 +337,15 @@ export function EmbedControls({ url, setUrl, dimentions, setDimentions, device, 
         <AccordionTrigger className="text-md">Viewer Controls</AccordionTrigger>
         <AccordionContent>
           <div className="space-y-4">
-            {/* Shadow toggle */}
+            {/* Page Zoom (stays here) */}
             <div className="space-y-2">
-              <Label className="text-sm font-medium">Shadow</Label>
-              <div className="flex items-center gap-2">
-                <Checkbox id="shadow-toggle" checked={!!contentShadowEnabled} onCheckedChange={(v) => setContentShadowEnabled?.(!!v)} />
-                <Label htmlFor="shadow-toggle" className="text-xs">
-                  Enable
-                </Label>
-              </div>
-            </div>
-
-            {/* Background Color */}
-            <div className="space-y-2">
-              <Label htmlFor="backgroundColor">Background</Label>
-              <div className="flex gap-2 mt-1">
-                <Button variant="outline" onClick={onRandomizeGradient} className="w-full">
-                  Randomize Background
-                </Button>
+              <Label htmlFor="pageZoom">Page Zoom</Label>
+              <div className="flex gap-2 items-center">
+                <Slider id="pageZoom" value={[pageZoom]} onValueChange={(vals) => setPageZoom?.(Number(vals[0]))} min={0.25} max={3} step={0.05} className="flex-1" />
+                <div className="w-30">
+                  <NumberInput value={pageZoom} onValueChange={(v) => setPageZoom?.(Math.max(0.25, Math.min(3, Number(v))))} min={0.25} max={3} stepper={0.05} decimalScale={2} />
+                </div>
+                <ResetButton onClick={() => setPageZoom?.(1)} title="Reset Zoom" />
               </div>
             </div>
 
@@ -383,7 +359,46 @@ export function EmbedControls({ url, setUrl, dimentions, setDimentions, device, 
                 <ResetButton onClick={() => setFrameBorderColor?.("rgba(3, 7, 18, 0.12)")} title="Reset Border Color" />
               </div>
             </div>
+            {/* Border Thickness */}
+            <div className="space-y-2">
+              <Label htmlFor="borderThickness">Border Thickness</Label>
+              <div className="flex gap-2">
+                <div className="flex-1">
+                  <NumberInput id="borderThickness" value={frameBorderThickness} onValueChange={(v) => setFrameBorderThickness?.(Number(v))} min={0} max={40} stepper={1} className="w-full" />
+                </div>
+                <ResetButton onClick={() => setFrameBorderThickness?.(4)} title="Reset Border Thickness" />
+              </div>
+            </div>
+            {/* Border Radius */}
+            <div className="space-y-2">
+              <Label htmlFor="borderRadius">Border Radius</Label>
+              <div className="flex gap-2">
+                <div className="flex-1">
+                  <NumberInput id="borderRadius" value={frameBorderRadius} onValueChange={(v) => setFrameBorderRadius?.(Number(v))} min={0} max={200} stepper={1} className="w-full" />
+                </div>
+                <ResetButton onClick={() => setFrameBorderRadius?.(16)} title="Reset Border Radius" />
+              </div>
+            </div>
 
+            {/* Shadow toggle */}
+            <div className="space-y-2">
+              <Label className="text-sm font-medium">Shadow</Label>
+              <div>
+                <Button type="button" aria-pressed={!!contentShadowEnabled} variant={contentShadowEnabled ? "default" : "outline"} onClick={() => setContentShadowEnabled?.(!contentShadowEnabled)} className="w-full">
+                  {contentShadowEnabled ? "Shadow: On" : "Shadow: Off"}
+                </Button>
+              </div>
+            </div>
+
+            {/* Background Color */}
+            <div className="space-y-2">
+              <Label htmlFor="backgroundColor">Background</Label>
+              <div className="flex gap-2 mt-1">
+                <Button variant="outline" onClick={onRandomizeGradient} className="w-full">
+                  Randomize Background
+                </Button>
+              </div>
+            </div>
             {/* Background Opacity */}
             <div className="space-y-2">
               <Label htmlFor="gradientOpacity">Background Opacity</Label>
@@ -395,26 +410,15 @@ export function EmbedControls({ url, setUrl, dimentions, setDimentions, device, 
                 <ResetButton onClick={() => setGradientOpacity?.(1)} title="Reset Opacity" />
               </div>
             </div>
-
-            {/* Border Thickness */}
+            {/* Background Margin */}
             <div className="space-y-2">
-              <Label htmlFor="borderThickness">Border Thickness</Label>
-              <div className="flex gap-2">
-                <div className="flex-1">
-                  <NumberInput id="borderThickness" value={frameBorderThickness} onValueChange={(v) => setFrameBorderThickness?.(Number(v))} min={0} max={40} stepper={1} className="w-full" />
+              <Label htmlFor="backgroundMargin">Background Margin</Label>
+              <div className="flex gap-2 items-center">
+                <Slider id="backgroundMargin" value={[backgroundMargin]} onValueChange={(vals) => setBackgroundMargin?.(Number(vals[0]))} min={0} max={300} step={1} className="flex-1" />
+                <div className="w-30">
+                  <NumberInput value={backgroundMargin} onValueChange={(v) => setBackgroundMargin?.(Math.max(0, Math.min(300, Number(v))))} min={0} max={300} stepper={1} />
                 </div>
-                <ResetButton onClick={() => setFrameBorderThickness?.(4)} title="Reset Border Thickness" />
-              </div>
-            </div>
-
-            {/* Border Radius */}
-            <div className="space-y-2">
-              <Label htmlFor="borderRadius">Border Radius</Label>
-              <div className="flex gap-2">
-                <div className="flex-1">
-                  <NumberInput id="borderRadius" value={frameBorderRadius} onValueChange={(v) => setFrameBorderRadius?.(Number(v))} min={0} max={200} stepper={1} className="w-full" />
-                </div>
-                <ResetButton onClick={() => setFrameBorderRadius?.(16)} title="Reset Border Radius" />
+                <ResetButton onClick={() => setBackgroundMargin?.(60)} title="Reset Background Margin" />
               </div>
             </div>
           </div>

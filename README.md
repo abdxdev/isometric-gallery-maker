@@ -25,13 +25,15 @@ Visit: [screenshoots.abd-dev.studio](https://screenshoots.abd-dev.studio/)
 
 ## Pages
 
-1) Screen Decorator — `/screenshoots/screen-decorator`
+1. Screen Decorator — `/screenshoots/screen-decorator`
+
 - Load any URL safely in a sandboxed iframe
 - Choose device + variant (chrome/safari, dark mode, scrollbars, landscape)
 - Customize frame (color, thickness, radius) and background/gradient
 - Zoom the page content or scale the viewport when cross‑origin
 
-2) Isometric Gallery — `/screenshoots/isometric-gallery`
+2. Isometric Gallery — `/screenshoots/isometric-gallery`
+
 - Add images from files or URLs
 - Tweak columns, spacing, angles, and colors in real time
 - Reorder via drag & drop and capture the final layout

@@ -1,44 +1,41 @@
 "use client";
 
-import { useRef } from "react";
+import { useRef, useEffect } from "react";
 import { FullscreenToggle } from "@/components/fullscreen-toggle";
 import { useFullscreen } from "@/hooks/useFullscreen";
 import { ControlSidebar } from "@/components/control-sidebar";
 
 export default function ScreenshootsLayout({ children }) {
 
-  const galleryContainerRef = useRef();
+  const mainContent = useRef();
 
-  const { isFullscreen, toggleFullscreen } = useFullscreen(galleryContainerRef);
+  const { isFullscreen, toggleFullscreen } = useFullscreen(mainContent);
 
+  // Listen for header-triggered fullscreen toggle
+  useEffect(() => {
+    const handler = () => { toggleFullscreen(); };
+    window.addEventListener("screenshoots:toggle-fullscreen", handler);
+    return () => window.removeEventListener("screenshoots:toggle-fullscreen", handler);
+  }, [toggleFullscreen]);
 
   const content = (
-    <div className="flex flex-col lg:flex-row" data-slot="screenshoots-layout">
-      {/* Main Area for children */}
-      <div className="flex-1 order-1 lg:order-1">
-        <div
-          ref={galleryContainerRef}
-          className={`z-10 overflow-hidden relative ${isFullscreen
-            ? "h-screen w-screen fixed top-0 left-0"
-            : "sticky top-14 h-[60vh] lg:h-[calc(100vh-3.5rem)]"}
-            `}
-        >
-          <div className="w-full h-full">
-            {children}
-          </div>
-
-          <FullscreenToggle isFullscreen={isFullscreen} onToggleFullscreen={toggleFullscreen} />
-        </div>
+    <div
+      className="flex flex-col md:flex-row md:flex-1 min-h-0 min-w-0 w-full overflow-auto md:overflow-hidden"
+      data-slot="screenshoots-layout-root"
+    >
+      <div
+        ref={mainContent}
+        className="flex-none h-[60vh] md:h-full min-w-0 overflow-scroll md:flex-1 md:min-h-0 md:overflow-auto overscroll-contain"
+      >
+        <FullscreenToggle isFullscreen={isFullscreen} onToggleFullscreen={toggleFullscreen} />
+        {children}
       </div>
 
-      {/* Common Sidebar Shell with a slot for per-page controls */}
-      {!isFullscreen && (
-        <div className="order-2 lg:order-2">
-          <ControlSidebar>
-            <div id="screenshoots-sidebar-slot" />
-          </ControlSidebar>
-        </div>
-      )}
+      <div className={`${!isFullscreen ? "block" : "hidden"} flex-none md:h-full overflow-visible md:overflow-hidden`}>
+        <ControlSidebar>
+          <div id="screenshoots-sidebar-slot" />
+        </ControlSidebar>
+      </div>
     </div>
   );
 
