@@ -2,7 +2,7 @@
 
 import React, { useRef, useState, useEffect, useMemo } from "react";
 import { SidebarPortal } from "@/components/sidebar-portal";
-import { EmbedControls } from "@/components/sidebars/embed-controls";
+import { ScreenDecoratorControls } from "@/components/sidebars/screen-decorator-controls";
 import devicesJson from "@/lib/device-elements.json";
 import { DeviceOverlays, collectAssets } from "@/components/device-overlays";
 import { generateJSXMeshGradient } from "meshgrad";
@@ -115,7 +115,7 @@ export default function Page() {
   return (
     <>
       <SidebarPortal>
-        <EmbedControls
+        <ScreenDecoratorControls
           controls={controls}
           updateControl={updateControl}
           resetControl={resetControl}

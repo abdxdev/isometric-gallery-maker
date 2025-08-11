@@ -2,7 +2,7 @@
 
 import { InfiniteCanvas } from "@/components/ui/infinite-gallery";
 import { SidebarPortal } from "@/components/sidebar-portal";
-import { IsometricControls } from "@/components/sidebars/isometric-controls";
+import { IsometricGalleryControls } from "@/components/sidebars/isometric-gallery-controls";
 import { useMemo, useRef, useState } from "react";
 
 const sampleImages = [
@@ -77,7 +77,7 @@ export default function Page() {
   return (
     <>
       <SidebarPortal>
-        <IsometricControls
+        <IsometricGalleryControls
           controls={controls}
           updateControl={updateControl}
           resetControl={resetControl}
