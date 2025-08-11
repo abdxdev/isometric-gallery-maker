@@ -12,7 +12,7 @@ export default function Home() {
 				<div className="space-y-3">
 					<div className="flex items-center gap-3">
 						<ScreenshootsIcon className="h-8 w-8 text-primary" />
-						<h1 className="text-3xl md:text-4xl font-semibold tracking-tight">Welcome</h1>
+						<h1 className="text-3xl md:text-4xl font-semibold tracking-tight">Screenshoots</h1>
 					</div>
 					<p className="text-muted-foreground">
 						Preview URLs in device frames, create isometric galleries, and style screenshots with overlays and gradients. Choose a tool below to get started.
@@ -29,7 +29,7 @@ export default function Home() {
 								Create 3D isometric galleries with customizable layout, colors, and rotation.
 							</p>
 							<Link href="/isometric-gallery">
-								<Button className="w-full">Open Isometric Gallery</Button>
+								<Button variant="outline" className="w-full">Open Isometric Gallery</Button>
 							</Link>
 						</CardContent>
 					</Card>
@@ -43,9 +43,7 @@ export default function Home() {
 								Preview any URL in different device sizes. Decorate with custom backgrounds and borders.
 							</p>
 							<Link href="/screen-decorator">
-								<Button variant="outline" className="w-full">
-									Open Screen Decorator
-								</Button>
+								<Button variant="outline" className="w-full">Open Screen Decorator</Button>
 							</Link>
 						</CardContent>
 					</Card>

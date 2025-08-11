@@ -124,7 +124,7 @@ export default function Page() {
               />
 
               <div
-                className="relative"
+                className="relative outline outline-white/30"
                 style={{
                   boxSizing: "content-box",
                   width: viewW + "px",
