@@ -3,7 +3,6 @@
 import { ImageSortable } from "@/components/image-sortable";
 import { Button } from "@/components/ui/button";
 import { NumberInput } from "@/components/ui/number-input";
-import { Label } from "@/components/ui/label";
 import { Slider } from "@/components/ui/slider";
 import { ReactColorPicker } from "@/components/ui/react-color-picker";
 import { Input } from "@/components/ui/input";

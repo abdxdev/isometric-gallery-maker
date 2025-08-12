@@ -92,9 +92,7 @@ export default function Page() {
         />
       </SidebarPortal>
 
-      <div className="w-full h-full">
-        <InfiniteCanvas ref={canvasRef} images={repeatedImages} className="w-full h-full" controls={controls} />
-      </div>
+      <InfiniteCanvas ref={canvasRef} images={repeatedImages} className="w-full h-full" controls={controls} />
     </>
   );
 }

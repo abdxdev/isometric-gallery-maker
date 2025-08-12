@@ -9,7 +9,7 @@ import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import devicesJson from "@/lib/device-elements.json";
 import { buildControlGroups, computeDeviceDimensions } from "@/components/device-overlays";
 import { ReactColorPicker } from "@/components/ui/react-color-picker";
-import { Camera, RefreshCw, Shuffle } from "lucide-react";
+import { Camera, RefreshCw, Shuffle, Focus } from "lucide-react";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { NumberInput } from "@/components/ui/number-input";
 import { Slider } from "@/components/ui/slider";
@@ -24,7 +24,7 @@ function safeUrl(u) {
   }
 }
 
-export function ScreenDecoratorControls({ controls, updateControl, resetControl, randomizeGradient, url, setUrl, dimentions, setDimentions, device, setDevice, selections, setSelections, toggles, setToggles }) {
+export function ScreenDecoratorControls({ controls, updateControl, resetControl, randomizeGradient, url, setUrl, dimentions, setDimentions, device, setDevice, selections, setSelections, toggles, setToggles, onResetView }) {
   const devices = devicesJson;
 
   // defaults
@@ -474,6 +474,15 @@ export function ScreenDecoratorControls({ controls, updateControl, resetControl,
       id: "actionss",
       title: "Actions",
       items: [
+        {
+          key: "reset-view",
+          node: (
+            <Button onClick={onResetView} variant="outline" className="w-full">
+              <Focus className="w-4 h-4" />
+              Reset View
+            </Button>
+          ),
+        },
         {
           key: "capture",
           node: (

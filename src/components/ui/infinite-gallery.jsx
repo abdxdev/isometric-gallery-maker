@@ -132,13 +132,7 @@ export const InfiniteCanvas = forwardRef(function InfiniteCanvas({ images, class
   );
 
   return (
-    <div
-      className={cn("overflow-visible", className)}
-      style={{
-        backgroundColor: controls.backgroundColor,
-        ...style,
-      }}
-    >
+    <div className={cn("overflow-visible", className)} style={{ backgroundColor: controls.backgroundColor }}>
       <ReactInfiniteCanvas ref={internalCanvasRef}>
         <div
           className="flex items-center justify-center outline-gray-950"
