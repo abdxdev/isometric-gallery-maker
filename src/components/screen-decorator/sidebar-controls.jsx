@@ -401,6 +401,21 @@ export function SidebarControls({ controls, updateControl, resetControl, randomi
           ),
         },
         {
+          key: "gradientScope",
+          label: "Gradient Scope",
+          when: controls.gradientEnabled,
+          control: (
+            <div className="flex gap-2 w-full">
+              <Button type="button" variant={controls.gradientScope === "frame" ? "default" : "outline"} className="flex-1" onClick={() => updateControl?.("gradientScope", "frame")}>
+                Frame
+              </Button>
+              <Button type="button" variant={controls.gradientScope === "canvas" ? "default" : "outline"} className="flex-1" onClick={() => updateControl?.("gradientScope", "canvas")}>
+                Canvas
+              </Button>
+            </div>
+          ),
+        },
+        {
           key: "randomizeGradient",
           label: "Randomize Gradient",
           when: controls.gradientEnabled,
