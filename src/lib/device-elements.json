@@ -37,7 +37,7 @@
                   },
                   {
                     "type": "asset",
-                    "name": "With Scroll",
+                    "name": "Url Bar Scroll",
                     "src": {
                       "light": "public/assets/iphone/safari/Dark=False, Scroll=True, Landscape=False.svg",
                       "dark": "public/assets/iphone/safari/Dark=True, Scroll=True, Landscape=False.svg"
@@ -75,7 +75,7 @@
                   },
                   {
                     "type": "asset",
-                    "name": "With Scroll",
+                    "name": "Url Bar Scroll",
                     "src": {
                       "light": "public/assets/iphone/chrome/Dark=False, Scroll=True, Landscape=False.svg",
                       "dark": "public/assets/iphone/chrome/Dark=True, Scroll=True, Landscape=False.svg"
@@ -99,7 +99,7 @@
                   },
                   {
                     "type": "asset",
-                    "name": "With Buttons",
+                    "name": "Nav Bar Buttons",
                     "src": {
                       "light": "public/assets/iphone/chrome/Dark=False.svg",
                       "dark": "public/assets/iphone/chrome/Dark=True.svg"
@@ -157,7 +157,7 @@
                   },
                   {
                     "type": "asset",
-                    "name": "With Scroll",
+                    "name": "Url Bar Scroll",
                     "src": {
                       "light": "public/assets/iphone/chrome/Dark=False, Scroll=True, Landscape=True.svg",
                       "dark": "public/assets/iphone/chrome/Dark=True, Scroll=True, Landscape=True.svg"
@@ -248,7 +248,7 @@
                   },
                   {
                     "type": "asset",
-                    "name": "With Scroll",
+                    "name": "Url Bar Scroll",
                     "src": {
                       "light": "public/assets/android/chrome/Dark=False, Scroll=True, Landscape=False.svg",
                       "dark": "public/assets/android/chrome/Dark=True, Scroll=True, Landscape=False.svg"
@@ -270,7 +270,7 @@
                   },
                   {
                     "type": "asset",
-                    "name": "With Controls",
+                    "name": "Nav Bar Controls",
                     "src": {
                       "light": "public/assets/android/chrome/Dark=False, Controls=True.svg",
                       "dark": "public/assets/android/chrome/Dark=True, Controls=True.svg"
@@ -348,7 +348,7 @@
                   },
                   {
                     "type": "asset",
-                    "name": "With Controls",
+                    "name": "Nav Bar Controls",
                     "src": {
                       "light": "public/assets/android/chrome/Nav Bar Controls=True, Landscape=True, Dark=False.svg",
                       "dark": "public/assets/android/chrome/Nav Bar Controls=True, Landscape=True, Dark=True.svg"
@@ -383,6 +383,34 @@
             ]
           }
         ]
+      }
+    ]
+  },
+  {
+    "type": "device",
+    "name": "Windows",
+    "dimensions": {
+      "width": 1280,
+      "height": 720
+    },
+    "one": [
+      {
+        "type": "asset",
+        "name": "Taskbar Center",
+        "src": {
+          "light":"public/assets/windows/color=white, Alignment=Center white.svg",
+          "dark":"public/assets/windows/color=black, Alignment=center.svg"
+        },
+        "pos": "bottom"
+      },
+      {
+        "type": "asset",
+        "name": "Taskbar Left",
+        "src": {
+          "light":"public/assets/windows/color=white, Alignment=Right white.svg",
+          "dark":"public/assets/windows/color=black, Alignment=Right.svg"
+        },
+        "pos": "bottom"
       }
     ]
   }
