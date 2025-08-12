@@ -9,7 +9,7 @@ import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import devicesJson from "@/lib/device-elements.json";
 import { buildControlGroups, computeDeviceDimensions } from "@/components/device-overlays";
 import { ReactColorPicker } from "@/components/ui/react-color-picker";
-import { RefreshCw, Shuffle } from "lucide-react";
+import { Camera, RefreshCw, Shuffle } from "lucide-react";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { NumberInput } from "@/components/ui/number-input";
 import { Slider } from "@/components/ui/slider";
@@ -75,7 +75,6 @@ export function ScreenDecoratorControls({ controls, updateControl, resetControl,
           ),
         },
       ],
-      stackClass: "space-y-4",
     },
     {
       id: "deviceOptions",
@@ -300,7 +299,6 @@ export function ScreenDecoratorControls({ controls, updateControl, resetControl,
           })(),
         })),
       ],
-      stackClass: "space-y-4",
     },
     {
       id: "viewer",
@@ -362,6 +360,38 @@ export function ScreenDecoratorControls({ controls, updateControl, resetControl,
               {controls.contentShadowEnabled ? "Shadow: On" : "Shadow: Off"}
             </Button>
           ),
+        },
+        {
+          key: "contentShadowOffsetX",
+          label: "Shadow Offset X",
+          when: controls.contentShadowEnabled,
+          showReset: true,
+          resetKey: "contentShadowOffsetX",
+          control: <NumberInput value={controls.contentShadowOffsetX} onValueChange={(v) => updateControl?.("contentShadowOffsetX", Number(v))} min={-200} max={200} stepper={1} className="w-full" />,
+        },
+        {
+          key: "contentShadowOffsetY",
+          label: "Shadow Offset Y",
+          when: controls.contentShadowEnabled,
+          showReset: true,
+          resetKey: "contentShadowOffsetY",
+          control: <NumberInput value={controls.contentShadowOffsetY} onValueChange={(v) => updateControl?.("contentShadowOffsetY", Number(v))} min={-200} max={200} stepper={1} className="w-full" />,
+        },
+        {
+          key: "contentShadowBlur",
+          label: "Shadow Blur",
+          when: controls.contentShadowEnabled,
+          showReset: true,
+          resetKey: "contentShadowBlur",
+          control: <NumberInput value={controls.contentShadowBlur} onValueChange={(v) => updateControl?.("contentShadowBlur", Number(v))} min={0} max={400} stepper={1} className="w-full" />,
+        },
+        {
+          key: "contentShadowColor",
+          label: "Shadow Color",
+          when: controls.contentShadowEnabled,
+          showReset: true,
+          resetKey: "contentShadowColor",
+          control: <ReactColorPicker value={controls.contentShadowColor} onChange={(value) => updateControl?.("contentShadowColor", value)} />,
         },
         {
           key: "gradientEnabled",
@@ -439,7 +469,22 @@ export function ScreenDecoratorControls({ controls, updateControl, resetControl,
           ),
         },
       ],
-      stackClass: "space-y-4",
+    },
+    {
+      id: "actionss",
+      title: "Actions",
+      items: [
+        {
+          key: "capture",
+          node: (
+            <Button className="w-full">
+              <Camera className="w-4 h-4" />
+              Capture
+            </Button>
+          ),
+          note: "Feature in development. Use manual screenshot",
+        },
+      ],
     },
   ];
 

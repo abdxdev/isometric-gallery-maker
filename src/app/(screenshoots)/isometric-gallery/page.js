@@ -66,7 +66,6 @@ export default function Page() {
     if (e?.target) e.target.value = "";
   };
   const onHighlightImage = (id) => canvasRef.current?.highlightImage?.(id);
-  const onCapture = () => console.log("Capture clicked");
 
   const repeatedImages = useMemo(() => {
     const result = [];
@@ -89,7 +88,6 @@ export default function Page() {
           setImageOrder={setImageOrder}
           resetView={resetView}
           recalculateBounding={recalculateBounding}
-          onCapture={onCapture}
           onHighlightImage={onHighlightImage}
         />
       </SidebarPortal>

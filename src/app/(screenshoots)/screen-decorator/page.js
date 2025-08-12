@@ -16,7 +16,7 @@ function safeUrl(u) {
 export default function Page() {
   const iframeRef = useRef(null);
 
-  // Consolidated controls state (pattern similar to isometric controls)
+
   const CONTROL_DEFAULTS = {
     backgroundColor: "rgba(249, 250, 251, 1)",
     borderColor: "rgba(3, 7, 18, 0.12)",
@@ -28,7 +28,11 @@ export default function Page() {
     gradientKey: 0,
     noiseEnabled: true,
     noiseTexture: 0.35,
-    contentShadowEnabled: false,
+    contentShadowEnabled: true,
+    contentShadowOffsetX: 0,
+    contentShadowOffsetY: 8,
+    contentShadowBlur: 24,
+    contentShadowColor: "rgba(0,0,0,0.25)",
     pageZoom: 1,
     backgroundMargin: 60,
   };
@@ -37,7 +41,7 @@ export default function Page() {
   const resetControl = (key) => setControls((c) => ({ ...c, [key]: CONTROL_DEFAULTS[key] }));
   const randomizeGradient = () => setControls((c) => ({ ...c, gradientKey: c.gradientKey + 1 }));
 
-  // Destructure for convenience
+
   const {
     backgroundColor,
     borderColor,
@@ -50,11 +54,15 @@ export default function Page() {
     noiseEnabled,
     noiseTexture,
     contentShadowEnabled,
+    contentShadowOffsetX,
+    contentShadowOffsetY,
+    contentShadowBlur,
+    contentShadowColor,
     pageZoom,
     backgroundMargin,
   } = controls;
 
-  // Derived values
+
   const defaultDeviceName = devicesJson[0]?.name;
   const defaultDims = devicesJson[0]?.dimensions
     ? { w: devicesJson[0].dimensions.width, h: devicesJson[0].dimensions.height }
@@ -72,17 +80,17 @@ export default function Page() {
   const [selections, setSelections] = useState({});
   const [toggles, setToggles] = useState({});
 
-  // Generate gradient style when key changes
+
   const [gradientStyle, setGradientStyle] = useState({});
   useEffect(() => { setGradientStyle(generateJSXMeshGradient(6)); }, [gradientKey]);
 
-  // Noise texture
+
   const noiseDataUrl = useMemo(() => {
     if (!noiseEnabled) return null;
     return generateNoiseDataUrl({ size: 128, opacity: noiseTexture, monochrome: true });
   }, [noiseEnabled, noiseTexture]);
 
-  // Auto adjust background margin when gradient toggles
+
   useEffect(() => {
     setControls((c) => {
       const desired = c.gradientEnabled ? CONTROL_DEFAULTS.backgroundMargin : 0;
@@ -90,7 +98,7 @@ export default function Page() {
     });
   }, [gradientEnabled]);
 
-  // Auto adjust border thickness when border toggles
+
   useEffect(() => {
     setControls((c) => {
       const desired = c.borderEnabled ? CONTROL_DEFAULTS.borderThickness : 0;
@@ -98,7 +106,7 @@ export default function Page() {
     });
   }, [borderEnabled]);
 
-  // Page zoom handling (inner zoom)
+
   const [canInnerZoom, setCanInnerZoom] = useState(false);
   useEffect(() => {
     const iframe = iframeRef.current;
@@ -120,7 +128,6 @@ export default function Page() {
           updateControl={updateControl}
           resetControl={resetControl}
           randomizeGradient={randomizeGradient}
-          // device & url specifics
           url={url}
           setUrl={setUrl}
           dimentions={dimentions}
@@ -182,7 +189,9 @@ export default function Page() {
                   borderRadius: borderEnabled ? borderRadius + "px" : 0,
                   overflow: "hidden",
                   backgroundClip: "padding-box",
-                  filter: contentShadowEnabled ? "drop-shadow(0 8px 24px rgba(0,0,0,0.25))" : undefined,
+                  filter: contentShadowEnabled
+                    ? `drop-shadow(${contentShadowOffsetX}px ${contentShadowOffsetY}px ${contentShadowBlur}px ${contentShadowColor})`
+                    : undefined,
                 }}
               >
                 <div className="relative flex flex-col w-full h-full" style={{ backgroundColor }}>

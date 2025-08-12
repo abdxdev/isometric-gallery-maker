@@ -3,7 +3,6 @@
 import { useRef, useEffect } from "react";
 import { FullscreenToggle } from "@/components/fullscreen-toggle";
 import { useFullscreen } from "@/hooks/useFullscreen";
-import { ControlSidebar } from "@/components/control-sidebar";
 
 export default function ScreenshootsLayout({ children }) {
 
@@ -32,9 +31,11 @@ export default function ScreenshootsLayout({ children }) {
       </div>
 
       <div className={`${!isFullscreen ? "block" : "hidden"} flex-none md:h-full overflow-visible md:overflow-hidden`}>
-        <ControlSidebar>
+
+        <div className="w-full lg:w-86 flex flex-col p-4 lg:border-l border-border h-auto md:h-full min-h-0 overflow-visible md:overflow-y-auto overscroll-contain">
           <div id="screenshoots-sidebar-slot" />
-        </ControlSidebar>
+        </div>
+
       </div>
     </div>
   );

@@ -11,7 +11,7 @@ import { GroupedSidebarControls } from "./grouped-sidebar-controls";
 import { Focus, Camera, X, RefreshCw, ImageIcon, Plus, Upload } from "lucide-react";
 import { useState, useRef } from "react";
 
-export function IsometricGalleryControls({ controls, updateControl, resetControl, imageOrder, loadSampleImages, handleFileUpload, addImageFromUrl, removeImage, setImageOrder, resetView, recalculateBounding, onCapture, onHighlightImage, isLoadingImages }) {
+export function IsometricGalleryControls({ controls, updateControl, resetControl, imageOrder, loadSampleImages, handleFileUpload, addImageFromUrl, removeImage, setImageOrder, resetView, recalculateBounding, onHighlightImage }) {
   const [urlInput, setUrlInput] = useState("");
   const fileInputRef = useRef();
 
@@ -170,21 +170,7 @@ export function IsometricGalleryControls({ controls, updateControl, resetControl
             </div>
           ),
         },
-        {
-          key: "recalc",
-          node: (
-            <div className="space-y-2">
-              <Button onClick={recalculateBounding} variant="outline" className="w-full">
-                <RefreshCw className="w-4 h-4" />
-                Recalculate Bounding
-              </Button>
-              <p className="text-xs text-muted-foreground text-center">Use if images appear cut off</p>
-            </div>
-          ),
-          wrapperClass: "space-y-2",
-        },
       ],
-      stackClass: "space-y-4",
     },
     {
       id: "actions",
@@ -198,23 +184,28 @@ export function IsometricGalleryControls({ controls, updateControl, resetControl
               Reset View
             </Button>
           ),
-          wrapperClass: "space-y-2",
+        },
+        {
+          key: "recalc",
+          node: (
+            <Button onClick={recalculateBounding} variant="outline" className="w-full">
+              <RefreshCw className="w-4 h-4" />
+              Recalculate Bounding
+            </Button>
+          ),
+          note: "Use if images appear cut off",
         },
         {
           key: "capture",
           node: (
-            <Button onClick={onCapture} className="w-full">
+            <Button className="w-full">
               <Camera className="w-4 h-4" />
               Capture
             </Button>
           ),
-        },
-        {
-          key: "note",
-          node: <p className="text-xs text-muted-foreground text-center">Feature in development. Use manual screenshot</p>,
+          note: "Feature in development. Use manual screenshot",
         },
       ],
-      stackClass: "space-y-2",
     },
   ];
 
