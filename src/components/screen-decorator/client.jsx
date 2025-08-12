@@ -32,7 +32,7 @@ export default function Client() {
     gradientEnabled: true,
     gradientOpacity: 0.75,
     gradientKey: 0,
-    gradientScope: "frame", // added
+    gradientScope: "frame",
     noiseEnabled: true,
     noiseTexture: 0.35,
     contentShadowEnabled: true,
@@ -200,38 +200,18 @@ export default function Client() {
                   >
                     <div className="relative flex flex-col w-full h-full" style={{ backgroundColor: controls.backgroundColor }}>
                       {assets.flowTop.map((a, idx) => (
-                        <img key={`top-${idx}`} src={a.src} alt={a.alt} className="block w-full h-auto select-none pointer-events-none" />
+                        <img key={`top-${idx}`} src={a.src} alt={a.alt} className="w-full h-auto select-none pointer-events-none" />
                       ))}
                       <div className="relative flex-1 min-h-0 overflow-hidden">
                         <div style={canInnerZoom ? { width: "100%", height: "100%" } : { width: `${viewW / controls.pageZoom}px`, height: `${viewH / controls.pageZoom}px`, transform: `scale(${controls.pageZoom})`, transformOrigin: "top left" }}>
-                          <iframe
-                            ref={iframeRef}
-                            title="embed-preview"
-                            src={safeUrl(url)}
-                            sandbox="allow-forms allow-scripts allow-same-origin allow-popups"
-                            className="w-full h-full z-0"
-                            style={{ border: 0 }}
-                            onLoad={() => {
-                              try {
-                                const doc = iframeRef.current?.contentDocument || iframeRef.current?.contentWindow?.document;
-                                if (doc?.documentElement) {
-                                  doc.documentElement.style.zoom = String(controls.pageZoom);
-                                  setCanInnerZoom(true);
-                                } else {
-                                  setCanInnerZoom(false);
-                                }
-                              } catch {
-                                setCanInnerZoom(false);
-                              }
-                            }}
-                          />
+                          <iframe ref={iframeRef} title="embed-preview" src={safeUrl(url)} sandbox="allow-forms allow-scripts allow-same-origin allow-popups" className="w-full h-full z-0 bg-background" style={{ border: 0 }} />
                         </div>
                       </div>
                       <div className="pointer-events-none absolute inset-0 z-10">
                         <DeviceOverlays devices={devicesJson} device={device || devicesJson[0]?.name} selections={selections} toggles={toggles} />
                       </div>
                       {assets.flowBottom.map((a, idx) => (
-                        <img key={`bottom-${idx}`} src={a.src} alt={a.alt} className="block w-full h-auto select-none pointer-events-none" />
+                        <img key={`bottom-${idx}`} src={a.src} alt={a.alt} className="w-full h-auto select-none pointer-events-none" />
                       ))}
                     </div>
                   </div>

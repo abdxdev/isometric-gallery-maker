@@ -3,6 +3,7 @@ import { ThemeProvider } from "@/components/theme-provider"
 import "./globals.css";
 import { Header } from "@/components/header";
 import { ScreenshootsIcon } from "@/components/svg/screenshoots";
+import { Toaster } from "sonner";
 
 
 const geistSans = Geist({
@@ -40,6 +41,7 @@ export default function RootLayout({ children }) {
               portfolioUrl="https://abd-dev.studio"
             />
             {children}
+            <Toaster />
           </div>
         </ThemeProvider>
       </body>

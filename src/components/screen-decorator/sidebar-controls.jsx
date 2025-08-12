@@ -71,6 +71,7 @@ export function SidebarControls({ controls, updateControl, resetControl, randomi
               </Button>
             </div>
           ),
+          note: "Some sites will refuse to load inside an iframe due to security policies",
         },
       ],
     },
@@ -171,7 +172,8 @@ export function SidebarControls({ controls, updateControl, resetControl, randomi
           ),
         },
         // dynamic OR groups
-        ...orGroups.map((g) => ({
+        ...orGroups.map((g, i) => ({
+          label: i === 0 && "Options",
           key: `or-${g.key}`,
           when: !isCustom,
           control: (
@@ -191,7 +193,7 @@ export function SidebarControls({ controls, updateControl, resetControl, randomi
                   if (curr === true) nextVal = "light";
                   else if (curr === "light") nextVal = "dark";
                   else if (curr === "dark") nextVal = true;
-                  else nextVal = true; // from undefined -> on (inherit)
+                  else nextVal = true;
                   setToggles?.({ ...(toggles || {}), [key]: nextVal });
                 };
 
@@ -217,7 +219,8 @@ export function SidebarControls({ controls, updateControl, resetControl, randomi
           ),
         })),
         // dynamic AND groups
-        ...andGroups.map((g) => ({
+        ...andGroups.map((g, i) => ({
+          label: i === 0 && !orGroups.length && "Options",
           key: `and-${g.key}`,
           when: !isCustom,
           control: (() => {
