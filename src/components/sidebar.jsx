@@ -6,6 +6,8 @@ import { RefreshCw } from "lucide-react";
 import clsx from "clsx";
 import { Label } from "@/components/ui/label";
 import { Tooltip, TooltipTrigger, TooltipContent } from "@/components/ui/tooltip";
+import { useEffect, useState } from "react";
+import { createPortal } from "react-dom";
 
 /**
  * Generic grouped sidebar controls component.
@@ -122,4 +124,14 @@ export function GroupedSidebarControls({ groups = [], type = "multiple", classNa
       })}
     </Accordion>
   );
+}
+
+export function SidebarPortal({ children }) {
+  const [target, setTarget] = useState(null);
+  useEffect(() => {
+    const el = document.getElementById("screenshoots-sidebar-slot");
+    setTarget(el || null);
+  }, []);
+  if (!target) return null;
+  return createPortal(children, target);
 }

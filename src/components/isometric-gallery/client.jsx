@@ -1,8 +1,8 @@
 "use client";
 
 import { InfiniteCanvas } from "@/components/ui/infinite-gallery";
-import { SidebarPortal } from "@/components/sidebar-portal";
-import { IsometricGalleryControls } from "@/components/isometric-gallery/isometric-gallery-controls";
+import { SidebarPortal } from "@/components/sidebar";
+import { SidebarControls } from "@/components/isometric-gallery/sidebar-controls";
 import { useMemo, useRef, useState } from "react";
 
 const sampleImages = [
@@ -28,7 +28,7 @@ const sampleImages = [
   { id: 20, src: "https://tailwindcss.com/plus-assets/img/heroes/ui-blocks-col-4-row-3.png" },
 ];
 
-export default function IsometricGalleryClient() {
+export default function Client() {
   const defaultControls = {
     repeat: 1,
     columns: 4,
@@ -58,7 +58,7 @@ export default function IsometricGalleryClient() {
   return (
     <>
       <SidebarPortal>
-        <IsometricGalleryControls
+        <SidebarControls
           controls={controls}
           updateControl={updateControl}
           resetControl={resetControl}

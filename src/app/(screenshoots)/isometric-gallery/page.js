@@ -1,7 +1,7 @@
 export const metadata = { title: "Isometric Gallery" };
 
-import IsometricGalleryClient from "../../../components/isometric-gallery/isometric-gallery-client";
+import Client from "../../../components/isometric-gallery/client";
 
 export default function Page() {
-	return <IsometricGalleryClient />;
+	return <Client />;
 }

@@ -3,17 +3,15 @@
 import { useEffect, useMemo } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import devicesJson from "@/lib/device-elements.json";
 import { buildControlGroups, computeDeviceDimensions } from "@/components/screen-decorator/device-overlays";
 import { ReactColorPicker } from "@/components/ui/react-color-picker";
-import { Camera, RefreshCw, Shuffle, Focus } from "lucide-react";
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
+import { Camera, Shuffle, Focus } from "lucide-react";
 import { NumberInput } from "@/components/ui/number-input";
 import { Slider } from "@/components/ui/slider";
-import { GroupedSidebarControls } from "../grouped-sidebar-controls";
+import { GroupedSidebarControls } from "../sidebar";
 
 function safeUrl(u) {
   if (!u) return "";
@@ -24,7 +22,7 @@ function safeUrl(u) {
   }
 }
 
-export function ScreenDecoratorControls({ controls, updateControl, resetControl, randomizeGradient, url, setUrl, dimentions, setDimentions, device, setDevice, selections, setSelections, toggles, setToggles, onResetView }) {
+export function SidebarControls({ controls, updateControl, resetControl, randomizeGradient, url, setUrl, dimentions, setDimentions, device, setDevice, selections, setSelections, toggles, setToggles, onResetView }) {
   const devices = devicesJson;
 
   // defaults

@@ -1,7 +1,7 @@
 export const metadata = { title: "Screen Decorator" };
 
-import ScreenDecoratorClient from "../../../components/screen-decorator/screen-decorator-client";
+import Client from "../../../components/screen-decorator/client";
 
 export default function Page() {
-  return <ScreenDecoratorClient />;
+  return <Client />;
 }

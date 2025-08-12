@@ -6,11 +6,11 @@ import { NumberInput } from "@/components/ui/number-input";
 import { Slider } from "@/components/ui/slider";
 import { ReactColorPicker } from "@/components/ui/react-color-picker";
 import { Input } from "@/components/ui/input";
-import { GroupedSidebarControls } from "../grouped-sidebar-controls";
+import { GroupedSidebarControls } from "../sidebar";
 import { Focus, Camera, X, RefreshCw, ImageIcon, Plus, Upload } from "lucide-react";
 import { useState, useRef } from "react";
 
-export function IsometricGalleryControls({ controls, updateControl, resetControl, imageOrder, loadSampleImages, handleFileUpload, addImageFromUrl, removeImage, setImageOrder, resetView, recalculateBounding, onHighlightImage }) {
+export function SidebarControls({ controls, updateControl, resetControl, imageOrder, loadSampleImages, handleFileUpload, addImageFromUrl, removeImage, setImageOrder, resetView, recalculateBounding, onHighlightImage }) {
   const [urlInput, setUrlInput] = useState("");
   const fileInputRef = useRef();
 
