@@ -31,7 +31,7 @@ export function Header({ name, logo, isBeta, pages, githubRepo, portfolioUrl }) 
   };
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+    <header className="sticky top-0 w-full border-b border-border bg-background/95 supports-[backdrop-filter]:bg-background/60">
       <div className="flex h-14 items-center justify-between px-3 lg:px-6 max-w-none gap-4">
         <div className="flex items-center gap-4 lg:gap-6">
           <div className="flex items-center gap-2">
