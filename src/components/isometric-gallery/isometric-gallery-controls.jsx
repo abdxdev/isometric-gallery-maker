@@ -1,12 +1,12 @@
 "use client";
 
-import { ImageSortable } from "@/components/image-sortable";
+import { ImageSortable } from "@/components/isometric-gallery/image-sortable";
 import { Button } from "@/components/ui/button";
 import { NumberInput } from "@/components/ui/number-input";
 import { Slider } from "@/components/ui/slider";
 import { ReactColorPicker } from "@/components/ui/react-color-picker";
 import { Input } from "@/components/ui/input";
-import { GroupedSidebarControls } from "./grouped-sidebar-controls";
+import { GroupedSidebarControls } from "../grouped-sidebar-controls";
 import { Focus, Camera, X, RefreshCw, ImageIcon, Plus, Upload } from "lucide-react";
 import { useState, useRef } from "react";
 

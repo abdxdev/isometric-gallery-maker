@@ -7,13 +7,13 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import devicesJson from "@/lib/device-elements.json";
-import { buildControlGroups, computeDeviceDimensions } from "@/components/device-overlays";
+import { buildControlGroups, computeDeviceDimensions } from "@/components/screen-decorator/device-overlays";
 import { ReactColorPicker } from "@/components/ui/react-color-picker";
 import { Camera, RefreshCw, Shuffle, Focus } from "lucide-react";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { NumberInput } from "@/components/ui/number-input";
 import { Slider } from "@/components/ui/slider";
-import { GroupedSidebarControls } from "./grouped-sidebar-controls";
+import { GroupedSidebarControls } from "../grouped-sidebar-controls";
 
 function safeUrl(u) {
   if (!u) return "";
