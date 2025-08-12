@@ -410,7 +410,7 @@ export function ScreenDecoratorControls({ controls, updateControl, resetControl,
           control: (
             <Button onClick={randomizeGradient} variant="outline" className="w-full">
               <Shuffle className="w-4 h-4" />
-              Recalculate Bounding
+              Randomize Gradient
             </Button>
           ),
         },
