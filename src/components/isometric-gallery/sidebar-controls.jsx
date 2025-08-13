@@ -104,7 +104,7 @@ export function SidebarControls({ controls, updateControl, resetControl, images,
           label: "Columns",
           showReset: true,
           resetKey: "columns",
-          control: <NumberInput id="columns" value={controls.columns} onValueChange={(value) => updateControl("columns", value)} min={1} max={5} stepper={1} className="w-full" />,
+          control: <NumberInput id="columns" value={controls.columns} onValueChange={(value) => updateControl("columns", value)} min={1} max={7} stepper={1} className="w-full" />,
         },
         {
           key: "gap",
@@ -140,6 +140,20 @@ export function SidebarControls({ controls, updateControl, resetControl, images,
           showReset: true,
           resetKey: "borderThickness",
           control: <NumberInput id="borderThickness" value={controls.borderThickness} onValueChange={(value) => updateControl("borderThickness", value)} min={0} max={20} stepper={1} className="w-full" />,
+        },
+        {
+          key: "imageRadius",
+          label: "Image Radius",
+          showReset: true,
+          resetKey: "imageRadius",
+          control: (
+            <div className="flex gap-2 items-center">
+              <Slider id="imageRadius" value={[controls.imageRadius]} onValueChange={(v) => updateControl("imageRadius", v[0])} min={0} max={100} step={1} className="flex-1" />
+              <div className="w-30">
+                <NumberInput id="imageRadius" value={controls.imageRadius} onValueChange={(value) => updateControl("imageRadius", value)} min={0} max={200} stepper={1} />
+              </div>
+            </div>
+          ),
         },
         {
           key: "rotateXOuter",

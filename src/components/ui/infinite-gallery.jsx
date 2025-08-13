@@ -19,19 +19,15 @@ export const InfiniteCanvas = forwardRef(function InfiniteCanvas({ images, class
     if (internalCanvasRef.current) {
       internalCanvasRef.current.fitContentToView({});
       internalCanvasRef.current.scrollNodeToCenter({});
-      console.log("Reset view called");
     }
   };
 
   const highlightImage = (imageId) => {
     setHighlightedImageId(imageId);
-    setTimeout(() => {
-      setHighlightedImageId(null);
-    }, 3000);
+    setTimeout(() => setHighlightedImageId(null), 3000);
   };
 
   const calculateBounding = useCallback(() => {
-    console.log("Calculating bounding box with stabilization");
     if (!contentRef.current || isStabilizingRef.current) return;
 
     isStabilizingRef.current = true;
@@ -59,7 +55,6 @@ export const InfiniteCanvas = forwardRef(function InfiniteCanvas({ images, class
       };
 
       if (previousDimensions && Math.abs(current.width - previousDimensions.width) < 0.5 && Math.abs(current.height - previousDimensions.height) < 0.5) {
-        console.log(`Dimensions stabilized after ${iterations} iterations`);
         isStabilizingRef.current = false;
         if (internalCanvasRef.current) {
           setTimeout(() => {
@@ -78,8 +73,6 @@ export const InfiniteCanvas = forwardRef(function InfiniteCanvas({ images, class
         width: result.width,
         height: result.height,
       });
-
-      console.log(`Iteration ${iterations} - original:`, current, "calculated:", result);
 
       // Use requestAnimationFrame to allow the DOM to update before next calculation
       requestAnimationFrame(() => {
@@ -161,7 +154,7 @@ export const InfiniteCanvas = forwardRef(function InfiniteCanvas({ images, class
                 transition: "opacity 0.3s ease-in-out",
               }}
             >
-              {Array.from({ length: controls.repeat }).map((_, repIdx) =>
+              {Array.from({ length: controls.repeat }).map((_, repIdx) => (
                 images.map((image) => (
                   <div key={`${repIdx}-${image.id}`} className="break-inside-avoid" style={{ marginBottom: `${controls.gap}px` }}>
                     <div className="relative">
@@ -173,13 +166,14 @@ export const InfiniteCanvas = forwardRef(function InfiniteCanvas({ images, class
                         alt={`gallery-photo-${image.id}`}
                         style={{
                           border: `${controls.borderThickness}px solid ${controls.borderColor}`,
+                          borderRadius: controls.imageRadius ? `${controls.imageRadius}px` : undefined,
                         }}
                       />
                       <div className={cn("absolute inset-0 pointer-events-none border-2 transition-all duration-300 ease-in-out", highlightedImageId === image.id ? "border-blue-500 bg-blue-500/30 opacity-100" : "border-transparent bg-transparent opacity-0")} />
                     </div>
                   </div>
                 ))
-              )}
+              ))}
             </div>
           </div>
         </div>

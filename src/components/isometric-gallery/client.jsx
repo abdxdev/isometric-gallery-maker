@@ -38,6 +38,7 @@ export default function Client() {
 		backgroundColor: "rgba(249, 250, 251, 1)",
 		borderColor: "rgba(3, 7, 18, 0.1)",
 		borderThickness: 4,
+		imageRadius: 0, // new roundness control in px
 		rotateXOuter: 35.264,
 		rotateYOuter: -45,
 	};
