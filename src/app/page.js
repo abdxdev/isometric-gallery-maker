@@ -50,8 +50,8 @@ export default function Home() {
   }, [slides.length]);
 
   return (
-    <div className="relative bg-gradient-to-b from-background to-muted/30 h-full">
-      <div className="container mx-auto px-4 md:px-6 2xl:max-w-[1400px] pt-24 pb-20 md:pt-32 md:pb-24">
+    <div className="relative bg-gradient-to-b from-background to-muted/30 h-full pt-24 pb-20 md:pt-32 md:pb-24">
+      <div className="container mx-auto px-4 md:px-6 2xl:max-w-[1400px]">
         <div className="grid gap-12 md:grid-cols-2 md:gap-16 items-center">
           <div className="flex flex-col justify-center space-y-4">
             <div className="space-y-2">
