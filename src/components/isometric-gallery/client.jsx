@@ -3,7 +3,7 @@
 import { InfiniteCanvas } from "@/components/ui/infinite-gallery";
 import { SidebarPortal } from "@/components/sidebar";
 import { SidebarControls } from "@/components/isometric-gallery/sidebar-controls";
-import { useMemo, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { WelcomeDialog } from "@/components/welcome-dialog";
 import { ImageIcon } from "lucide-react";
 
@@ -42,20 +42,43 @@ export default function Client() {
 		rotateYOuter: -45,
 	};
 	const [controls, setControls] = useState(defaultControls);
-	const [imageOrder, setImageOrder] = useState([]);
+	const [images, setImages] = useState([]);
 	const [nextImageId, setNextImageId] = useState(sampleImages.length + 1);
 	const canvasRef = useRef();
 	const updateControl = (key, value) => setControls((prev) => ({ ...prev, [key]: value }));
 	const resetControl = (key) => setControls((prev) => ({ ...prev, [key]: defaultControls[key] }));
 	const resetView = () => canvasRef.current?.resetView?.();
 	const recalculateBounding = () => canvasRef.current?.calculateBounding?.();
-	const addImageFromUrl = (url) => { setImageOrder((prev) => [...prev, { id: nextImageId, src: url }]); setNextImageId((prev) => prev + 1); };
-	const removeImage = (id) => setImageOrder((prev) => prev.filter((i) => i.id !== id));
-	const loadSampleImages = () => { setImageOrder(sampleImages); setNextImageId(sampleImages.length + 1); };
-	const handleFileUpload = (e) => { const files = Array.from(e.target.files || []); files.forEach((file) => { if (file.type.startsWith("image/")) { const url = URL.createObjectURL(file); addImageFromUrl(url); } }); if (e?.target) e.target.value = ""; };
-	const onHighlightImage = (id) => canvasRef.current?.highlightImage?.(id);
-
-	const repeatedImages = useMemo(() => { const result = []; for (let i = 0; i < controls.repeat; i++) result.push(...imageOrder); return result; }, [imageOrder, controls.repeat]);
+	const addImageFromUrl = (url) => {
+		setImages((prev) => {
+			let newId;
+			setNextImageId((prevId) => {
+				newId = prevId;
+				return prevId + 1;
+			});
+			return [...prev, { id: newId, src: url }];
+		});
+	};
+	const removeImage = (id) => setImages((prev) => prev.filter((i) => i.id !== id));
+	const loadSampleImages = () => { setImages(sampleImages); setNextImageId(sampleImages.length + 1); };
+	const handleFileUpload = (e) => {
+		const files = Array.from(e.target.files || []).filter((f) => f.type.startsWith("image/"));
+		if (!files.length) {
+			if (e?.target) e.target.value = "";
+			return;
+		}
+		setImages((prev) => {
+			let startId;
+			setNextImageId((prevId) => {
+				startId = prevId;
+				return prevId + files.length;
+			});
+			const newImages = files.map((file, i) => ({ id: startId + i, src: URL.createObjectURL(file) }));
+			return [...prev, ...newImages];
+		});
+		if (e?.target) e.target.value = "";
+	};
+	const onHighlightImage = (id) => { canvasRef.current?.highlightImage?.(id); };
 
 	return (
 		<>
@@ -76,18 +99,18 @@ export default function Client() {
 					controls={controls}
 					updateControl={updateControl}
 					resetControl={resetControl}
-					imageOrder={imageOrder}
+					images={images}
 					loadSampleImages={loadSampleImages}
 					handleFileUpload={handleFileUpload}
 					addImageFromUrl={addImageFromUrl}
 					removeImage={removeImage}
-					setImageOrder={setImageOrder}
+					setImages={setImages}
 					resetView={resetView}
 					recalculateBounding={recalculateBounding}
 					onHighlightImage={onHighlightImage}
 				/>
 			</SidebarPortal>
-			<InfiniteCanvas ref={canvasRef} images={repeatedImages} className="w-full h-full" controls={controls} />
+			<InfiniteCanvas ref={canvasRef} images={images} className="w-full h-full" controls={controls} />
 		</>
 	);
 }

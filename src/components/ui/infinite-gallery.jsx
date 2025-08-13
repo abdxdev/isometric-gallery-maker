@@ -6,7 +6,7 @@ import { cn } from "@/lib/utils";
 import { calculateIsometricBoundingBox } from "@/lib/isometric-bounding-box";
 import Image from "next/image";
 
-export const InfiniteCanvas = forwardRef(function InfiniteCanvas({ images, className, controls, style }, ref) {
+export const InfiniteCanvas = forwardRef(function InfiniteCanvas({ images, className, controls }, ref) {
   const contentRef = useRef();
   const internalCanvasRef = useRef();
   const isStabilizingRef = useRef(false);
@@ -161,23 +161,25 @@ export const InfiniteCanvas = forwardRef(function InfiniteCanvas({ images, class
                 transition: "opacity 0.3s ease-in-out",
               }}
             >
-              {images.map((image, index) => (
-                <div key={image.id || index} className="break-inside-avoid" style={{ marginBottom: `${controls.gap}px` }}>
-                  <div className="relative">
-                    <Image
-                      height={1080}
-                      width={1920}
-                      className="object-cover object-center min-w-[1280px] min-h-[720px]"
-                      src={image.src}
-                      alt={`gallery-photo-${index}`}
-                      style={{
-                        border: `${controls.borderThickness}px solid ${controls.borderColor}`,
-                      }}
-                    />
-                    <div className={cn("absolute inset-0 pointer-events-none border-2 transition-all duration-300 ease-in-out", highlightedImageId === image.id ? "border-blue-500 bg-blue-500/30 opacity-100" : "border-transparent bg-transparent opacity-0")} />
+              {Array.from({ length: controls.repeat }).map((_, repIdx) =>
+                images.map((image) => (
+                  <div key={`${repIdx}-${image.id}`} className="break-inside-avoid" style={{ marginBottom: `${controls.gap}px` }}>
+                    <div className="relative">
+                      <Image
+                        height={1080}
+                        width={1920}
+                        className="object-cover object-center min-w-[1280px] min-h-[720px]"
+                        src={image.src}
+                        alt={`gallery-photo-${image.id}`}
+                        style={{
+                          border: `${controls.borderThickness}px solid ${controls.borderColor}`,
+                        }}
+                      />
+                      <div className={cn("absolute inset-0 pointer-events-none border-2 transition-all duration-300 ease-in-out", highlightedImageId === image.id ? "border-blue-500 bg-blue-500/30 opacity-100" : "border-transparent bg-transparent opacity-0")} />
+                    </div>
                   </div>
-                </div>
-              ))}
+                ))
+              )}
             </div>
           </div>
         </div>

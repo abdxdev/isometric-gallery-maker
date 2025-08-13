@@ -33,7 +33,7 @@ export function ImageSortable({ imageList, onImageOrderChange, onImageRemove, on
         {images.map((image) => (
           <Sortable.Item key={image.id} value={image.id} asChild asHandle>
             <div className="relative aspect-square cursor-grab active:cursor-grabbing rounded-lg overflow-hidden border-2 border-border hover:border-primary transition-colors group">
-              <img src={image.src} alt={`Image ${image.id}`} className="w-full h-full object-cover" draggable={false} />
+              <img src={image.src} alt={`Image ${image._originalId ?? image.id}`} className="w-full h-full object-cover" draggable={false} />
               {onImageRemove && (
                 <Button
                   title="Remove Image"

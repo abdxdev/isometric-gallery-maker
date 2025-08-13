@@ -10,7 +10,7 @@ import { GroupedSidebarControls } from "../sidebar";
 import { Focus, Camera, X, RefreshCw, ImageIcon, Plus, Upload } from "lucide-react";
 import { useState, useRef } from "react";
 
-export function SidebarControls({ controls, updateControl, resetControl, imageOrder, loadSampleImages, handleFileUpload, addImageFromUrl, removeImage, setImageOrder, resetView, recalculateBounding, onHighlightImage }) {
+export function SidebarControls({ controls, updateControl, resetControl, images, loadSampleImages, handleFileUpload, addImageFromUrl, removeImage, setImages, resetView, recalculateBounding, onHighlightImage }) {
   const [urlInput, setUrlInput] = useState("");
   const fileInputRef = useRef();
 
@@ -26,7 +26,7 @@ export function SidebarControls({ controls, updateControl, resetControl, imageOr
   };
 
   const clearAll = () => {
-    setImageOrder([]);
+    setImages([]);
   };
 
   const groups = [
@@ -65,7 +65,7 @@ export function SidebarControls({ controls, updateControl, resetControl, imageOr
       id: "order",
       title: "Image Order",
       items: [
-        imageOrder.length === 0
+        images.length === 0
           ? {
               key: "empty-order",
               node: (
@@ -84,8 +84,8 @@ export function SidebarControls({ controls, updateControl, resetControl, imageOr
                 <div className="space-y-4">
                   <p className="text-sm text-muted-foreground">Drag and drop images to reorder them</p>
                   <div className="space-y-2">
-                    <ImageSortable imageList={imageOrder} onImageOrderChange={setImageOrder} onImageRemove={removeImage} onHighlightImage={onHighlightImage} />
-                    <Button onClick={clearAll} variant="outline" className="w-full" disabled={imageOrder.length === 0}>
+                    <ImageSortable imageList={images} onImageOrderChange={setImages} onImageRemove={removeImage} onHighlightImage={onHighlightImage} />
+                    <Button onClick={clearAll} variant="outline" className="w-full" disabled={images.length === 0}>
                       <X className="w-4 h-4" />
                       Clear All
                     </Button>
