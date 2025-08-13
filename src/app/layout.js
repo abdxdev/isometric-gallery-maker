@@ -27,7 +27,7 @@ export default function RootLayout({ children }) {
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange >
-          <div className="flex flex-col w-full h-full">
+          <div className="flex min-h-dvh flex-col">
             <Header
               name="Screenshoots"
               logo={<ScreenshootsIcon className="h-6 w-6" />}
