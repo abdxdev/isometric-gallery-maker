@@ -139,7 +139,7 @@ export function SidebarControls({ controls, updateControl, resetControl, images,
           label: "Border Thickness",
           showReset: true,
           resetKey: "borderThickness",
-          control: <NumberInput id="borderThickness" value={controls.borderThickness} onValueChange={(value) => updateControl("borderThickness", value)} min={0} max={20} stepper={1} className="w-full" />,
+          control: <NumberInput id="borderThickness" value={controls.borderThickness} onValueChange={(value) => updateControl("borderThickness", value)} min={0} max={100} stepper={5} className="w-full" />,
         },
         {
           key: "imageRadius",
