@@ -32,7 +32,7 @@ export default function ScreenshootsLayout({ children }) {
 
       <div className={`${!isFullscreen ? "block" : "hidden"} flex-none md:h-full overflow-visible md:overflow-hidden`}>
 
-        <div className="w-full lg:w-86 flex flex-col p-4 lg:border-l border-border h-auto md:h-full min-h-0 overflow-visible md:overflow-y-auto overscroll-contain">
+        <div className="w-full md:w-86 flex flex-col p-4 lborder-border h-auto md:h-full min-h-0 overflow-visible md:overflow-y-auto overscroll-contain border-t md:border-l md:border-t-0">
           <div id="screenshoots-sidebar-slot" />
         </div>
 
