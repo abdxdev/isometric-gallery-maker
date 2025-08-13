@@ -12,28 +12,28 @@ export default function Home() {
       title: "Isometric Gallery",
       desc: "Turn screenshots into polished isometric mockups with ease",
       color: "rgb(79, 70, 229)",
-      img: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=1200&q=80",
+      img: "/images/image1.png",
       href: "/isometric-gallery",
     },
     {
       title: "Isometric Gallery",
       desc: "Turn screenshots into polished isometric mockups with ease",
       color: "rgb(14, 165, 233)",
-      img: "https://images.unsplash.com/photo-1551650975-87deedd944c3?auto=format&fit=crop&w=1200&q=80",
+      img: "/images/image2.png",
       href: "/isometric-gallery",
     },
     {
       title: "Screen Decorator",
       desc: "Easily create and customize device frames for your designs",
       color: "rgb(245, 158, 11)",
-      img: "https://images.unsplash.com/photo-1545235617-9465d2a55698?auto=format&fit=crop&w=1200&q=80",
+      img: "/images/image3.png",
       href: "/screen-decorator",
     },
     {
       title: "Screen Decorator",
       desc: "Easily create and customize device frames for your designs",
       color: "rgb(236, 72, 153)",
-      img: "https://images.unsplash.com/photo-1545235617-9465d2a55698?auto=format&fit=crop&w=1200&q=80",
+      img: "/images/image4.png",
       href: "/screen-decorator",
     }
   ];
@@ -92,7 +92,7 @@ export default function Home() {
             </div>
           </div>
           <div className="relative">
-            <div className="relative aspect-[4/3] overflow-hidden rounded-xl border shadow-xl">
+            <div className="relative aspect-video overflow-hidden rounded-xl border shadow-xl">
               {slides.map((s, i) => (
                 <div
                   key={`${s.title}-${i}`}
