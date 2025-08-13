@@ -8,6 +8,8 @@ import { DeviceOverlays, collectAssets } from "@/components/screen-decorator/dev
 import { generateJSXMeshGradient } from "meshgrad";
 import { generateNoiseDataUrl } from "@/lib/noise-texture";
 import { ReactInfiniteCanvas } from "react-infinite-canvas";
+import { WelcomeDialog } from "@/components/welcome-dialog";
+import { ImageIcon } from "lucide-react";
 
 function safeUrl(u) {
   if (!u) return "";
@@ -121,6 +123,17 @@ export default function Client() {
 
   return (
     <>
+      <WelcomeDialog
+        storageKey="screen-decorator-welcome"
+        title="Welcome to Screen Decorator"
+        description={(
+          <>
+            <p>Frame any URL or screenshot with device chrome, gradients and noise.</p>
+            <p>Adjust borders, shadows and export polished visuals.</p>
+          </>
+        )}
+        primaryAction={{ label: "Let's Start" }}
+      />
       <SidebarPortal>
         <SidebarControls controls={controls} updateControl={updateControl} resetControl={resetControl} randomizeGradient={randomizeGradient} url={url} setUrl={setUrl} dimentions={dimentions} setDimentions={setDimentions} device={device} setDevice={setDevice} selections={selections} setSelections={setSelections} toggles={toggles} setToggles={setToggles} onResetView={handleResetView} />
       </SidebarPortal>

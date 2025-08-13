@@ -3,55 +3,77 @@
 import { useState, useEffect } from "react";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { ImageIcon, Sparkles } from "lucide-react";
 
-export function WelcomeDialog({ onLoadSamples, onCancel }) {
+// Generic reusable welcome dialog
+// Props:
+// storageKey: unique localStorage key to remember dismissal
+// title: heading text
+// description: main description (string or JSX)
+// primaryAction: { label, onClick, icon? }
+// secondaryAction: { label, onClick? } (defaults to just closing)
+// autoOpen: bool (default true) – whether to auto show if not seen
+export function WelcomeDialog({
+  storageKey = "app-welcome-dialog",
+  title = "Welcome",
+  description = "",
+  primaryAction,
+  secondaryAction,
+  autoOpen = true,
+  onOpenChange,
+}) {
   const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
-    // Check if user has seen the welcome dialog before
-    const hasSeenWelcome = localStorage.getItem("isometric-gallery-welcome-seen");
-    if (!hasSeenWelcome) {
-      setIsOpen(true);
-    }
-  }, []);
+    if (!autoOpen) return;
+    try {
+      const hasSeen = localStorage.getItem(storageKey);
+      if (!hasSeen) setIsOpen(true);
+    } catch {}
+  }, [autoOpen, storageKey]);
 
-  const handleLoadSamples = () => {
-    localStorage.setItem("isometric-gallery-welcome-seen", "true");
+  const closeAndPersist = () => {
+    try { localStorage.setItem(storageKey, "true"); } catch {}
     setIsOpen(false);
-    onLoadSamples();
+    onOpenChange?.(false);
   };
 
-  const handleCancel = () => {
-    localStorage.setItem("isometric-gallery-welcome-seen", "true");
-    setIsOpen(false);
-    if (onCancel) onCancel();
+  const handlePrimary = () => {
+    if (primaryAction?.onClick) primaryAction.onClick();
+    closeAndPersist();
   };
+  const handleSecondary = () => {
+    if (secondaryAction?.onClick) secondaryAction.onClick();
+    closeAndPersist();
+  };
+
+  if (!autoOpen && !isOpen) return null;
 
   return (
-    <Dialog open={isOpen} onOpenChange={setIsOpen}>
+    <Dialog open={isOpen} onOpenChange={(o) => { setIsOpen(o); if (!o) closeAndPersist(); }}>
       <DialogContent className="sm:max-w-md" showCloseButton={false}>
         <DialogHeader>
-          <div className="flex items-center gap-2 mb-2">
-            <Sparkles className="h-6 w-6 text-primary" />
-            <DialogTitle className="text-xl">Welcome to Screenshoots!</DialogTitle>
-          </div>
-          <DialogDescription className=" space-y-3">
-            <p className="text-base">
-              Create stunning 3D isometric gallery mockups from your images with an easy-to-use interface.
-              <br />
-            </p>
-            <p className="text-sm text-muted-foreground">Would you like to start with some sample images to see what's possible?</p>
-          </DialogDescription>
+          <DialogTitle className="text-xl">{title}</DialogTitle>
+          {description && (
+            <DialogDescription className="space-y-3 text-sm leading-relaxed">
+              {description}
+            </DialogDescription>
+          )}
         </DialogHeader>
         <DialogFooter className="flex-col sm:flex-row">
-          <Button variant="outline" onClick={handleCancel} className="w-full sm:w-auto">
-            Start Empty
-          </Button>
-          <Button onClick={handleLoadSamples} className="w-full sm:w-auto">
-            <ImageIcon className="w-4 h-4" />
-            Load Sample Images
-          </Button>
+          {secondaryAction && (
+            <Button variant="outline" onClick={handleSecondary} className="w-full sm:w-auto">
+              {secondaryAction.label || "Close"}
+            </Button>
+          )}
+          {primaryAction && (
+            <Button onClick={handlePrimary} className="w-full sm:w-auto">
+              {primaryAction.icon}
+              {primaryAction.label}
+            </Button>
+          )}
+          {!primaryAction && !secondaryAction && (
+            <Button onClick={closeAndPersist} className="w-full sm:w-auto">Get Started</Button>
+          )}
         </DialogFooter>
       </DialogContent>
     </Dialog>
