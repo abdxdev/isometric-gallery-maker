@@ -126,12 +126,12 @@ export default function Client() {
       <WelcomeDialog
         storageKey="screen-decorator-welcome"
         title="Welcome to Screen Decorator"
-        description={(
+        description={
           <>
             <p>Frame any URL or screenshot with device chrome, gradients and noise.</p>
             <p>Adjust borders, shadows and export polished visuals.</p>
           </>
-        )}
+        }
         primaryAction={{ label: "Let's Start" }}
       />
       <SidebarPortal>
@@ -142,14 +142,14 @@ export default function Client() {
         {controls.gradientEnabled && controls.gradientScope === "canvas" && (
           <>
             <div className="absolute inset-0 pointer-events-none" style={{ ...gradientStyle, opacity: controls.gradientOpacity, zIndex: 0 }} aria-hidden suppressHydrationWarning />
-            {noiseDataUrl && (
+            {noiseDataUrl && controls.noiseEnabled && (
               <div
                 className="absolute inset-0 pointer-events-none"
                 style={{
                   backgroundImage: `url(${noiseDataUrl})`,
                   backgroundRepeat: "repeat",
                   backgroundSize: "128px 128px",
-                  opacity: controls.noiseEnabled ? controls.noiseTexture / 2 : 0,
+                  opacity: controls.noiseTexture / 2,
                   mixBlendMode: "normal",
                   zIndex: 1,
                 }}
@@ -179,7 +179,7 @@ export default function Client() {
                       suppressHydrationWarning
                     />
                   )}
-                  {noiseDataUrl && controls.gradientEnabled && controls.gradientScope === "frame" && (
+                  {noiseDataUrl && controls.gradientEnabled && controls.gradientScope === "frame" && controls.noiseEnabled && (
                     <div
                       className="absolute pointer-events-none"
                       style={{
@@ -190,7 +190,7 @@ export default function Client() {
                         backgroundImage: `url(${noiseDataUrl})`,
                         backgroundRepeat: "repeat",
                         backgroundSize: "128px 128px",
-                        opacity: controls.noiseEnabled ? controls.noiseTexture / 2 : 0,
+                        opacity: controls.noiseTexture / 2,
                         mixBlendMode: "normal",
                         zIndex: 1,
                       }}
@@ -220,6 +220,19 @@ export default function Client() {
                           <iframe ref={iframeRef} title="embed-preview" src={safeUrl(url)} sandbox="allow-forms allow-scripts allow-same-origin allow-popups" className="w-full h-full z-0 bg-background" style={{ border: 0 }} />
                         </div>
                       </div>
+                      {noiseDataUrl && controls.noiseEnabled && (
+                        <div
+                          className="pointer-events-none absolute inset-0 z-[5]"
+                          style={{
+                            backgroundImage: `url(${noiseDataUrl})`,
+                            backgroundRepeat: "repeat",
+                            backgroundSize: "128px 128px",
+                            opacity: controls.noiseTexture / 2,
+                            mixBlendMode: "normal",
+                          }}
+                          aria-hidden
+                        />
+                      )}
                       <div className="pointer-events-none absolute inset-0 z-10">
                         <DeviceOverlays devices={devicesJson} device={device || devicesJson[0]?.name} selections={selections} toggles={toggles} />
                       </div>
