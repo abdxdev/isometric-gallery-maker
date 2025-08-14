@@ -85,7 +85,7 @@ export default function Home() {
                     Isometric Gallery
                   </Button>
                 </Link>
-                <Link href="/isometric-gallery">
+                <Link href="/screen-decorator">
                   <Button size="lg" variant="outline">
                     Screen Decorator
                   </Button>

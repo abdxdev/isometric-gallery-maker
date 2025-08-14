@@ -70,7 +70,6 @@ export const NumberInput = forwardRef(({ stepper, thousandSeparator, placeholder
   return (
     <div className="flex items-center">
       <NumericFormat value={value} onValueChange={handleChange} thousandSeparator={thousandSeparator} decimalScale={decimalScale} fixedDecimalScale={fixedDecimalScale} allowNegative={min < 0} valueIsNumericString onBlur={handleBlur} max={max} min={min} suffix={suffix} prefix={prefix} customInput={CustomInputComponent} placeholder={placeholder} getInputRef={ref} {...props} />
-
       <div className="flex flex-col">
         <Button aria-label="Increase value" className="px-2 h-4 rounded-l-none rounded-br-none border-input border-l-0 border-b-[0.5px] focus-visible:relative" variant="outline" onClick={handleIncrement} disabled={value === max}>
           <ChevronUp size={16} />

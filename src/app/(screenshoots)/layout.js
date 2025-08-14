@@ -19,22 +19,21 @@ export default function ScreenshootsLayout({ children }) {
 
   const content = (
     <div
-      className="flex flex-col md:flex-row md:flex-1 min-h-0 min-w-0 w-full overflow-auto md:overflow-hidden"
+      className="flex flex-col md:flex-row flex-1 h-full w-full overflow-auto md:overflow-hidden"
       data-slot="screenshoots-layout-root"
     >
       <div
         ref={mainContent}
-        className="flex-none h-[60vh] md:h-full min-w-0 overflow-scroll md:flex-1 md:min-h-0 md:overflow-auto overscroll-contain"
+        className={`min-w-0 md:flex-1 md:h-full ${isFullscreen ? 'h-full' : 'h-[60dvh]'} shrink-0 overflow-hidden md:overflow-auto`}
       >
         <FullscreenToggle isFullscreen={isFullscreen} onToggleFullscreen={toggleFullscreen} />
         {children}
       </div>
 
-      <div className={`${!isFullscreen ? "block" : "hidden"} flex-none md:h-full overflow-visible md:overflow-hidden`}>
+      <div className={`${isFullscreen ? 'hidden' : 'block'} w-full md:w-auto md:h-full md:overflow-hidden`}>
         <div className="w-full md:w-86 flex flex-col p-4 h-auto md:h-full min-h-0 overflow-visible md:overflow-y-auto overscroll-contain border-t md:border-l md:border-t-0">
           <div id="screenshoots-sidebar-slot" />
         </div>
-
       </div>
     </div>
   );

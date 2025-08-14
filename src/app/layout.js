@@ -24,10 +24,10 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en" suppressHydrationWarning>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased h-dvh overflow-hidden`}
       >
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange >
-          <div className="flex min-h-dvh flex-col">
+          <div className="flex flex-col h-full">
             <Header
               name="Screenshoots"
               logo={<ScreenshootsIcon className="h-6 w-6" />}
@@ -39,7 +39,9 @@ export default function RootLayout({ children }) {
               githubRepo="abdxdev/screenshoots"
               portfolioUrl="https://abd-dev.studio"
             />
-            {children}
+            <main className="flex-1 flex flex-col overflow-auto">
+              {children}
+            </main>
           </div>
         </ThemeProvider>
       </body>

@@ -335,7 +335,7 @@ export function SidebarControls({ controls, updateControl, resetControl, randomi
           when: controls.borderEnabled,
           showReset: true,
           resetKey: "borderColor",
-          control: <ReactColorPicker value={controls.borderColor} onChange={(value) => updateControl?.("borderColor", value)} />,
+          control: <ReactColorPicker className="w-full" value={controls.borderColor} onChange={(value) => updateControl?.("borderColor", value)} />,
         },
         {
           key: "borderThickness",
@@ -392,7 +392,7 @@ export function SidebarControls({ controls, updateControl, resetControl, randomi
           when: controls.contentShadowEnabled,
           showReset: true,
           resetKey: "contentShadowColor",
-          control: <ReactColorPicker value={controls.contentShadowColor} onChange={(value) => updateControl?.("contentShadowColor", value)} />,
+          control: <ReactColorPicker className="w-full" value={controls.contentShadowColor} onChange={(value) => updateControl?.("contentShadowColor", value)} />,
         },
         {
           key: "gradientEnabled",
